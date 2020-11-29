@@ -1,13 +1,26 @@
 {
   "name": "@rep-finances-app/server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.ts",
   "license": "MIT",
+  "scripts": {
+    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/server.ts"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "@types/express": "^4.17.9"
+    "@babel/cli": "^7.12.8",
+    "@babel/core": "^7.12.9",
+    "@babel/node": "^7.12.6",
+    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-typescript": "^7.12.7",
+    "@types/express": "^4.17.9",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "ts-node-dev": "^1.0.0",
+    "tsconfig-paths": "^3.9.0"
   }
 }

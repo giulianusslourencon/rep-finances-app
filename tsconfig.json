@@ -2,9 +2,17 @@
   "compilerOptions": {
     "target": "es2017",
     "module": "commonjs",
+    "lib": ["ES6"],
+    "allowJs": true,
+    "strict": true,
     "noEmit": true,
     "resolveJsonModule": true,
+    "typeRoots": [
+      "*/**/@types"
+    ],
     "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   }
