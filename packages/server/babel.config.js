@@ -13,7 +13,9 @@ module.exports = {
   plugins: [
     ['module-resolver', {
       alias: {
-        '@controllers': './src/controllers'
+        '@entities': './src/entities',
+        '@repositories': './src/repositories',
+        '@useCases': './src/useCases'
       }
     }]
   ],

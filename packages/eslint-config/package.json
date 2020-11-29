@@ -1,7 +1,7 @@
 {
   "name": "@rep-finances-app/eslint-config",
   "version": "1.0.0",
-  "main": ".eslintrc.js",
+  "main": ".eslintrc.json",
   "license": "MIT",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.7.0",

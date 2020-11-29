@@ -4,7 +4,6 @@
     "module": "commonjs",
     "lib": ["ES6"],
     "allowJs": true,
-    "strict": true,
     "noEmit": true,
     "resolveJsonModule": true,
     "typeRoots": [
