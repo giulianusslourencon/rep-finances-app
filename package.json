@@ -9,7 +9,7 @@
     ]
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "repository": "https://github.com/giulianusslourencon/rep-finances-app.git",
   "license": "MIT",

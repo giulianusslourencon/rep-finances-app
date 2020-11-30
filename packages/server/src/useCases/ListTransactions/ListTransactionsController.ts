@@ -17,7 +17,7 @@ export class ListTransactionsController {
           } 
         : undefined
 
-      const transactions = await this.listTransactionsUseCase.execute(skipLimit, <string>month)
+      const transactions = await this.listTransactionsUseCase.execute({ skipLimit, month: <string>month })
 
       return response.status(200).json(transactions)
     } catch (error) {

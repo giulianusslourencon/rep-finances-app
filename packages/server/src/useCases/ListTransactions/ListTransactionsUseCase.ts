@@ -6,10 +6,10 @@ export class ListTransactionsUseCase {
     private transactionsRepository: ITransactionsRepository
   ) { }
 
-  async execute(skipLimit?: IListTransactionsRequestDTO, month?: string) {
-    const transactions = month 
-      ? await this.transactionsRepository.listByMonth(month, skipLimit)
-      : await this.transactionsRepository.list(skipLimit)
+  async execute(props: IListTransactionsRequestDTO) {
+    const transactions = props.month 
+      ? await this.transactionsRepository.listByMonth(props.month, props.skipLimit)
+      : await this.transactionsRepository.list(props.skipLimit)
 
     return transactions
   }

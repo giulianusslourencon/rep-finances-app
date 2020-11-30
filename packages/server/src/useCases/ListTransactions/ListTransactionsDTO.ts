@@ -1,4 +1,7 @@
 export interface IListTransactionsRequestDTO {
-  skip: number
-  limit: number
+  skipLimit?: {
+    skip: number
+    limit: number
+  }
+  month?: string
 }
