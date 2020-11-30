@@ -4,8 +4,10 @@
     "baseUrl": ".",
     "paths": {
       "@server/*": ["./src/*"],
+      "@config/*": ["./src/config/*"],
       "@entities/*": ["./src/entities/*"],
       "@repositories/*": ["./src/repositories/*"],
+      "@shared/*": ["./src/shared/*"],
       "@useCases/*": ["./src/useCases/*"]
     }
   }

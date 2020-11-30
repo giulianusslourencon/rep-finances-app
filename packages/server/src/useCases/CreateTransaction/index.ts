@@ -1,11 +1,11 @@
-import { LocalTransactionsRepository } from "@repositories/implementations/LocalTransactionsRepository"
+import { MongoTransactionsRepository } from "@repositories/implementations/MongoTransactionsRepository"
 import { CreateTransactionController } from "./CreateTransactionController"
 import { CreateTransactionUseCase } from "./CreateTransactionUseCase"
 
-const localTransactionRepository = new LocalTransactionsRepository()
+const mongoTransactionRepository = new MongoTransactionsRepository()
 
 const createTransactionUseCase = new CreateTransactionUseCase(
-  localTransactionRepository
+  mongoTransactionRepository
 )
 
 const createTransactionController = new CreateTransactionController(
