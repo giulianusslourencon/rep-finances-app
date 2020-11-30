@@ -34,7 +34,7 @@ export class Transaction {
     )
 
     if (itemsValues !== totalPaid) {
-      throw new Error('Items values are distinct from total paid.')
+      throw new Error('Items values are distinct from total paid')
     }
     if (itemsValues === 0) {
       throw new Error('There must be some money involved in the transaction')

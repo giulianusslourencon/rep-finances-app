@@ -20,7 +20,7 @@ describe('Create transaction', () => {
       .send(data.transactionDistinctValues)
       .expect(406)
     
-    expect(response.body.message).toBe('Items values are distinct from total paid.')
+    expect(response.body.message).toBe('Items values are distinct from total paid')
   })
 
   it('Should not create a transaction with amount equal to 0.', async () => {
