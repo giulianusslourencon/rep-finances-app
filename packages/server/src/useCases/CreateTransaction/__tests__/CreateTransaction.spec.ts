@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { app } from '../../../app'
+import { app } from '@server/app'
 import { transactionSuccess } from './testData'
 
 describe('Create transaction', () => {

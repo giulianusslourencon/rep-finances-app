@@ -96,7 +96,7 @@
   "settings": {
     "import/resolver": {
       "typescript": {
-        "directory": "packages/server/*/tsconfig.json"
+        "directory": "packages/server/tsconfig.json"
       }
     }
   }

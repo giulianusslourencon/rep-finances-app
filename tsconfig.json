@@ -6,7 +6,9 @@
     "allowJs": true,
     "noEmit": true,
     "resolveJsonModule": true,
+    "types": ["jest"],
     "typeRoots": [
+      "./node_modules/@types",
       "*/**/@types"
     ],
     "esModuleInterop": true,
@@ -14,5 +16,8 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "include": [
+    "**/src/**/*.ts"
+  ]
 }
