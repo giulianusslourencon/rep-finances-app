@@ -1,5 +1,5 @@
-import { Request, Response } from "express"
-import { CreateTransactionUseCase } from "./CreateTransactionUseCase"
+import { Request, Response } from 'express'
+import { CreateTransactionUseCase } from './CreateTransactionUseCase'
 
 export class CreateTransactionController {
   constructor(

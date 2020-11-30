@@ -1,6 +1,6 @@
-import { MongoTransactionsRepository } from "@repositories/implementations/MongoTransactionsRepository"
-import { CreateTransactionController } from "./CreateTransactionController"
-import { CreateTransactionUseCase } from "./CreateTransactionUseCase"
+import { MongoTransactionsRepository } from '@repositories/implementations/MongoTransactionsRepository'
+import { CreateTransactionController } from './CreateTransactionController'
+import { CreateTransactionUseCase } from './CreateTransactionUseCase'
 
 const mongoTransactionRepository = new MongoTransactionsRepository()
 

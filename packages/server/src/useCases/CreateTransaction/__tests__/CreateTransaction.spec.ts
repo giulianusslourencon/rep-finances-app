@@ -2,20 +2,20 @@ import * as data from './testData'
 
 import MongoMock from '@shared/MongoMock'
 import Transaction from '@entities/schemas/Transaction'
-import { createTransactionUseCase } from '..';
+import { createTransactionUseCase } from '..'
 
 describe('Create transaction', () => {
   beforeAll(async () => {
-    await MongoMock.connect();
-  });
+    await MongoMock.connect()
+  })
 
   afterAll(async () => {
-    await MongoMock.disconnect();
-  });
+    await MongoMock.disconnect()
+  })
 
   beforeEach(async () => {
-    await Transaction.deleteMany({});
-  });
+    await Transaction.deleteMany({})
+  })
 
   it('Should create a transaction and return the created Transaction.', async () => {
     const transaction = await createTransactionUseCase.execute(data.transactionSuccess)

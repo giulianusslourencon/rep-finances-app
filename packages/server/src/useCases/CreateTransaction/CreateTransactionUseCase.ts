@@ -1,6 +1,6 @@
-import { Transaction } from "@entities/Transaction"
-import { ITransactionsRepository } from "@repositories/ITransactionsRepository"
-import { ICreateTransactionRequestDTO } from "./CreateTransactionDTO"
+import { Transaction } from '@entities/Transaction'
+import { ITransactionsRepository } from '@repositories/ITransactionsRepository'
+import { ICreateTransactionRequestDTO } from './CreateTransactionDTO'
 
 export class CreateTransactionUseCase {
   constructor(
@@ -10,7 +10,7 @@ export class CreateTransactionUseCase {
   async execute(data: ICreateTransactionRequestDTO) {
     const transaction = new Transaction(data)
 
-    this.transactionsRepository.save(transaction)
+    await this.transactionsRepository.save(transaction)
 
     return transaction
   }
