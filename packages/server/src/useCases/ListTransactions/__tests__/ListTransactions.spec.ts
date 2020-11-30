@@ -23,13 +23,26 @@ describe('List transactions', () => {
   it('Should list all transactions registered.', async () => {
     const transactions = await listTransactionsUseCase.execute()
 
-    expect(transactions).toHaveLength(data.transactions.length)
+    expect(transactions).toHaveLength(4)
   })
 
   it('Should list transactions registered with skip and limit.', async () => {
     const transactions = await listTransactionsUseCase.execute({ skip: 1, limit: 3 })
 
     expect(transactions).toHaveLength(3)
+    expect(transactions[1].title).toBe(data.transactions[2].title)
+  })
+
+  it('Should list transactions registered by month.', async () => {
+    const transactions = await listTransactionsUseCase.execute(undefined, '202011')
+
+    expect(transactions).toHaveLength(3)
+  })
+
+  it('Should list transactions registered by month with skip and limit.', async () => {
+    const transactions = await listTransactionsUseCase.execute({ skip: 1, limit: 3 }, '202011')
+
+    expect(transactions).toHaveLength(2)
     expect(transactions[1].title).toBe(data.transactions[2].title)
   })
 })

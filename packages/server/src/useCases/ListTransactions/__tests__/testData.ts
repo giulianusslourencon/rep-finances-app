@@ -50,7 +50,7 @@ export const transactions = [
   },
   {
     title: 'Compra 4',
-    month: '202011',
+    month: '202012',
     items: {
       item1: {
         value: 200,

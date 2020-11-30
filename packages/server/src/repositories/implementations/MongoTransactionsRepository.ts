@@ -7,6 +7,10 @@ export class MongoTransactionsRepository implements ITransactionsRepository {
     return await TransactionSchema.find({}, {}, skipLimit).lean()
   }
 
+  async listByMonth(month: string, skipLimit?: { skip: number; limit: number }): Promise<Transaction[]> {
+    return await TransactionSchema.find({month}, {}, skipLimit).lean()
+  }
+
   async findById(id: string): Promise<Transaction | null | undefined> {
     return await TransactionSchema.findById(id).lean()
   }

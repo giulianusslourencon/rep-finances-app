@@ -7,7 +7,7 @@ export class ListTransactionsController {
   ) { }
 
   async handle(request: Request, response: Response): Promise<Response> {
-    const { skip, limit } = request.query
+    const { skip, limit, month } = request.query
 
     try {
       const skipLimit = (skip && limit) 
@@ -17,7 +17,7 @@ export class ListTransactionsController {
           } 
         : undefined
 
-      const transactions = await this.listTransactionsUseCase.execute(skipLimit)
+      const transactions = await this.listTransactionsUseCase.execute(skipLimit, <string>month)
 
       return response.status(200).json(transactions)
     } catch (error) {
