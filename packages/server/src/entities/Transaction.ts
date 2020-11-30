@@ -20,15 +20,28 @@ export class Transaction {
   public readonly amount!: number
 
   constructor(props: Omit<Transaction, '_id' | 'amount'>, id?: string) {
-    const itemsValues = Object.values(props.items).reduce((acc, cur) => acc + cur.value, 0)
-    const totalPaid = Object.values(props.payers).reduce((acc, cur) => acc + cur)
+    const itemsValues = Object.values(props.items).reduce(
+      (acc, cur) => {
+        if (cur.value <= 0) throw new Error('All items values and payers amount must be a positive number')
+        return acc + cur.value
+      }, 0
+    )
+    const totalPaid = Object.values(props.payers).reduce(
+      (acc, cur) => {
+        if (cur <= 0) throw new Error('All items values and payers amount must be a positive number')
+        return acc + cur
+      }, 0
+    )
 
     if (itemsValues !== totalPaid) {
       throw new Error('Items values are distinct from total paid.')
     }
+    if (itemsValues === 0) {
+      throw new Error('There must be some money involved in the transaction')
+    }
+    this.amount = itemsValues
     
     Object.assign(this, props)
-    this.amount = itemsValues
 
     if (!id) {
       this._id = uuid()

@@ -10,13 +10,13 @@ export class CreateTransactionController {
     const { title, timestamp, items, payers } = request.body
 
     try {
-      await this.createTransactionUseCase.execute({
+      const transaction = await this.createTransactionUseCase.execute({
         title, timestamp, items, payers
       })
 
-      return response.status(201).send()
+      return response.status(201).json(transaction)
     } catch (error) {
-      return response.status(400).json({
+      return response.status(406).json({
         message: error.message || 'Unexpected error.'
       })
     }

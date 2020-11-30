@@ -11,5 +11,7 @@ export class CreateTransactionUseCase {
     const transaction = new Transaction(data)
 
     this.transactionsRepository.save(transaction)
+
+    return transaction
   }
 }
