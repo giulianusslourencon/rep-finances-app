@@ -3,7 +3,7 @@ import { Transaction } from "@server/entities/Transaction";
 export const transactions = [
   {
     title: 'Compra 1',
-    timestamp: 1606669473068,
+    month: '202011',
     items: {
       item1: {
         value: 20,
@@ -20,7 +20,7 @@ export const transactions = [
   },
   {
     title: 'Compra 2',
-    timestamp: 1606669473068,
+    month: '202011',
     items: {
       item1: {
         value: 40,
@@ -37,7 +37,7 @@ export const transactions = [
   },
   {
     title: 'Compra 3',
-    timestamp: 1606669473068,
+    month: '202011',
     items: {
       item1: {
         value: 10,
@@ -50,7 +50,7 @@ export const transactions = [
   },
   {
     title: 'Compra 4',
-    timestamp: 1606669473068,
+    month: '202011',
     items: {
       item1: {
         value: 200,

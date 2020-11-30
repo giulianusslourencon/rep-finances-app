@@ -1,7 +1,7 @@
 export const transactionSuccess = {
   title: 'Compra 1',
-    timestamp: 1606669473068,
-      items: {
+  month: '202011',
+  items: {
     item1: {
       value: 20,
         related_users: ['P', 'G']
@@ -18,7 +18,7 @@ export const transactionSuccess = {
 
 export const transactionDistinctValues = {
   title: 'Compra 1',
-  timestamp: 1606669473068,
+  month: '202011',
   items: {
     item1: {
       value: 20,
@@ -36,14 +36,14 @@ export const transactionDistinctValues = {
 
 export const transactionNoMoney = {
   title: 'Compra 1',
-  timestamp: 1606669473068,
+  month: '202011',
   items: {},
   payers: {}
 }
   
 export const transactionNegativeNull = {
   title: 'Compra 1',
-  timestamp: 1606669473068,
+  month: '202011',
   items: {
     item1: {
       value: -10,

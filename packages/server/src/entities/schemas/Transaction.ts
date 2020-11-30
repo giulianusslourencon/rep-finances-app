@@ -4,7 +4,7 @@ export type TransactionAttributes = {
   _id: string
   title: string
   amount: number
-  timestamp: number
+  month: string
   items: {
     [title: string]: {
       value: number
@@ -35,8 +35,8 @@ const TransactionSchema = new Schema(
       type: Number,
       required: true,
     },
-    timestamp: {
-      type: Number,
+    month: {
+      type: String,
       required: true,
     },
     items: {

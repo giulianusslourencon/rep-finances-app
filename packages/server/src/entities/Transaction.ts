@@ -4,7 +4,7 @@ export class Transaction {
   public readonly _id!: string
 
   public title!: string
-  public timestamp!: number
+  public month!: string
   
   public items!: { 
     [title: string]: {

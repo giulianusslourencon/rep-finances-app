@@ -7,11 +7,11 @@ export class CreateTransactionController {
   ) {}
   
   async handle(request: Request, response: Response): Promise<Response> {
-    const { title, timestamp, items, payers } = request.body
+    const { title, month, items, payers } = request.body
 
     try {
       const transaction = await this.createTransactionUseCase.execute({
-        title, timestamp, items, payers
+        title, month, items, payers
       })
 
       return response.status(201).json(transaction)
