@@ -1,7 +1,7 @@
 import MongoMock from '@shared/MongoMock'
 import { findTransactionUseCase } from '..'
 import * as data from './testData'
-import { createTransactionUseCase } from '@useCases/CreateTransaction'
+import { createTransactionUseCase } from '@useCases/Transactions/CreateTransaction'
 import { Transaction } from '@entities/Transaction'
 import TransactionSchema from '@entities/schemas/Transaction'
 

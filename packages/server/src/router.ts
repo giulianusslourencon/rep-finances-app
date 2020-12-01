@@ -1,14 +1,8 @@
-import { Router } from "express"
-import { createTransactionController } from "@useCases/CreateTransaction"
-import { listTransactionsController } from "@useCases/ListTransactions"
+import { transactionsRouter } from '@useCases/Transactions/transactions.routes'
+import { Router } from 'express'
 
 const router = Router()
 
-router.post('/transactions', (request, response) => {
-  return createTransactionController.handle(request, response)
-})
-router.get('/transactions', (request, response) => {
-  return listTransactionsController.handle(request, response)
-})
+router.use('/transactions', transactionsRouter)
 
 export { router }

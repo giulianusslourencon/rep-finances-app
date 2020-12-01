@@ -14,4 +14,8 @@ mongoose.connect(
     useCreateIndex: true,
     useFindAndModify: false,
   }
-)
+).then(() => {
+  console.log('Mongo connected')
+}).catch(() => {
+  console.log('Error on connection with mongo')
+})
