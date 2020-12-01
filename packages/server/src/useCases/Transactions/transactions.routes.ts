@@ -3,18 +3,18 @@ import { createTransactionController } from './CreateTransaction'
 import { findTransactionController } from './FindTransaction'
 import { listTransactionsController } from './ListTransactions'
 
-const transactionsRouter = Router()
+const transactionsRoutes = Router()
 
-transactionsRouter.post('/', (request, response) => {
+transactionsRoutes.post('/', (request, response) => {
   return createTransactionController.handle(request, response)
 })
 
-transactionsRouter.get('/', (request, response) => {
+transactionsRoutes.get('/', (request, response) => {
   return listTransactionsController.handle(request, response)
 })
 
-transactionsRouter.get('/:id', (request, response) => {
+transactionsRoutes.get('/:id', (request, response) => {
   return findTransactionController.handle(request, response)
 })
 
-export { transactionsRouter }
+export { transactionsRoutes }

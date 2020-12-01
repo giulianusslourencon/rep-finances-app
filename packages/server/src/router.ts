@@ -1,8 +1,8 @@
-import { transactionsRouter } from '@useCases/Transactions/transactions.routes'
+import { transactionsRoutes } from '@useCases/Transactions/transactions.routes'
 import { Router } from 'express'
 
 const router = Router()
 
-router.use('/transactions', transactionsRouter)
+router.use('/transactions', transactionsRoutes)
 
 export { router }

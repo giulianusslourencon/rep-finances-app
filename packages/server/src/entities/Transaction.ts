@@ -1,10 +1,13 @@
-import { v4 as uuid } from "uuid"
+import DateParser from '@shared/utils/DateParser'
+import { v4 as uuid } from 'uuid'
 
 export class Transaction {
   public readonly _id!: string
 
   public title!: string
-  public month!: string
+
+  public timestamp!: number
+  public readonly month!: string
   
   public items!: { 
     [title: string]: {
@@ -19,7 +22,7 @@ export class Transaction {
 
   public readonly amount!: number
 
-  constructor(props: Omit<Transaction, '_id' | 'amount'>, id?: string) {
+  constructor(props: Omit<Transaction, '_id' | 'month' | 'amount'>, id?: string) {
     const itemsValues = Object.values(props.items).reduce(
       (acc, cur) => {
         if (cur.value <= 0) throw new Error('All items values and payers amount must be a positive number')
@@ -40,6 +43,8 @@ export class Transaction {
       throw new Error('There must be some money involved in the transaction')
     }
     this.amount = itemsValues
+
+    this.month = DateParser.parseDate(props.timestamp)
     
     Object.assign(this, props)
 
