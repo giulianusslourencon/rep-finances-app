@@ -1,15 +1,20 @@
 import { Request, Response } from 'express'
 import { CreateTransactionUseCase } from './CreateTransactionUseCase'
+import { CreateTransactionValidation } from './CreateTransactionValidation'
 
 export class CreateTransactionController {
   constructor(
-    private createTransactionUseCase: CreateTransactionUseCase
+    private createTransactionUseCase: CreateTransactionUseCase,
+    private createTransactionValidation: CreateTransactionValidation
   ) {}
   
   async handle(request: Request, response: Response): Promise<Response> {
-    const { title, timestamp, items, payers } = request.body
-
     try {
+      if (!this.createTransactionValidation.validate(request))
+        throw new Error('Validation failed.')
+      
+      const { title, timestamp, items, payers } = request.body
+
       const transaction = await this.createTransactionUseCase.execute({
         title, timestamp, items, payers
       })
