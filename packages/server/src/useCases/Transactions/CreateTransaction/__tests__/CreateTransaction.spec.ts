@@ -21,6 +21,7 @@ describe('Create transaction', () => {
     expect(transaction).toHaveProperty('_id')
     expect(transaction).toHaveProperty('amount')
     expect(transaction.amount).toBe(50)
+    expect(transaction.related.length).toBe(2)
   })
 
   it('Should not create a transaction with total items values distinct from total paid.', async () => {

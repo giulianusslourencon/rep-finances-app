@@ -36,4 +36,4 @@ export const transactions = [
       G: 20
     }
   }
-] as Omit<Transaction, '_id' | 'month' | 'amount'>[]
+] as Omit<Transaction, '_id' | 'month' | 'amount' | 'related'>[]

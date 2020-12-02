@@ -15,6 +15,7 @@ export type TransactionAttributes = {
   payers: {
     [user_id: string]: number
   }
+  related: string[]
 }
 
 export type TransactionDocument = Document & TransactionAttributes
@@ -54,6 +55,10 @@ const TransactionSchema = new Schema(
     payers: {
       type: Map,
       of: Number
+    },
+    related: {
+      type: [String],
+      required: true
     }
   }
 )

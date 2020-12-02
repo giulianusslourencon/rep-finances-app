@@ -21,8 +21,9 @@ export class Transaction {
   }
 
   public readonly amount!: number
+  public readonly related!: string[]
 
-  constructor(props: Omit<Transaction, '_id' | 'month' | 'amount'>, id?: string) {
+  constructor(props: Omit<Transaction, '_id' | 'month' | 'amount' | 'related'>, id?: string) {
     const itemsValues = Object.values(props.items).reduce(
       (acc, cur) => {
         if (cur.value <= 0) throw new Error('All items values and payers amount must be a positive number')
@@ -45,6 +46,12 @@ export class Transaction {
     this.amount = itemsValues
 
     this.month = DateParser.parseDate(props.timestamp)
+
+    let related = [...Object.keys(props.payers)]
+    Object.values(props.items).forEach(item => {
+      related = related.concat(item.related_users)
+    })
+    this.related = [...new Set(related)]
     
     Object.assign(this, props)
 

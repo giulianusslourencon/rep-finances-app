@@ -17,7 +17,7 @@ export class FindTransactionController {
 
       const balance = this.getTransactionBalanceUseCase.execute({ transaction })
 
-      return response.status(200).json({ transaction, balance })
+      return response.status(200).json({ transaction, balance: balance.individual_balance })
     } catch (error) {
       return response.status(404).json({
         message: error.message || 'Unexpected error.'
