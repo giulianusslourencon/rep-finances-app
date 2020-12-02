@@ -7,7 +7,7 @@ export class Balance {
   }
   
   constructor(transaction: Transaction) {
-    this.individual_balance = transaction.payers
+    this.individual_balance = { ...transaction.payers }
 
     Object.values(transaction.items).forEach(item => {
       const nUsers = item.related_users.length
