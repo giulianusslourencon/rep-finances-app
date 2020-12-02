@@ -7,14 +7,12 @@ import { createTransactionUseCase } from '..'
 describe('Create transaction', () => {
   beforeAll(async () => {
     await MongoMock.connect()
+
+    await Transaction.deleteMany({})
   })
 
   afterAll(async () => {
     await MongoMock.disconnect()
-  })
-
-  beforeEach(async () => {
-    await Transaction.deleteMany({})
   })
 
   it('Should create a transaction and return the created Transaction.', async () => {

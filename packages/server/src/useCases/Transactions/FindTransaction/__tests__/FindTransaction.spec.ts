@@ -10,18 +10,16 @@ let createdTransaction: Transaction
 describe('Find transaction', () => {
   beforeAll(async () => {
     await MongoMock.connect()
-  })
 
-  afterAll(async () => {
-    await MongoMock.disconnect()
-  })
-
-  beforeEach(async () => {
     await TransactionSchema.deleteMany({})
 
     createdTransaction = (await Promise.all(
       data.transactions.map(transaction => createTransactionUseCase.execute(transaction))
     ))[0]
+  })
+
+  afterAll(async () => {
+    await MongoMock.disconnect()
   })
 
   it('Should find a transaction with given id.', async () => {

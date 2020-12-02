@@ -7,17 +7,15 @@ import { createTransactionUseCase } from '@useCases/Transactions/CreateTransacti
 describe('List transactions', () => {
   beforeAll(async () => {
     await MongoMock.connect()
-  })
 
-  afterAll(async () => {
-    await MongoMock.disconnect()
-  })
-
-  beforeEach(async () => {
     await Transaction.deleteMany({})
     await Promise.all(
       data.transactions.map(transaction => createTransactionUseCase.execute(transaction))
     )
+  })
+
+  afterAll(async () => {
+    await MongoMock.disconnect()
   })
 
   it('Should list all transactions registered.', async () => {
