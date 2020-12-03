@@ -21,17 +21,17 @@ export class MongoBalanceRepository implements IBalanceRepository {
       { _id: 1 }, 
       { sort: { _id: 1 } }
     ).lean()).map(balance => balance._id)
-
+    
     const [lastBalance] = await BalanceSchema.find({},
       { _id: 1 },
       { sort: { _id: -1 }, limit: 1 }
     ).lean()
-
+    
     const lastMonth: string = lastBalance ? lastBalance._id : '0'
     const notRegisteredMonths = await this.transactionsRepository.getNotRegisteredMonths(lastMonth)
 
-    if (notUpdatedMonths.length > 0 || notRegisteredMonths.length > 0)
-      this.updateBalance([...notUpdatedMonths, ...notRegisteredMonths])
+    if (notUpdatedMonths.length + notRegisteredMonths.length > 0)
+      await this.updateBalance([...notUpdatedMonths, ...notRegisteredMonths])
     
     const [balance] = await BalanceSchema.find({}, 
       { individual_balance: 1 }, 
@@ -47,13 +47,15 @@ export class MongoBalanceRepository implements IBalanceRepository {
     let [lastUpdatedMonth] = await BalanceSchema.find(
       { updated: true }, {},
       { sort: { _id: -1 } }
-    ).lean()
+    ).lean() as BalanceAttributes[]
     lastUpdatedMonth ||= { _id: '', individual_balance: {}, updated: true }
 
     for (const month of notUpdatedMonths) {
       const transactions = await this.transactionsRepository.listByMonth(month)
-      let { individual_balance: monthBalance } = new Balance([...transactions, lastUpdatedMonth])
+      const { individual_balance } = lastUpdatedMonth
 
+      let { individual_balance: monthBalance } = new Balance([...transactions, {individual_balance}])
+      
       lastUpdatedMonth = await BalanceSchema.findByIdAndUpdate(
         month,
         { $set: { individual_balance: monthBalance, updated: true } },

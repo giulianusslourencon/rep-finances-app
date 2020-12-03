@@ -21,8 +21,9 @@ export class Balance {
     }
     else {
       const balances = transaction.map(transac => {
-        if (transac instanceof Balance) return transac.individual_balance
-        return (new Balance(transac)).individual_balance
+        if ((<Balance>transac).individual_balance) 
+          return (<Balance>transac).individual_balance
+        return (new Balance(<Transaction>transac)).individual_balance
       })
 
       this.individual_balance = balances.reduce((acc, cur) => {

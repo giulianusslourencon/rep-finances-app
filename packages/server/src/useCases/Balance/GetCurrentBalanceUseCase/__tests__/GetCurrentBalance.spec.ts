@@ -29,5 +29,10 @@ describe('Get Current Balance', () => {
       M: -202.5,
       F: -2.5
     })
+
+    const balances = await BalanceSchema.find()
+    for (const monthBalance of balances) {
+      expect(monthBalance.updated).toBe(true)
+    }
   })
 })

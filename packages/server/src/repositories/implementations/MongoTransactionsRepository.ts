@@ -20,10 +20,12 @@ export class MongoTransactionsRepository implements ITransactionsRepository {
   }
 
   async getNotRegisteredMonths(lastMonth: string): Promise<string[]> {
-    return (await TransactionSchema.find(
-      { month: { $gt: lastMonth } },
-      { month: 1 },
-      { sort: { month: 1 } }
-    ).lean()).map(transaction => transaction.month)
+    const doc = await TransactionSchema.aggregate()
+      .match({ month: { $gt: lastMonth } })
+      .group({ _id: '$month' })
+      .sort({ _id: 1 })
+      .exec()
+
+      return doc.map((month: { _id: string }) => month._id)
   }
 }
