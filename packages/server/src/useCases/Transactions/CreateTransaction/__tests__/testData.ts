@@ -15,6 +15,78 @@ export const transactionSuccess = {
     P: 50
   }
 }
+export const transactionsToBalance = {
+  created: [
+    {
+      title: 'Compra Jan',
+      timestamp: 1609470000000,
+      items: {
+        item1: {
+          value: 20,
+            related_users: ['P', 'G']
+        },
+        item2: {
+          value: 30,
+            related_users: ['P']
+        }
+      },
+      payers: {
+        P: 50
+      }
+    },
+    {
+      title: 'Compra Fev',
+      timestamp: 1612148400000,
+      items: {
+        item1: {
+          value: 20,
+            related_users: ['P', 'G']
+        },
+        item2: {
+          value: 30,
+            related_users: ['P']
+        }
+      },
+      payers: {
+        P: 50
+      }
+    },
+    {
+      title: 'Compra Mar',
+      timestamp: 1614567600000,
+      items: {
+        item1: {
+          value: 20,
+            related_users: ['P', 'G']
+        },
+        item2: {
+          value: 30,
+            related_users: ['P']
+        }
+      },
+      payers: {
+        P: 50
+      }
+    }
+  ],
+  toCreate: {
+    title: 'Outra Compra Fev',
+    timestamp: 1613148400000,
+    items: {
+      item1: {
+        value: 20,
+        related_users: ['P', 'G']
+      },
+      item2: {
+        value: 30,
+        related_users: ['P']
+      }
+    },
+    payers: {
+      P: 50
+    }
+  }
+}
 
 export const transactionDistinctValues = {
   title: 'Compra 1',

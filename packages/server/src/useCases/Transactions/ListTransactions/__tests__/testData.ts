@@ -1,4 +1,4 @@
-import { Transaction } from "@server/entities/Transaction";
+import { Transaction } from '@server/entities/Transaction'
 
 export const transactions = [
   {
@@ -50,7 +50,7 @@ export const transactions = [
   },
   {
     title: 'Compra 4',
-    timestamp: '1610449200000',
+    timestamp: 1610449200000,
     items: {
       item1: {
         value: 200,

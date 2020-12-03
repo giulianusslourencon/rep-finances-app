@@ -2,17 +2,22 @@ import * as data from './testData'
 
 import MongoMock from '@shared/MongoMock'
 import Transaction from '@entities/schemas/Transaction'
+import Balance from '@entities/schemas/Balance'
 import { createTransactionUseCase } from '..'
+import { getCurrentBalanceUseCase } from '@useCases/Balance/GetCurrentBalanceUseCase'
 
 describe('Create transaction', () => {
   beforeAll(async () => {
     await MongoMock.connect()
-
-    await Transaction.deleteMany({})
   })
 
   afterAll(async () => {
     await MongoMock.disconnect()
+  })
+
+  beforeEach(async () => {
+    await Transaction.deleteMany({})
+    await Balance.deleteMany({})
   })
 
   it('Should create a transaction and return the created Transaction.', async () => {
@@ -22,6 +27,21 @@ describe('Create transaction', () => {
     expect(transaction).toHaveProperty('amount')
     expect(transaction.amount).toBe(50)
     expect(transaction.related.length).toBe(2)
+  })
+
+  it('Should set Balance updated property to true from the new transaction month.', async () => {
+    Promise.all(data.transactionsToBalance.created.map(transaction => 
+      createTransactionUseCase.execute(transaction)
+    ))
+
+    await getCurrentBalanceUseCase.execute()
+    const createdTransaction = await createTransactionUseCase.execute(data.transactionsToBalance.toCreate)
+
+    const monthBalances = await Balance.find().lean()
+
+    monthBalances.forEach(month => {
+      expect(month.updated).toBe(month._id < createdTransaction.month)
+    })
   })
 
   it('Should not create a transaction with total items values distinct from total paid.', async () => {

@@ -25,7 +25,7 @@ describe('Get Transaction Balance', () => {
   it('Should return the correct transaction balance', async () => {
     const balance = getTransactionBalanceUseCase.execute({ transaction: createdTransactions[0] })
 
-    expect(balance.individual_balance).toMatchObject({
+    expect(balance.individual_balance).toEqual({
       P: 10, G: -10
     })
   })
@@ -33,6 +33,6 @@ describe('Get Transaction Balance', () => {
   it('Should return the correct transaction balance even when it is an empty object', async () => {
     const balance = getTransactionBalanceUseCase.execute({ transaction: createdTransactions[1] })
 
-    expect(balance.individual_balance).toMatchObject({})
+    expect(balance.individual_balance).toEqual({})
   })
 })

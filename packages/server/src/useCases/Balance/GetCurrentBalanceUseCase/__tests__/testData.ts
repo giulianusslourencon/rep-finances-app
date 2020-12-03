@@ -54,7 +54,7 @@ export const transactions = [
     items: {
       item1: {
         value: 200,
-        related_users: ['G']
+        related_users: ['M']
       }
     },
     payers: {
