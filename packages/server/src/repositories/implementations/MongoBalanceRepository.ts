@@ -51,7 +51,7 @@ export class MongoBalanceRepository implements IBalanceRepository {
     lastUpdatedMonth ||= { _id: '', individual_balance: {}, updated: true }
 
     for (const month of notUpdatedMonths) {
-      const transactions = await this.transactionsRepository.listByMonth(month)
+      const transactions = await this.transactionsRepository.listItemsAndPayersByMonth(month)
       const { individual_balance } = lastUpdatedMonth
 
       let { individual_balance: monthBalance } = new Balance([...transactions, {individual_balance}])

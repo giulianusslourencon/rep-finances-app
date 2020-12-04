@@ -6,7 +6,7 @@ export class Balance {
     [user_id: string]: number
   }
   
-  constructor(transaction: Transaction | (Transaction | Balance)[]) {
+  constructor(transaction: Pick<Transaction, 'items' | 'payers'> | (Pick<Transaction, 'items' | 'payers'> | Balance)[]) {
     if (!(transaction instanceof Array)) {
       this.individual_balance = { ...transaction.payers }
   

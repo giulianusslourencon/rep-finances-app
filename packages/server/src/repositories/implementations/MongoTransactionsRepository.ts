@@ -3,12 +3,27 @@ import TransactionSchema from '@entities/schemas/Transaction'
 import { ITransactionsRepository } from '@repositories/ITransactionsRepository'
 
 export class MongoTransactionsRepository implements ITransactionsRepository {
-  async list(skipLimit?: { skip: number; limit: number }): Promise<Transaction[]> {
-    return await TransactionSchema.find({}, {}, { sort: { timestamp: -1 }, ...skipLimit }).lean()
+  async list(skipLimit?: { skip: number; limit: number }): Promise<Pick<Transaction, 'title' | 'timestamp' | 'amount' | 'related'>[]> {
+    return await TransactionSchema.find(
+      {}, 
+      { title: 1, timestamp: 1, amount: 1, related: 1 }, 
+      { sort: { timestamp: -1 }, ...skipLimit }
+    ).lean()
   }
 
-  async listByMonth(month: string, skipLimit?: { skip: number; limit: number }): Promise<Transaction[]> {
-    return await TransactionSchema.find({month}, {}, skipLimit).lean()
+  async listByMonth(month: string, skipLimit?: { skip: number; limit: number }): Promise<Pick<Transaction, 'title' | 'timestamp' | 'amount' | 'related'>[]> {
+    return await TransactionSchema.find(
+      { month }, 
+      { title: 1, timestamp: 1, amount: 1, related: 1 }, 
+      { sort: { timestamp: -1 }, ...skipLimit }
+    ).lean()
+  }
+
+  async listItemsAndPayersByMonth(month: string): Promise<Pick<Transaction, 'items' | 'payers'>[]> {
+    return await TransactionSchema.find(
+      { month },
+      { items: 1, payers: 1 }
+    ).lean()
   }
 
   async findById(id: string): Promise<Transaction | null | undefined> {

@@ -42,6 +42,6 @@ describe('List transactions', () => {
     const transactions = await listTransactionsUseCase.execute({ skipLimit: { skip: 1, limit: 3 }, month: '202012' })
 
     expect(transactions).toHaveLength(2)
-    expect(transactions[1].title).toBe(data.transactions[2].title)
+    expect(transactions[1].title).toBe(data.transactions[0].title)
   })
 })
