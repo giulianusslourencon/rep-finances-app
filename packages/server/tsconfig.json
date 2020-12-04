@@ -10,5 +10,6 @@
       "@useCases/*": ["./src/useCases/*"],
       "@server/*": ["./src/*"]
     }
-  }
+  },
+  "include": ["./src/**/*.ts"]
 }
