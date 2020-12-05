@@ -1,17 +1,12 @@
-import { Head } from 'next/document'
 import React from 'react'
+
+import Layout from '../../components/layout'
 
 const CreateTransaction: React.FC = () => {
   return (
-    <div>
-      <Head>
-        <title>Homepage</title>
-      </Head>
-
-      <main>
-        <h1>New</h1>
-      </main>
-    </div>
+    <Layout>
+      <h1>New</h1>
+    </Layout>
   )
 }
 

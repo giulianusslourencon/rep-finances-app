@@ -2,10 +2,10 @@ import Document, {
   DocumentInitialProps,
   DocumentContext,
   Html,
+  Head,
   Main,
   NextScript
 } from 'next/document'
-import Head from 'next/head'
 import React from 'react'
 import { ServerStyleSheet } from 'styled-components'
 

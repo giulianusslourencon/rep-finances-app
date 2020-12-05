@@ -1,6 +1,8 @@
 import { GetStaticProps } from 'next'
-import Head from 'next/head'
+import Link from 'next/link'
 import React from 'react'
+
+import Layout from '../components/layout'
 
 type BalanceProps = {
   balance: [string, number][]
@@ -8,16 +10,13 @@ type BalanceProps = {
 
 const Home: React.FC<BalanceProps> = ({ balance }) => {
   return (
-    <div>
-      <Head>
-        <title>Homepage</title>
-      </Head>
-
-      <main>
-        <h1>Hello World</h1>
-        <p>{balance}</p>
-      </main>
-    </div>
+    <Layout>
+      <h1>Hello World</h1>
+      <p>{balance}</p>
+      <Link href="/transactions">
+        <a>Ver Transações</a>
+      </Link>
+    </Layout>
   )
 }
 
