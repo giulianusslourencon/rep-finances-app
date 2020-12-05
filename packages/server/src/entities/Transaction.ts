@@ -1,5 +1,6 @@
-import DateParser from '@shared/utils/DateParser'
 import { v4 as uuid } from 'uuid'
+
+import DateParser from '@shared/utils/DateParser'
 
 export class Transaction {
   public readonly _id!: string
@@ -8,34 +9,39 @@ export class Transaction {
 
   public timestamp!: number
   public readonly month!: string
-  
-  public items!: { 
+
+  public items!: {
     [title: string]: {
       value: number
       related_users: string[]
     }
   }
 
-  public payers!: { 
+  public payers!: {
     [user_id: string]: number
   }
 
   public readonly amount!: number
   public readonly related!: string[]
 
-  constructor(props: Omit<Transaction, '_id' | 'month' | 'amount' | 'related'>, id?: string) {
-    const itemsValues = Object.values(props.items).reduce(
-      (acc, cur) => {
-        if (cur.value <= 0) throw new Error('All items values and payers amount must be a positive number')
-        return acc + cur.value
-      }, 0
-    )
-    const totalPaid = Object.values(props.payers).reduce(
-      (acc, cur) => {
-        if (cur <= 0) throw new Error('All items values and payers amount must be a positive number')
-        return acc + cur
-      }, 0
-    )
+  constructor(
+    props: Omit<Transaction, '_id' | 'month' | 'amount' | 'related'>,
+    id?: string
+  ) {
+    const itemsValues = Object.values(props.items).reduce((acc, cur) => {
+      if (cur.value <= 0)
+        throw new Error(
+          'All items values and payers amount must be a positive number'
+        )
+      return acc + cur.value
+    }, 0)
+    const totalPaid = Object.values(props.payers).reduce((acc, cur) => {
+      if (cur <= 0)
+        throw new Error(
+          'All items values and payers amount must be a positive number'
+        )
+      return acc + cur
+    }, 0)
 
     if (itemsValues !== totalPaid) {
       throw new Error('Items values are distinct from total paid')
@@ -52,7 +58,7 @@ export class Transaction {
       related = related.concat(item.related_users)
     })
     this.related = [...new Set(related)]
-    
+
     Object.assign(this, props)
 
     if (!id) {

@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
+
 import { GetCurrentBalanceUseCase } from './GetCurrentBalanceUseCase'
 
 export class GetCurrentBalanceController {
-  constructor(
-    private getCurrentBalanceUseCase: GetCurrentBalanceUseCase
-  ) {}
+  // eslint-disable-next-line prettier/prettier
+  constructor(private getCurrentBalanceUseCase: GetCurrentBalanceUseCase) { }
 
   async handle(_request: Request, response: Response): Promise<Response> {
     try {

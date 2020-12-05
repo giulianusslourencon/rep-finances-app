@@ -9,10 +9,8 @@
     "standard",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
     "prettier/@typescript-eslint",
-    "prettier/standard",
-    "prettier/react"
+    "plugin:prettier/recommended"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -23,27 +21,151 @@
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 12,
+    "ecmaVersion": 2021,
     "sourceType": "module"
   },
   "plugins": [
+    "prettier",
     "react",
     "@typescript-eslint",
-    "prettier",
     "eslint-plugin-import-helpers"
   ],
   "rules": {
     "prettier/prettier": "error",
-    "space-before-function-paren":"off",
-    "react/prop-types": "off",
+    "object-curly-spacing": [
+      "error",
+      "always",
+      {
+        "arraysInObjects": false
+      }
+    ],
+    "array-bracket-spacing": [
+      "error",
+      "never"
+    ],
+    "offsetTernaryExpressions": "off",
     "no-use-before-define": "off",
-    "no-useless-constructor":"off"
+    "no-empty-function": [
+      "error",
+      {
+        "allow": [
+          "constructors"
+        ]
+      }
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/*.spec.ts",
+          "**/__tests__/*.ts"
+        ]
+      }
+    ],
+    "no-useless-constructor": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "_"
+      }
+    ],
+    "@typescript-eslint/no-useless-constructor": "error",
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/prefer-for-of": "warn",
+    "import-helpers/order-imports": [
+      "warn",
+      {
+        "newlinesBetween": "always",
+        "groups": [
+          "/^express/",
+          "module",
+          "/^@config/",
+          "/^@entities/",
+          "/^@repositories/",
+          "/^@shared/",
+          "/^@useCases/",
+          [
+            "parent",
+            "sibling",
+            "index"
+          ]
+        ],
+        "alphabetize": {
+          "order": "asc",
+          "ignoreCase": true
+        }
+      }
+    ],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".tsx"
+        ]
+      }
+    ],
+    "import/prefer-default-export": "off",
+    "react/prop-types": "off",
+    "no-param-reassign": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "react/jsx-curly-newline": "off",
+    "no-shadow": "off",
+    "no-alert": "off",
+    "@typescript-eslint/ban-types": "warn",
+    "react/jsx-props-no-spreading": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "camelcase": "off",
+    "no-unused-expressions": "off",
+    "no-underscore-dangle": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
   },
+  "overrides": [
+    {
+      "files": [
+        "*.js"
+      ],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ],
   "settings": {
     "import/resolver": {
       "typescript": {
-        "directory": "packages/server/tsconfig.json"
+        "project": "packages/server/tsconfig.json"
       }
-    }
+    },
+    "react": {
+      "createClass": "createReactClass",
+      "pragma": "React",
+      "fragment": "Fragment",
+      "version": "detect",
+      "flowVersion": "0.53"
+    },
+    "propWrapperFunctions": [
+      "forbidExtraProps",
+      {
+        "property": "freeze",
+        "object": "Object"
+      },
+      {
+        "property": "myFavoriteWrapper"
+      }
+    ],
+    "linkComponents": [
+      "Hyperlink",
+      {
+        "name": "Link",
+        "linkAttribute": "to"
+      }
+    ]
   }
 }

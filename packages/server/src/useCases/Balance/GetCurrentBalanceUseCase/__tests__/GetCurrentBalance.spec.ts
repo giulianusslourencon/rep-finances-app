@@ -1,8 +1,12 @@
-import TransactionSchema from '@entities/schemas/Transaction'
 import BalanceSchema from '@entities/schemas/Balance'
+import TransactionSchema from '@entities/schemas/Transaction'
+
 import { getCurrentBalanceUseCase } from '..'
-import { createTransactionUseCase } from '@useCases/Transactions/CreateTransaction'
+
 import MongoMock from '@shared/MongoMock'
+
+import { createTransactionUseCase } from '@useCases/Transactions/CreateTransaction'
+
 import * as data from './testData'
 
 describe('Get Current Balance', () => {
@@ -12,7 +16,9 @@ describe('Get Current Balance', () => {
     await TransactionSchema.deleteMany({})
     await BalanceSchema.deleteMany({})
     await Promise.all(
-      data.transactions.map(transaction => createTransactionUseCase.execute(transaction))
+      data.transactions.map(transaction =>
+        createTransactionUseCase.execute(transaction)
+      )
     )
   })
 

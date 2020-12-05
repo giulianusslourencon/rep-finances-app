@@ -4,11 +4,11 @@ export const transactionSuccess = {
   items: {
     item1: {
       value: 20,
-        related_users: ['P', 'G']
+      related_users: ['P', 'G']
     },
     item2: {
       value: 30,
-        related_users: ['P']
+      related_users: ['P']
     }
   },
   payers: {
@@ -23,11 +23,11 @@ export const transactionsToBalance = {
       items: {
         item1: {
           value: 20,
-            related_users: ['P', 'G']
+          related_users: ['P', 'G']
         },
         item2: {
           value: 30,
-            related_users: ['P']
+          related_users: ['P']
         }
       },
       payers: {
@@ -40,11 +40,11 @@ export const transactionsToBalance = {
       items: {
         item1: {
           value: 20,
-            related_users: ['P', 'G']
+          related_users: ['P', 'G']
         },
         item2: {
           value: 30,
-            related_users: ['P']
+          related_users: ['P']
         }
       },
       payers: {
@@ -57,11 +57,11 @@ export const transactionsToBalance = {
       items: {
         item1: {
           value: 20,
-            related_users: ['P', 'G']
+          related_users: ['P', 'G']
         },
         item2: {
           value: 30,
-            related_users: ['P']
+          related_users: ['P']
         }
       },
       payers: {
@@ -112,7 +112,7 @@ export const transactionNoMoney = {
   items: {},
   payers: {}
 }
-  
+
 export const transactionNegativeNull = {
   title: 'Compra 1',
   timestamp: 1606834466326,

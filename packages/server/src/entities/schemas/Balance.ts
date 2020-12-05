@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema, Model } from 'mongoose'
+import mongoose, { Document, Schema } from 'mongoose'
 
 export type BalanceAttributes = {
   _id: string
@@ -10,23 +10,19 @@ export type BalanceAttributes = {
 
 export type BalanceDocument = Document & BalanceAttributes
 
-type BalanceModel = Model<BalanceDocument>
-
-const BalanceSchema = new Schema(
-  {
-    _id: {
-      type: String,
-      trim: true
-    },
-    individual_balance: {
-      type: Map,
-      of: Number
-    },
-    updated: {
-      type: Boolean,
-      default: true
-    }
+const BalanceSchema = new Schema({
+  _id: {
+    type: String,
+    trim: true
+  },
+  individual_balance: {
+    type: Map,
+    of: Number
+  },
+  updated: {
+    type: Boolean,
+    default: true
   }
-)
+})
 
-export default mongoose.model<BalanceDocument, BalanceModel>('Balance', BalanceSchema)
+export default mongoose.model<BalanceDocument>('Balance', BalanceSchema)

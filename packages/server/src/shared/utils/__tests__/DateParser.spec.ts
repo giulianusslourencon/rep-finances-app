@@ -1,4 +1,4 @@
-import DateParser from "../DateParser"
+import DateParser from '../DateParser'
 
 describe('Date Parser', () => {
   it('Should return the date parsed on default timeZone.', () => {

@@ -1,10 +1,13 @@
-import * as data from './testData'
+import Balance from '@entities/schemas/Balance'
+import Transaction from '@entities/schemas/Transaction'
 
 import MongoMock from '@shared/MongoMock'
-import Transaction from '@entities/schemas/Transaction'
-import Balance from '@entities/schemas/Balance'
+
 import { createTransactionUseCase } from '..'
+
 import { getCurrentBalanceUseCase } from '@useCases/Balance/GetCurrentBalanceUseCase'
+
+import * as data from './testData'
 
 describe('Create transaction', () => {
   beforeAll(async () => {
@@ -21,7 +24,9 @@ describe('Create transaction', () => {
   })
 
   it('Should create a transaction and return the created Transaction.', async () => {
-    const transaction = await createTransactionUseCase.execute(data.transactionSuccess)
+    const transaction = await createTransactionUseCase.execute(
+      data.transactionSuccess
+    )
 
     expect(transaction).toHaveProperty('_id')
     expect(transaction).toHaveProperty('amount')
@@ -30,12 +35,16 @@ describe('Create transaction', () => {
   })
 
   it('Should set Balance updated property to true from the new transaction month.', async () => {
-    Promise.all(data.transactionsToBalance.created.map(transaction => 
-      createTransactionUseCase.execute(transaction)
-    ))
+    Promise.all(
+      data.transactionsToBalance.created.map(transaction =>
+        createTransactionUseCase.execute(transaction)
+      )
+    )
 
     await getCurrentBalanceUseCase.execute()
-    const createdTransaction = await createTransactionUseCase.execute(data.transactionsToBalance.toCreate)
+    const createdTransaction = await createTransactionUseCase.execute(
+      data.transactionsToBalance.toCreate
+    )
 
     const monthBalances = await Balance.find().lean()
 
@@ -45,20 +54,22 @@ describe('Create transaction', () => {
   })
 
   it('Should not create a transaction with total items values distinct from total paid.', async () => {
-    await expect(createTransactionUseCase.execute(data.transactionDistinctValues))
-      .rejects
-      .toThrow('Items values are distinct from total paid')
+    await expect(
+      createTransactionUseCase.execute(data.transactionDistinctValues)
+    ).rejects.toThrow('Items values are distinct from total paid')
   })
 
   it('Should not create a transaction with amount equal to 0.', async () => {
-    await expect(createTransactionUseCase.execute(data.transactionNoMoney))
-      .rejects
-      .toThrow('There must be some money involved in the transaction')
+    await expect(
+      createTransactionUseCase.execute(data.transactionNoMoney)
+    ).rejects.toThrow('There must be some money involved in the transaction')
   })
 
   it('Should not create a transaction with negative or null items values or payers amount.', async () => {
-    await expect(createTransactionUseCase.execute(data.transactionNegativeNull))
-      .rejects
-      .toThrow('All items values and payers amount must be a positive number')
+    await expect(
+      createTransactionUseCase.execute(data.transactionNegativeNull)
+    ).rejects.toThrow(
+      'All items values and payers amount must be a positive number'
+    )
   })
 })

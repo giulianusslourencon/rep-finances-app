@@ -7,7 +7,7 @@ export interface ICreateTransactionRequestDTO {
       related_users: string[]
     }
   }
-  payers: { 
-    [user_id: string]: number 
+  payers: {
+    [user_id: string]: number
   }
 }

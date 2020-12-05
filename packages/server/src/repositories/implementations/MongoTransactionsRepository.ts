@@ -1,25 +1,38 @@
-import { Transaction } from '@entities/Transaction'
 import TransactionSchema from '@entities/schemas/Transaction'
+import { Transaction } from '@entities/Transaction'
+
 import { ITransactionsRepository } from '@repositories/ITransactionsRepository'
 
 export class MongoTransactionsRepository implements ITransactionsRepository {
-  async list(skipLimit?: { skip: number; limit: number }): Promise<Pick<Transaction, 'title' | 'timestamp' | 'amount' | 'related'>[]> {
+  async list(skipLimit?: {
+    skip: number
+    limit: number
+  }): Promise<
+    Pick<Transaction, 'title' | 'timestamp' | 'amount' | 'related'>[]
+  > {
     return await TransactionSchema.find(
-      {}, 
-      { title: 1, timestamp: 1, amount: 1, related: 1 }, 
+      {},
+      { title: 1, timestamp: 1, amount: 1, related: 1 },
       { sort: { timestamp: -1 }, ...skipLimit }
     ).lean()
   }
 
-  async listByMonth(month: string, skipLimit?: { skip: number; limit: number }): Promise<Pick<Transaction, 'title' | 'timestamp' | 'amount' | 'related'>[]> {
+  async listByMonth(
+    month: string,
+    skipLimit?: { skip: number; limit: number }
+  ): Promise<
+    Pick<Transaction, 'title' | 'timestamp' | 'amount' | 'related'>[]
+  > {
     return await TransactionSchema.find(
-      { month }, 
-      { title: 1, timestamp: 1, amount: 1, related: 1 }, 
+      { month },
+      { title: 1, timestamp: 1, amount: 1, related: 1 },
       { sort: { timestamp: -1 }, ...skipLimit }
     ).lean()
   }
 
-  async listItemsAndPayersByMonth(month: string): Promise<Pick<Transaction, 'items' | 'payers'>[]> {
+  async listItemsAndPayersByMonth(
+    month: string
+  ): Promise<Pick<Transaction, 'items' | 'payers'>[]> {
     return await TransactionSchema.find(
       { month },
       { items: 1, payers: 1 }
@@ -35,12 +48,12 @@ export class MongoTransactionsRepository implements ITransactionsRepository {
   }
 
   async getNotRegisteredMonths(lastMonth: string): Promise<string[]> {
-    const doc = await TransactionSchema.aggregate()
-      .match({ month: { $gt: lastMonth } })
-      .group({ _id: '$month' })
-      .sort({ _id: 1 })
-      .exec()
+    const doc = await TransactionSchema.aggregate<{ _id: string }>([
+      { $match: { month: { $gt: lastMonth } } },
+      { $group: { _id: '$month' } },
+      { $sort: { _id: 1 } }
+    ])
 
-      return doc.map((month: { _id: string }) => month._id)
+    return doc.map(month => month._id)
   }
 }
