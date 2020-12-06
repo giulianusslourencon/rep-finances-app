@@ -30,6 +30,14 @@ export class MongoTransactionsRepository implements ITransactionsRepository {
     ).lean()
   }
 
+  async count(): Promise<number> {
+    return await TransactionSchema.count()
+  }
+
+  async countByMonth(month: string): Promise<number> {
+    return await TransactionSchema.count({ month })
+  }
+
   async listItemsAndPayersByMonth(
     month: string
   ): Promise<Pick<Transaction, 'items' | 'payers'>[]> {

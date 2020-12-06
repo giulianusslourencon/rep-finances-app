@@ -9,12 +9,19 @@ export type TransactionCore = Pick<Transaction, 'items' | 'payers'>
 
 export interface ITransactionsRepository {
   save(transaction: Transaction): Promise<void>
+
   list(skipLimit?: { skip: number; limit: number }): Promise<TransactionList>
   listByMonth(
     month: string,
     skipLimit?: { skip: number; limit: number }
   ): Promise<TransactionList>
+
+  count(): Promise<number>
+  countByMonth(month: string): Promise<number>
+
   listItemsAndPayersByMonth(month: string): Promise<TransactionCore[]>
+
   findById(id: string): Promise<Transaction | null | undefined>
+
   getNotRegisteredMonths(lastMonth: string): Promise<string[]>
 }
