@@ -1,15 +1,16 @@
 import { GetStaticProps } from 'next'
 import React from 'react'
 
+import BalanceList from '../components/balanceList'
 import Buttons from '../components/buttons'
 import Container from '../components/container'
 import Layout from '../components/layout'
 
-type BalanceProps = {
+type Props = {
   balance: [string, number][]
 }
 
-const Home: React.FC<BalanceProps> = ({ balance }) => {
+const Home: React.FC<Props> = ({ balance }) => {
   return (
     <Layout>
       <Buttons
@@ -19,14 +20,13 @@ const Home: React.FC<BalanceProps> = ({ balance }) => {
         ]}
       />
       <Container>
-        <h1>Hello World</h1>
-        <p>{balance}</p>
+        <BalanceList balance={balance} />
       </Container>
     </Layout>
   )
 }
 
-export const getStaticProps: GetStaticProps<BalanceProps> = async () => {
+export const getStaticProps: GetStaticProps<Props> = async () => {
   const balance = {
     P: 50,
     G: -20,

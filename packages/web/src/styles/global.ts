@@ -55,9 +55,47 @@ export default createGlobalStyle`
     text-decoration: underline;
   }
 
-  hr.lineAmongButtons {
+  hr {
     height: 2;
-    color: ${props => props.theme.colors.light};
-    margin: 0 16px;    
+    margin: 0 16px;
   }
+
+  hr.lineAmongButtons {
+    color: ${props => props.theme.colors.light};
+  }
+
+  hr.lineAmongBalance {
+    color: ${props => props.theme.colors.primaryDark};
+  }
+
+  .individual_balance {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .individual_balance .balance_id {
+    display: flex;
+    height: 72px;
+    width: 72px;
+    background-color: ${props => props.theme.colors.primaryLight};
+    border-radius: 16px;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+  }
+
+  .individual_balance .balance_amount {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: ${props => props.theme.colors.primaryDark};
+    font-weight: 300;
+  }
+
+  .individual_balance .balance_amount.negative {
+    color: ${props => props.theme.colors.danger};
+  }
+
 `
