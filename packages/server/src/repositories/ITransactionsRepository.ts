@@ -2,7 +2,7 @@ import { Transaction } from '@entities/Transaction'
 
 export type TransactionList = Pick<
   Transaction,
-  'title' | 'timestamp' | 'amount' | 'related'
+  '_id' | 'title' | 'timestamp' | 'amount' | 'related'
 >[]
 
 export type TransactionCore = Pick<Transaction, 'items' | 'payers'>

@@ -51,7 +51,19 @@ export default createGlobalStyle`
     font-size: 32px;
   }
 
+  a {
+    text-decoration: none;
+  }
+
   a:hover {
+    text-decoration: underline;
+  }
+
+  a:hover .transaction_item {
+    text-decoration: none;
+  }
+
+  a:hover .transaction_item .transaction_title {
     text-decoration: underline;
   }
 
@@ -96,6 +108,51 @@ export default createGlobalStyle`
 
   .individual_balance .balance_amount.negative {
     color: ${props => props.theme.colors.danger};
+  }
+
+  .transaction_item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+  }
+
+  .transaction_item div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .transaction_item .transaction_title {
+    font-weight: bold;
+    font-size: 24px;
+    color: ${props => props.theme.colors.primaryDark};
+  }
+
+  .transaction_item .transaction_amount {
+    font-size: 16px;
+    color: ${props => props.theme.colors.primary};
+  }
+
+  .transaction_item .transaction_date {
+    font-size: 18px;
+    font-weight: 600;
+    color: ${props => props.theme.colors.primary};
+  }
+
+  .transaction_item .transaction_related {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .transaction_item .transaction_related_id {
+    display: flex;
+    height: 24px;
+    width: 24px;
+    background-color: ${props => props.theme.colors.primaryLight};
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
   }
 
 `

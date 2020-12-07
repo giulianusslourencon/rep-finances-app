@@ -4,7 +4,7 @@ type Props = {
   individual_balance: [string, number]
 }
 
-const IndividualBalance: React.FC<Props> = ({ individual_balance }) => {
+const BalanceItem: React.FC<Props> = ({ individual_balance }) => {
   const [id, amount] = individual_balance
   let classes = 'balance_amount'
   if (amount < 0) classes = classes.concat(' negative')
@@ -17,4 +17,4 @@ const IndividualBalance: React.FC<Props> = ({ individual_balance }) => {
   )
 }
 
-export default IndividualBalance
+export default BalanceItem

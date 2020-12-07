@@ -1,6 +1,6 @@
 import React from 'react'
 
-import IndividualBalance from './individualBalance'
+import BalanceItem from './balanceItem'
 
 type Props = {
   balance: [string, number][]
@@ -11,7 +11,7 @@ const BalanceList: React.FC<Props> = ({ balance }) => {
     <div id="balance">
       {balance.map((individual_balance, index) => (
         <>
-          <IndividualBalance
+          <BalanceItem
             individual_balance={individual_balance}
             key={individual_balance[0]}
           />

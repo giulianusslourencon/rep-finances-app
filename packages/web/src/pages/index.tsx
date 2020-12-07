@@ -30,7 +30,8 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   const balance = {
     P: 50,
     G: -20,
-    M: -30
+    M: -30,
+    F: 0
   }
 
   return {
