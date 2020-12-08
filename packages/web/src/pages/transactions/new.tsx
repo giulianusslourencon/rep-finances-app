@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Buttons from '../../components/buttons'
-import Container from '../../components/container'
-import Layout from '../../components/layout'
+import Buttons from '@components/buttons'
+import Container from '@components/container'
+import Layout from '@components/layout'
 
 const CreateTransaction: React.FC = () => {
   return (

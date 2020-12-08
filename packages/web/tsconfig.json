@@ -6,7 +6,16 @@
       "dom.iterable",
       "esnext"
     ],
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@styles/*": [
+        "./src/styles/*"
+      ]
+    }
   },
   "include": [
     "next-env.d.ts",

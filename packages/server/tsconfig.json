@@ -3,13 +3,27 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@config/*": ["./src/config/*"],
-      "@entities/*": ["./src/entities/*"],
-      "@repositories/*": ["./src/repositories/*"],
-      "@shared/*": ["./src/shared/*"],
-      "@useCases/*": ["./src/useCases/*"],
-      "@server/*": ["./src/*"]
+      "@config/*": [
+        "./src/config/*"
+      ],
+      "@entities/*": [
+        "./src/entities/*"
+      ],
+      "@repositories/*": [
+        "./src/repositories/*"
+      ],
+      "@shared/*": [
+        "./src/shared/*"
+      ],
+      "@useCases/*": [
+        "./src/useCases/*"
+      ],
+      "@server/*": [
+        "./src/*"
+      ]
     }
   },
-  "include": ["./src/**/*.ts"]
+  "include": [
+    "./src/**/*.ts"
+  ]
 }

@@ -84,6 +84,8 @@
           "/^@repositories/",
           "/^@shared/",
           "/^@useCases/",
+          "/^@components/",
+          "/^@styles/",
           [
             "parent",
             "sibling",

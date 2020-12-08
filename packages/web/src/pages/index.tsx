@@ -1,10 +1,10 @@
 import { GetStaticProps } from 'next'
 import React from 'react'
 
-import BalanceList from '../components/balanceList'
-import Buttons from '../components/buttons'
-import Container from '../components/container'
-import Layout from '../components/layout'
+import BalanceList from '@components/balanceList'
+import Buttons from '@components/buttons'
+import Container from '@components/container'
+import Layout from '@components/layout'
 
 type Props = {
   balance: [string, number][]

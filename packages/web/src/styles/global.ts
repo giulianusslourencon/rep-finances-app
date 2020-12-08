@@ -80,6 +80,10 @@ export default createGlobalStyle`
     color: ${props => props.theme.colors.primaryDark};
   }
 
+  hr.line_between_transaction_items {
+    height: 1;
+  }
+
   .individual_balance {
     padding: 16px;
     display: flex;
@@ -106,8 +110,8 @@ export default createGlobalStyle`
     font-weight: 300;
   }
 
-  .individual_balance .balance_amount.negative {
-    color: ${props => props.theme.colors.danger};
+  .negative {
+    color: ${props => props.theme.colors.danger} !important;
   }
 
   .transaction_item {
@@ -153,6 +157,85 @@ export default createGlobalStyle`
     align-items: center;
     justify-content: center;
     font-size: 16px;
+  }
+
+  #transaction_header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #transaction_header_title {
+    font-size: 32px;
+    font-weight: 700;
+    color: ${props => props.theme.colors.primaryDark};
+  }
+
+  #transaction_header_date_time {
+    font-size: 16px;
+    font-weight: 600;
+    color: ${props => props.theme.colors.primary};
+  }
+
+  #transaction_amount, .transaction_data {
+    color: ${props => props.theme.colors.primary};    
+  }
+
+  #transaction_amount span, .transaction_data_value {
+    font-weight: 300;
+    font-size: 14px;
+  }
+
+  .transaction_data {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 16px;
+    margin-top: 8px;
+  }
+
+  .transaction_data .transaction_data_obj {
+    margin-left: 16px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+  }
+
+  .transaction_data .transaction_data_id, .transaction_related_id {
+    display: flex;
+    height: 24px;
+    width: 24px;
+    color: ${props => props.theme.colors.dark};
+    background-color: ${props => props.theme.colors.primaryLight};
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    margin-right: 4px;
+  }
+
+  .transaction_item_details {
+    color: ${props => props.theme.colors.primary};
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+  }
+
+  .transaction_item_details_title {
+    font-size: 18px;
+    max-width: 100px;
+  }
+
+  .transaction_item_details_related {
+    display: flex;
+  }
+
+  .transaction_item_details_value {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 16px;
+    font-weight: 300;
   }
 
 `
