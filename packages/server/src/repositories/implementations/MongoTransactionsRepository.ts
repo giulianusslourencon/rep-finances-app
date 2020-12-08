@@ -1,18 +1,19 @@
 import TransactionSchema from '@entities/schemas/Transaction'
 import { Transaction } from '@entities/Transaction'
 
-import { ITransactionsRepository } from '@repositories/ITransactionsRepository'
+import {
+  ITransactionsRepository,
+  TransactionList
+} from '@repositories/ITransactionsRepository'
 
 export class MongoTransactionsRepository implements ITransactionsRepository {
   async list(skipLimit?: {
     skip: number
     limit: number
-  }): Promise<
-    Pick<Transaction, 'title' | 'timestamp' | 'amount' | 'related'>[]
-  > {
+  }): Promise<TransactionList> {
     return await TransactionSchema.find(
       {},
-      { title: 1, timestamp: 1, amount: 1, related: 1 },
+      { _id: 1, title: 1, timestamp: 1, amount: 1, related: 1 },
       { sort: { timestamp: -1 }, ...skipLimit }
     ).lean()
   }
@@ -20,12 +21,10 @@ export class MongoTransactionsRepository implements ITransactionsRepository {
   async listByMonth(
     month: string,
     skipLimit?: { skip: number; limit: number }
-  ): Promise<
-    Pick<Transaction, 'title' | 'timestamp' | 'amount' | 'related'>[]
-  > {
+  ): Promise<TransactionList> {
     return await TransactionSchema.find(
       { month },
-      { title: 1, timestamp: 1, amount: 1, related: 1 },
+      { _id: 1, title: 1, timestamp: 1, amount: 1, related: 1 },
       { sort: { timestamp: -1 }, ...skipLimit }
     ).lean()
   }
