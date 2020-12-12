@@ -1,10 +1,10 @@
+import { Flex, StackDivider, VStack } from '@chakra-ui/react'
 import { GetStaticProps } from 'next'
 import React from 'react'
 
-import BalanceList from '@components/balanceList'
-import Buttons from '@components/buttons'
-import Container from '@components/container'
+import Cash from '@components/cash'
 import Layout from '@components/layout'
+import UserIdBox from '@components/userIdBox'
 
 type Props = {
   balance: [string, number][]
@@ -12,16 +12,24 @@ type Props = {
 
 const Home: React.FC<Props> = ({ balance }) => {
   return (
-    <Layout>
-      <Buttons
-        buttons={[
-          { title: 'Histórico', href: '/transactions' },
-          { title: 'Adicionar', href: '/transactions/new' }
-        ]}
-      />
-      <Container>
-        <BalanceList balance={balance} />
-      </Container>
+    <Layout
+      buttons={[
+        { title: 'Histórico', href: '/transactions' },
+        { title: 'Adicionar', href: '/transactions/new' }
+      ]}
+    >
+      <VStack
+        divider={<StackDivider borderColor="purple.800" />}
+        spacing="8px"
+        align="stretch"
+      >
+        {balance.map(user => (
+          <Flex key={user[0]} justify="space-between" align="center">
+            <UserIdBox id={user[0]} />
+            <Cash amount={user[1]} />
+          </Flex>
+        ))}
+      </VStack>
     </Layout>
   )
 }

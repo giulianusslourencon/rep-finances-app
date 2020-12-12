@@ -85,7 +85,7 @@
           "/^@shared/",
           "/^@useCases/",
           "/^@components/",
-          "/^@styles/",
+          "/^@theme/",
           [
             "parent",
             "sibling",
