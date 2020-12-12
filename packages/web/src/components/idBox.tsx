@@ -5,12 +5,17 @@ type Props = {
   id: string
   size?: string
   variant?: string
+  [x: string]: string | undefined
 }
 
-const IdBox: React.FC<Props> = ({ id, size, variant }) => {
+const IdBox: React.FC<Props> = ({ id, size, variant, ...remaining }) => {
   const styles = useStyleConfig('IdBox', { size, variant })
 
-  return <Box sx={styles}>{id}</Box>
+  return (
+    <Box sx={styles} {...remaining}>
+      {id}
+    </Box>
+  )
 }
 
 export default IdBox

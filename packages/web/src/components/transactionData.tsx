@@ -1,25 +1,26 @@
+import { Flex, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
 
+import Cash from './cash'
+import IdBox from './idBox'
+
 type Props = {
-  children: React.ReactNode
   data: { id: string; value: number }[]
 }
 
 const TransactionData: React.FC<Props> = ({ children, data }) => {
   return (
-    <div className="transaction_data">
-      <span className="transaction_data_title">{children}</span>
-      {data.map(user => {
-        let classes = 'transaction_data_value'
-        if (user.value < 0) classes = classes.concat(' negative')
-        return (
-          <span className="transaction_data_obj" key={user.id}>
-            <span className="transaction_data_id">{user.id}</span>{' '}
-            <span className={classes}>R$ {user.value.toFixed(2)}</span>
-          </span>
-        )
-      })}
-    </div>
+    <VStack spacing="4px" align="flex-start">
+      <Text color="purple.600" fontSize="18px">
+        {children}
+      </Text>
+      {data.map(user => (
+        <Flex key={user.id} align="center">
+          <IdBox id={user.id} marginRight="4px" marginLeft="16px" />
+          <Cash amount={user.value} />
+        </Flex>
+      ))}
+    </VStack>
   )
 }
 

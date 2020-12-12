@@ -12,6 +12,9 @@ export const Cash = {
   },
   variants: {
     normal: {
+      color: 'purple.600'
+    },
+    dark: {
       color: 'purple.800'
     },
     negative: {
