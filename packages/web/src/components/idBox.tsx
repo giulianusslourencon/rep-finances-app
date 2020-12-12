@@ -1,0 +1,16 @@
+import { Box, useStyleConfig } from '@chakra-ui/react'
+import React from 'react'
+
+type Props = {
+  id: string
+  size?: string
+  variant?: string
+}
+
+const IdBox: React.FC<Props> = ({ id, size, variant }) => {
+  const styles = useStyleConfig('IdBox', { size, variant })
+
+  return <Box sx={styles}>{id}</Box>
+}
+
+export default IdBox

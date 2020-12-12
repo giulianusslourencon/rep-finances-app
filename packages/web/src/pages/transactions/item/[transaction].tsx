@@ -2,8 +2,6 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
 
-import Buttons from '@components/buttons'
-import Container from '@components/container'
 import Layout from '@components/layout'
 import TransactionData from '@components/transactionData'
 import TransactionItemsList from '@components/transactionItemsList'
@@ -67,34 +65,30 @@ const Transaction: React.FC<Props> = ({ transaction, balance }) => {
   })
 
   return (
-    <Layout>
-      <Buttons buttons={[{ title: 'Voltar', href: '/transactions' }]} />
-      <Container>
-        <section id="transaction_header">
-          <span id="transaction_header_title">{transaction.title}</span>
-          <span id="transaction_header_date_time">{formattedDate}</span>
-        </section>
-        <hr />
-        <section id="transaction_values">
-          <div id="transaction_amount">
-            Valor Total da Compra:{' '}
-            <span>R$ {transaction.amount.toFixed(2)}</span>
-          </div>
-          <TransactionData data={individual_amount}>
-            Valor Individual:
-          </TransactionData>
-          <TransactionData data={individual_payment}>
-            Pagamento Individual:
-          </TransactionData>
-          <TransactionData data={individual_balance}>
-            Agiotagem Final:
-          </TransactionData>
-        </section>
-        <hr />
-        <section id="transaction_items_details">
-          <TransactionItemsList items={Object.entries(transaction.items)} />
-        </section>
-      </Container>
+    <Layout buttons={[{ title: 'Voltar', href: '/transactions' }]}>
+      <section id="transaction_header">
+        <span id="transaction_header_title">{transaction.title}</span>
+        <span id="transaction_header_date_time">{formattedDate}</span>
+      </section>
+      <hr />
+      <section id="transaction_values">
+        <div id="transaction_amount">
+          Valor Total da Compra: <span>R$ {transaction.amount.toFixed(2)}</span>
+        </div>
+        <TransactionData data={individual_amount}>
+          Valor Individual:
+        </TransactionData>
+        <TransactionData data={individual_payment}>
+          Pagamento Individual:
+        </TransactionData>
+        <TransactionData data={individual_balance}>
+          Agiotagem Final:
+        </TransactionData>
+      </section>
+      <hr />
+      <section id="transaction_items_details">
+        <TransactionItemsList items={Object.entries(transaction.items)} />
+      </section>
     </Layout>
   )
 }

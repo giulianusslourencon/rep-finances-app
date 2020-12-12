@@ -3,8 +3,8 @@ import { GetStaticProps } from 'next'
 import React from 'react'
 
 import Cash from '@components/cash'
+import IdBox from '@components/idBox'
 import Layout from '@components/layout'
-import UserIdBox from '@components/userIdBox'
 
 type Props = {
   balance: [string, number][]
@@ -25,8 +25,8 @@ const Home: React.FC<Props> = ({ balance }) => {
       >
         {balance.map(user => (
           <Flex key={user[0]} justify="space-between" align="center">
-            <UserIdBox id={user[0]} />
-            <Cash amount={user[1]} />
+            <IdBox id={user[0]} size="lg" />
+            <Cash amount={user[1]} size="lg" />
           </Flex>
         ))}
       </VStack>
