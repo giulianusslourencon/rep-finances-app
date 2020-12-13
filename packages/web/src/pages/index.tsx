@@ -1,10 +1,17 @@
 import { Flex, StackDivider, VStack } from '@chakra-ui/react'
+import axios from 'axios'
 import { GetStaticProps } from 'next'
 import React from 'react'
 
 import Cash from '@components/cash'
 import IdBox from '@components/idBox'
 import Layout from '@components/layout'
+
+type Balance = {
+  balance: {
+    [x: string]: number
+  }
+}
 
 type Props = {
   balance: [string, number][]
@@ -35,12 +42,8 @@ const Home: React.FC<Props> = ({ balance }) => {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const balance = {
-    P: 50,
-    G: -20,
-    M: -30,
-    F: 0
-  }
+  const response = await axios.get<Balance>('http://localhost:3333/balance')
+  const balance = response.data.balance
 
   return {
     props: {

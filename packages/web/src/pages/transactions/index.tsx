@@ -1,4 +1,5 @@
 import { Box, Flex, Link, StackDivider, VStack } from '@chakra-ui/react'
+import axios from 'axios'
 import { NextPage } from 'next'
 import NextLink from 'next/link'
 import React from 'react'
@@ -63,39 +64,15 @@ const Historic: NextPage<Props> = ({ transactions }) => {
   )
 }
 
-Historic.getInitialProps = async ({ query }) => {
-  const page = parseInt(query.page?.toString() || '0')
+Historic.getInitialProps = async () => {
+  // const page = parseInt(query.page?.toString() || '0')
 
-  const transactions: Transaction[][] = [
-    [
-      {
-        _id: 'algum-id',
-        title: 'Compra 1',
-        timestamp: 1607360198652,
-        amount: 25,
-        related: ['P', 'G']
-      },
-      {
-        _id: 'outro-id',
-        title: 'Compra 2',
-        timestamp: 1607360198652,
-        amount: 1500,
-        related: ['P', 'G', 'M', 'F']
-      }
-    ],
-    [
-      {
-        _id: 'terceiro-id',
-        title: 'Compra 3',
-        timestamp: 1607360198652,
-        amount: 10,
-        related: ['P', 'F']
-      }
-    ],
-    []
-  ]
+  const response = await axios.get<Transaction[]>(
+    'http://localhost:3333/transactions'
+  )
+  const transactions = response.data
 
-  return { transactions: transactions[page] }
+  return { transactions: transactions }
 }
 
 export default Historic

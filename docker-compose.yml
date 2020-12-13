@@ -1,0 +1,20 @@
+version: "3.3"
+
+services:
+  server:
+    ports:
+      - 3333:3333
+    build:
+      context: packages/server
+      dockerfile: Dockerfile
+    volumes:
+      - ./packages/server:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - ./packages/server/.env
+
+  db:
+    image: mongo
+    restart: always
+    volumes:
+      - /deploy/databases/rep_finances_db:/data/db

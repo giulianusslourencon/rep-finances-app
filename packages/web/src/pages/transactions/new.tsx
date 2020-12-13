@@ -12,7 +12,9 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react'
+import axios from 'axios'
 import moment from 'moment'
+import Router from 'next/router'
 import React, { useState } from 'react'
 import DatePicker from 'react-datetime'
 import Popup from 'reactjs-popup'
@@ -92,7 +94,7 @@ const CreateTransaction: React.FC = () => {
 
   const closePopup = () => setPopupOpened(false)
 
-  const handleCreateTransaction = () => {
+  const handleCreateTransaction = async () => {
     const objItems = {} as { [x: string]: Omit<TransactionItem, 'title'> }
     items.map(
       item =>
@@ -103,7 +105,9 @@ const CreateTransaction: React.FC = () => {
     )
 
     const objPayers = {} as { [x: string]: number }
-    payers.map(payer => (objPayers[payer.user] = payer.amount))
+    payers.forEach(payer => {
+      if (payer.amount) objPayers[payer.user] = payer.amount
+    })
 
     const transaction = {
       title,
@@ -111,9 +115,10 @@ const CreateTransaction: React.FC = () => {
       items: objItems,
       payers: objPayers
     }
-
-    console.log(JSON.stringify(transaction))
-    console.log(validateTransaction(transaction))
+    if (validateTransaction(transaction)) {
+      await axios.post('http://localhost:3333/transactions', transaction)
+      Router.push('/')
+    }
   }
 
   return (

@@ -1,4 +1,5 @@
 import { Box, Flex, StackDivider, Text, VStack } from '@chakra-ui/react'
+import axios from 'axios'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -142,7 +143,14 @@ const Transaction: React.FC<Props> = ({ transaction, balance }) => {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [{ params: { transaction: 'id-teste' } }]
+  const response = await axios.get<Transaction[]>(
+    'http://localhost:3333/transactions?skip=0&limit=5'
+  )
+  const transactions = response.data
+
+  const paths = transactions.map(transaction => {
+    return { params: { transaction: transaction._id } }
+  })
 
   return {
     paths,
@@ -156,33 +164,10 @@ export const getStaticProps: GetStaticProps<
 > = async context => {
   const _id = context.params?.transaction || ''
 
-  const transaction: Transaction = {
-    _id,
-    title: 'Compra 1',
-    timestamp: 1607360198652,
-    month: '202012',
-    items: {
-      'item 1 da compra 1': {
-        value: 15,
-        related_users: ['P', 'G', 'F']
-      },
-      'item 2': {
-        value: 10,
-        related_users: ['P', 'G']
-      }
-    },
-    payers: {
-      P: 25
-    },
-    amount: 25,
-    related: ['P', 'G', 'F']
-  }
-
-  const balance: Balance = {
-    P: 15,
-    G: -10,
-    F: -5
-  }
+  const response = await axios.get<Props>(
+    `http://localhost:3333/transactions/${_id}`
+  )
+  const { transaction, balance } = response.data
 
   return {
     props: {
