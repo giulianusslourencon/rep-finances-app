@@ -19,11 +19,11 @@ import Popup from 'reactjs-popup'
 import 'react-datetime/css/react-datetime.css'
 import 'reactjs-popup/dist/index.css'
 
-import { validateTransaction } from 'src/utils/validateTransaction'
-
 import Button from '@components/button'
 import IdBox from '@components/idBox'
 import Layout from '@components/layout'
+
+import { validateTransaction } from '@utils/validateTransaction'
 
 type TransactionItem = {
   title: string
