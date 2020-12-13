@@ -130,3 +130,15 @@ export const transactionNegativeNull = {
     P: 0
   }
 }
+
+export const transactionNoRelatedUsers = {
+  title: 'Compra 1',
+  timestamp: 1606834466326,
+  items: {
+    item: {
+      value: 10,
+      related_users: []
+    }
+  },
+  payers: {}
+}

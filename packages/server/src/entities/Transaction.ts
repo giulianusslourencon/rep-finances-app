@@ -33,6 +33,8 @@ export class Transaction {
         throw new Error(
           'All items values and payers amount must be a positive number'
         )
+      if (cur.related_users.length === 0)
+        throw new Error('All items must have at least one related user')
       return acc + cur.value
     }, 0)
     const totalPaid = Object.values(props.payers).reduce((acc, cur) => {

@@ -72,4 +72,10 @@ describe('Create transaction', () => {
       'All items values and payers amount must be a positive number'
     )
   })
+
+  it('Should not create a transaction with items that have no related user on.', async () => {
+    await expect(
+      createTransactionUseCase.execute(data.transactionNoRelatedUsers)
+    ).rejects.toThrow('All items must have at least one related user')
+  })
 })
