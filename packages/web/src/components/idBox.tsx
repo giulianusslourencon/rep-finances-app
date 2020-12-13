@@ -5,7 +5,7 @@ type Props = {
   id: string
   size?: string
   variant?: string
-  [x: string]: string | undefined
+  [x: string]: unknown
 }
 
 const IdBox: React.FC<Props> = ({ id, size, variant, ...remaining }) => {
