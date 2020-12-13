@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Flex,
   HStack,
   Input,
@@ -20,6 +19,9 @@ import Popup from 'reactjs-popup'
 import 'react-datetime/css/react-datetime.css'
 import 'reactjs-popup/dist/index.css'
 
+import { validateTransaction } from 'src/utils/validateTransaction'
+
+import Button from '@components/button'
 import IdBox from '@components/idBox'
 import Layout from '@components/layout'
 
@@ -111,6 +113,7 @@ const CreateTransaction: React.FC = () => {
     }
 
     console.log(JSON.stringify(transaction))
+    console.log(validateTransaction(transaction))
   }
 
   return (
@@ -176,6 +179,8 @@ const CreateTransaction: React.FC = () => {
                   fontSize="16px"
                   borderColor="purple.400"
                   focusBorderColor="purple.600"
+                  placeholder="Título"
+                  isRequired={true}
                   value={items[index].title}
                   onChange={val =>
                     updateItem(index, { title: val.target.value })

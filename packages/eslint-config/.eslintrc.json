@@ -86,6 +86,7 @@
           "/^@useCases/",
           "/^@components/",
           "/^@theme/",
+          "/^@utils/",
           [
             "parent",
             "sibling",
