@@ -173,8 +173,7 @@ export const getStaticProps: GetStaticProps<
     props: {
       transaction,
       balance
-    },
-    revalidate: 60
+    }
   }
 }
 

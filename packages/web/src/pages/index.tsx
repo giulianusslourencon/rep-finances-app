@@ -49,7 +49,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     props: {
       balance: Object.entries(balance)
     },
-    revalidate: 30
+    revalidate: 10
   }
 }
 

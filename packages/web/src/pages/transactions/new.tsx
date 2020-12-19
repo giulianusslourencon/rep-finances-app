@@ -94,7 +94,7 @@ const CreateTransaction: React.FC = () => {
 
   const closePopup = () => setPopupOpened(false)
 
-  const handleCreateTransaction = async () => {
+  const getTransactionObject = () => {
     const objItems = {} as { [x: string]: Omit<TransactionItem, 'title'> }
     items.map(
       item =>
@@ -109,12 +109,17 @@ const CreateTransaction: React.FC = () => {
       if (payer.amount) objPayers[payer.user] = payer.amount
     })
 
-    const transaction = {
+    return {
       title,
       timestamp: timestamp.valueOf(),
       items: objItems,
       payers: objPayers
     }
+  }
+
+  const handleCreateTransaction = async () => {
+    const transaction = getTransactionObject()
+
     if (validateTransaction(transaction)) {
       await axios.post('http://localhost:3333/transactions', transaction)
       Router.push('/')
@@ -290,7 +295,12 @@ const CreateTransaction: React.FC = () => {
           </VStack>
         </Box>
         <Flex justify="center">
-          <Button onClick={handleCreateTransaction}>Criar Transação</Button>
+          <Button
+            onClick={handleCreateTransaction}
+            isDisabled={!validateTransaction(getTransactionObject())}
+          >
+            Criar Transação
+          </Button>
         </Flex>
       </VStack>
     </Layout>

@@ -4,6 +4,8 @@ services:
   server:
     ports:
       - 3333:3333
+    networks:
+      - internal_world
     build:
       context: packages/server
       dockerfile: Dockerfile
@@ -16,5 +18,11 @@ services:
   db:
     image: mongo
     restart: always
+    networks:
+      - internal_world
     volumes:
       - /deploy/databases/rep_finances_db:/data/db
+
+networks:
+  internal_world:
+    external: true
