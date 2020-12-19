@@ -75,7 +75,12 @@ const CreateTransaction: React.FC = () => {
   }
 
   const addRelated = () => {
-    if (related.includes(newRelated)) return
+    if (
+      related.includes(newRelated) ||
+      newRelated.length <= 0 ||
+      newRelated.length > 2
+    )
+      return
 
     const currentRelated = [...related]
     currentRelated.push(newRelated)
@@ -235,10 +240,16 @@ const CreateTransaction: React.FC = () => {
                       }
                       open={popupOpened}
                       onClose={closePopup}
-                      position="top center"
+                      position="center center"
                       arrow={false}
                       closeOnDocumentClick
                       closeOnEscape
+                      modal={true}
+                      contentStyle={{
+                        width: '300px',
+                        display: 'flex',
+                        flexDirection: 'column'
+                      }}
                     >
                       <Input
                         variant="flushed"
@@ -247,13 +258,20 @@ const CreateTransaction: React.FC = () => {
                         borderColor="purple.400"
                         focusBorderColor="purple.600"
                         value={newRelated}
+                        maxLength={2}
                         onChange={val => setNewRelated(val.target.value)}
+                        onKeyDown={event => {
+                          if (event.key.valueOf() === 'Enter') addRelated()
+                        }}
                       />
                       <Button
                         onClick={() => {
                           addRelated()
                           closePopup()
                         }}
+                        isDisabled={newRelated.length === 0}
+                        marginX={'50px'}
+                        marginTop={'8px'}
                       >
                         Adicionar
                       </Button>
