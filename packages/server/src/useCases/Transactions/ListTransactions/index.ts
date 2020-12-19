@@ -1,4 +1,4 @@
-import { MongoTransactionsRepository } from '@repositories/implementations/MongoTransactionsRepository'
+import { MongoTransactionsRepository } from '@repositories/mongodb/implementations/MongoTransactionsRepository'
 
 import { ListTransactionsController } from './ListTransactionsController'
 import { ListTransactionsUseCase } from './ListTransactionsUseCase'

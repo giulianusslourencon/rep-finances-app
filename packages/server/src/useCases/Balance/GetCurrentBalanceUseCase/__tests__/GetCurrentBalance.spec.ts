@@ -1,9 +1,8 @@
-import BalanceSchema from '@entities/schemas/Balance'
-import TransactionSchema from '@entities/schemas/Transaction'
+import MongoMock from '@repositories/mongodb/MongoMock'
+import BalanceSchema from '@repositories/mongodb/schemas/Balance'
+import TransactionSchema from '@repositories/mongodb/schemas/Transaction'
 
 import { getCurrentBalanceUseCase } from '..'
-
-import MongoMock from '@shared/MongoMock'
 
 import { createTransactionUseCase } from '@useCases/Transactions/CreateTransaction'
 

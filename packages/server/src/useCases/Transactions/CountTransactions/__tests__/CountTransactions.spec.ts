@@ -1,6 +1,5 @@
-import Transaction from '@entities/schemas/Transaction'
-
-import MongoMock from '@shared/MongoMock'
+import MongoMock from '@repositories/mongodb/MongoMock'
+import Transaction from '@repositories/mongodb/schemas/Transaction'
 
 import { createTransactionUseCase } from '@useCases/Transactions/CreateTransaction'
 

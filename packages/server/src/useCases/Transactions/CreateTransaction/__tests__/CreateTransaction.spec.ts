@@ -1,7 +1,6 @@
-import Balance from '@entities/schemas/Balance'
-import Transaction from '@entities/schemas/Transaction'
-
-import MongoMock from '@shared/MongoMock'
+import MongoMock from '@repositories/mongodb/MongoMock'
+import Balance from '@repositories/mongodb/schemas/Balance'
+import Transaction from '@repositories/mongodb/schemas/Transaction'
 
 import { createTransactionUseCase } from '..'
 

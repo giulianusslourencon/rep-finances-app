@@ -1,5 +1,5 @@
-import { MongoBalanceRepository } from '@repositories/implementations/MongoBalanceRepository'
-import { MongoTransactionsRepository } from '@repositories/implementations/MongoTransactionsRepository'
+import { MongoBalanceRepository } from '@repositories/mongodb/implementations/MongoBalanceRepository'
+import { MongoTransactionsRepository } from '@repositories/mongodb/implementations/MongoTransactionsRepository'
 
 import { GetCurrentBalanceController } from './GetCurrentBalanceController'
 import { GetCurrentBalanceUseCase } from './GetCurrentBalanceUseCase'

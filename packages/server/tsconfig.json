@@ -3,14 +3,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@config/*": [
-        "./src/config/*"
-      ],
       "@entities/*": [
         "./src/entities/*"
       ],
       "@repositories/*": [
-        "./src/repositories/*"
+        "src/external/repositories/*"
       ],
       "@shared/*": [
         "./src/shared/*"

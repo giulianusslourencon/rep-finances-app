@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-import mongoConfig from '@config/mongo'
+import mongoConfig from '@repositories/mongodb/config/mongo'
 
 const mongoUserPass = mongoConfig.username
   ? `${mongoConfig.username}:${mongoConfig.password}@`

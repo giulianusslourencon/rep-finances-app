@@ -1,8 +1,10 @@
 import { Balance } from '@entities/Balance'
-import BalanceSchema, { BalanceAttributes } from '@entities/schemas/Balance'
 
 import { IBalanceRepository } from '@repositories/IBalanceRepository'
 import { ITransactionsRepository } from '@repositories/ITransactionsRepository'
+import BalanceSchema, {
+  BalanceAttributes
+} from '@repositories/mongodb/schemas/Balance'
 
 export class MongoBalanceRepository implements IBalanceRepository {
   // eslint-disable-next-line prettier/prettier

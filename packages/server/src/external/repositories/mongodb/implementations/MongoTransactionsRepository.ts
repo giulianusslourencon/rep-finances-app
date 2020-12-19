@@ -1,10 +1,10 @@
-import TransactionSchema from '@entities/schemas/Transaction'
 import { Transaction } from '@entities/Transaction'
 
 import {
   ITransactionsRepository,
   TransactionList
 } from '@repositories/ITransactionsRepository'
+import TransactionSchema from '@repositories/mongodb/schemas/Transaction'
 
 export class MongoTransactionsRepository implements ITransactionsRepository {
   async list(skipLimit?: {

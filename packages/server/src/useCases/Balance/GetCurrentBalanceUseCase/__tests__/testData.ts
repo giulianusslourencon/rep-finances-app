@@ -1,4 +1,4 @@
-import { Transaction } from '@server/entities/Transaction'
+import { Transaction } from '@entities/Transaction'
 
 export const transactions = [
   {

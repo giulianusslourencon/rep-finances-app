@@ -1,6 +1,6 @@
 import { TransactionCore } from '@repositories/ITransactionsRepository'
 
-import { Transaction } from './Transaction'
+import { Transaction } from '../Transaction'
 
 export class Balance {
   public individual_balance!: {
