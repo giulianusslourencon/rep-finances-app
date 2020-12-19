@@ -126,8 +126,12 @@ const CreateTransaction: React.FC = () => {
     const transaction = getTransactionObject()
 
     if (validateTransaction(transaction)) {
-      await axios.post('http://localhost:3333/transactions', transaction)
-      Router.push('/')
+      const response = await axios.post(
+        'http://localhost:3333/transactions',
+        transaction
+      )
+      if (response.status === 201)
+        Router.push(`/transactions/item/${response.data._id}`)
     }
   }
 
