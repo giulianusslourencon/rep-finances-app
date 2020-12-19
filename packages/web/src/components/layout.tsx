@@ -56,15 +56,24 @@ const Layout: React.FC<Props> = ({ buttons = [], children }) => {
           </VStack>
         )}
         <Flex
+          justify="stretch"
           bgColor="yellow.200"
           borderBottomRadius="32px"
           borderTopRadius={buttons.length > 0 ? '0' : '32px'}
           padding="16px"
           minH="400px"
-          flexDir="column"
-          justify="stretch"
+          maxH="700px"
         >
-          {children}
+          <Flex
+            flexGrow={1}
+            width="fit-content"
+            flexDir="column"
+            justify="stretch"
+            overflowY="scroll"
+            style={{ scrollbarWidth: 'none' }}
+          >
+            {children}
+          </Flex>
         </Flex>
       </Flex>
     </Grid>
