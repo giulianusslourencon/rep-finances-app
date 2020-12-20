@@ -14,7 +14,7 @@ export class CreateTransactionController {
   async handle(request: Request, response: Response): Promise<Response> {
     try {
       if (!this.createTransactionValidation.validate(request))
-        throw new Error('Validation failed.')
+        return response.status(406).json({ message: 'Missing field.' })
 
       const { title, timestamp, items, payers } = request.body
 
@@ -27,7 +27,7 @@ export class CreateTransactionController {
 
       return response.status(201).json(transaction)
     } catch (error) {
-      return response.status(406).json({
+      return response.status(500).json({
         message: error.message || 'Unexpected error.'
       })
     }

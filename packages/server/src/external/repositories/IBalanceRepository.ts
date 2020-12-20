@@ -1,6 +1,6 @@
-import { Balance } from '@entities/Balance'
+import { BalanceProps } from '@shared/types/Balance'
 
 export interface IBalanceRepository {
   setNotUpdatedFromMonth(month: string): Promise<void>
-  getCurrentBalance(): Promise<Balance>
+  getCurrentBalance(): Promise<BalanceProps>
 }

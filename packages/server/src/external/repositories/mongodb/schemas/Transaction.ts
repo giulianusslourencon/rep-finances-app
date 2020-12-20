@@ -1,24 +1,8 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
-export type TransactionAttributes = {
-  _id: string
-  title: string
-  amount: number
-  timestamp: number
-  month: string
-  items: {
-    [title: string]: {
-      value: number
-      related_users: string[]
-    }
-  }
-  payers: {
-    [user_id: string]: number
-  }
-  related: string[]
-}
+import { TransactionProps } from '@shared/types/Transaction'
 
-export type TransactionDocument = Document & TransactionAttributes
+export type TransactionDocument = Document & TransactionProps
 
 const TransactionSchema = new Schema({
   _id: {

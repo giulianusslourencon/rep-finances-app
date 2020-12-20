@@ -1,5 +1,5 @@
-import { Transaction } from '@entities/Transaction'
+import { TransactionCoreProps } from '@shared/types/Transaction'
 
 export interface IGetTransactionBalanceDTO {
-  transaction: Transaction
+  transaction: TransactionCoreProps
 }

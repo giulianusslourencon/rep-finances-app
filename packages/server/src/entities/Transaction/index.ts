@@ -1,34 +1,24 @@
 import { v4 as uuid } from 'uuid'
 
 import { Either, left, right } from '@shared/Either'
+import {
+  TransactionInitProps,
+  TransactionProps
+} from '@shared/types/Transaction'
 import DateParser from '@shared/utils/DateParser'
 
-import { Amount } from './Amount'
+import { Amount } from '../atomics/Amount'
+import { InvalidAmountError } from '../atomics/errors/InvalidAmount'
+import { InvalidRelatedError } from '../atomics/errors/InvalidRelated'
+import { InvalidTimestampError } from '../atomics/errors/InvalidTimestamp'
+import { InvalidTitleError } from '../atomics/errors/InvalidTitle'
+import { Timestamp } from '../atomics/Timestamp'
+import { Title } from '../atomics/Title'
 import { EmptyListError } from './errors/EmptyList'
-import { InvalidAmountError } from './errors/InvalidAmount'
-import { InvalidRelatedError } from './errors/InvalidRelated'
-import { InvalidTimestampError } from './errors/InvalidTimestamp'
-import { InvalidTitleError } from './errors/InvalidTitle'
 import { InvalidValueError } from './errors/InvalidValue'
 import { RelatedList } from './RelatedList'
-import { Timestamp } from './Timestamp'
-import { Title } from './Title'
 import { TransactionItems } from './TransactionItems'
 import { TransactionPayers } from './TransactionPayers'
-
-type TransactionProps = {
-  title: string
-  timestamp: number | string
-  items: {
-    [title: string]: {
-      value: number
-      related_users: string[]
-    }
-  }
-  payers: {
-    [user: string]: number
-  }
-}
 
 export class Transaction {
   public readonly _id!: string
@@ -65,7 +55,7 @@ export class Transaction {
   }
 
   static create(
-    props: TransactionProps,
+    props: TransactionInitProps,
     id?: string
   ): Either<
     | InvalidTitleError
@@ -87,33 +77,34 @@ export class Transaction {
     if (payersOrError.isLeft()) return left(payersOrError.value)
 
     const title = titleOrError.value
+
     const timestamp = timestampOrError.value
+    const month = DateParser.parseDate(timestamp.value)
+
     const items = itemsOrError.value
     const payers = payersOrError.value
 
-    const itemsValues = items.value.reduce((acc, cur) => {
-      return acc + cur[1].value.value
+    const itemsValues = Object.entries(items.value).reduce((acc, cur) => {
+      return acc + cur[1].value
     }, 0)
 
-    const totalPaid = payers.value.reduce((acc, cur) => {
-      return acc + cur[1].value
+    const totalPaid = Object.entries(payers.value).reduce((acc, cur) => {
+      return acc + cur[1]
     }, 0)
 
     if (itemsValues !== totalPaid) return left(new InvalidValueError())
 
     const amountOrError = Amount.create(itemsValues)
     if (amountOrError.isLeft()) return left(amountOrError.value)
-
     const amount = amountOrError.value
-    const month = DateParser.parseDate(timestamp.value)
 
-    let related = payers.value.map(payer => payer[0])
-    items.value.forEach(item => {
-      related = related.concat(item[1].related_users.value)
+    let related = Object.keys(payers.value)
+    Object.values(items.value).forEach(item => {
+      related = related.concat(item.related_users)
     })
     related = [...new Set(related)]
 
-    const relatedUsersOrError = RelatedList.setList(related)
+    const relatedUsersOrError = RelatedList.create(related)
     if (relatedUsersOrError.isLeft()) return left(relatedUsersOrError.value)
 
     const relatedUsers = relatedUsersOrError.value
@@ -130,5 +121,18 @@ export class Transaction {
         id
       )
     )
+  }
+
+  get value(): TransactionProps {
+    return {
+      _id: this._id,
+      title: this.title.value,
+      timestamp: this.timestamp.value,
+      items: this.items.value,
+      payers: this.payers.value,
+      month: this.month,
+      amount: this.amount.value,
+      related: this.related.value
+    }
   }
 }

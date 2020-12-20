@@ -1,7 +1,6 @@
-import {
-  ITransactionsRepository,
-  TransactionList
-} from '@repositories/ITransactionsRepository'
+import { ITransactionsRepository } from '@repositories/ITransactionsRepository'
+
+import { TransactionResumeProps } from '@shared/types/Transaction'
 
 import { IListTransactionsRequestDTO } from './ListTransactionsDTO'
 
@@ -9,7 +8,9 @@ export class ListTransactionsUseCase {
   // eslint-disable-next-line prettier/prettier
   constructor(private transactionsRepository: ITransactionsRepository) { }
 
-  async execute(props: IListTransactionsRequestDTO): Promise<TransactionList> {
+  async execute(
+    props: IListTransactionsRequestDTO
+  ): Promise<TransactionResumeProps[]> {
     const { month, skipLimit } = props
     const transactions = month
       ? await this.transactionsRepository.listByMonth(month, skipLimit)

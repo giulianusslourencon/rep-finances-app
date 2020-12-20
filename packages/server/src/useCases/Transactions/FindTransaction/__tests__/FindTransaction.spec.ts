@@ -1,15 +1,15 @@
-import { Transaction } from '@entities/Transaction'
-
 import MongoMock from '@repositories/mongodb/MongoMock'
 import TransactionSchema from '@repositories/mongodb/schemas/Transaction'
 
 import { findTransactionUseCase } from '..'
 
+import { TransactionProps } from '@shared/types/Transaction'
+
 import { createTransactionUseCase } from '@useCases/Transactions/CreateTransaction'
 
 import * as data from './testData'
 
-let createdTransaction: Transaction
+let createdTransaction: TransactionProps
 
 describe('Find transaction', () => {
   beforeAll(async () => {
@@ -23,7 +23,7 @@ describe('Find transaction', () => {
           createTransactionUseCase.execute(transaction)
         )
       )
-    )[0]
+    ).map(transactionOrError => <TransactionProps>transactionOrError.value)[0]
   })
 
   afterAll(async () => {
@@ -36,7 +36,7 @@ describe('Find transaction', () => {
     })
 
     expect(transaction).toBeDefined()
-    expect(transaction!._id).toBe(createdTransaction._id)
+    expect(transaction?._id).toBe(createdTransaction._id)
   })
 
   it('Should return a falsy value if there is no transaction registered with given id.', async () => {

@@ -1,14 +1,11 @@
 import { Either, left, right } from '@shared/Either'
+import { TransactionPayersProps } from '@shared/types/Transaction'
 
-import { Amount } from './Amount'
+import { Amount } from '../atomics/Amount'
+import { InvalidAmountError } from '../atomics/errors/InvalidAmount'
+import { InvalidRelatedError } from '../atomics/errors/InvalidRelated'
+import { Related } from '../atomics/Related'
 import { EmptyListError } from './errors/EmptyList'
-import { InvalidAmountError } from './errors/InvalidAmount'
-import { InvalidRelatedError } from './errors/InvalidRelated'
-import { Related } from './Related'
-
-type Payers = {
-  [user: string]: number
-}
 
 type ValidatedPayers = [Related, Amount][]
 
@@ -21,7 +18,7 @@ export class TransactionPayers {
   }
 
   static create(
-    payers: Payers
+    payers: TransactionPayersProps
   ): Either<
     InvalidAmountError | InvalidRelatedError | EmptyListError,
     TransactionPayers
@@ -43,8 +40,12 @@ export class TransactionPayers {
     return right(new TransactionPayers(finalList))
   }
 
-  get value(): ValidatedPayers {
-    return this.payers
+  get value(): TransactionPayersProps {
+    const payers: TransactionPayersProps = {}
+    for (const [user, amount] of this.payers) {
+      payers[user.value] = amount.value
+    }
+    return payers
   }
 
   static validate(payers: ValidatedPayers): boolean {

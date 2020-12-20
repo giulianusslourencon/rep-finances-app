@@ -1,8 +1,8 @@
 import { Either, left, right } from '@shared/Either'
 
+import { InvalidRelatedError } from '../atomics/errors/InvalidRelated'
+import { Related } from '../atomics/Related'
 import { EmptyListError } from './errors/EmptyList'
-import { InvalidRelatedError } from './errors/InvalidRelated'
-import { Related } from './Related'
 
 export class RelatedList {
   private readonly relatedList: Related[]
@@ -10,12 +10,6 @@ export class RelatedList {
   private constructor(relatedList: Related[]) {
     this.relatedList = [...relatedList]
     Object.freeze(this)
-  }
-
-  static setList(relatedList: Related[]): Either<EmptyListError, RelatedList> {
-    if (!RelatedList.validate(relatedList)) return left(new EmptyListError())
-
-    return right(new RelatedList(relatedList))
   }
 
   static create(
@@ -35,8 +29,8 @@ export class RelatedList {
     return right(new RelatedList(finalList))
   }
 
-  get value(): Related[] {
-    return this.relatedList
+  get value(): string[] {
+    return this.relatedList.map(related => related.value)
   }
 
   static validate(relatedList: Related[]): boolean {

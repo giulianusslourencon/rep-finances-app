@@ -11,7 +11,7 @@ export class Timestamp {
   }
 
   static create(
-    timestamp: number | string
+    timestamp: number | string | Date
   ): Either<InvalidTimestampError, Timestamp> {
     if (!Timestamp.validate(timestamp)) {
       return left(new InvalidTimestampError(timestamp.toString()))
@@ -23,7 +23,7 @@ export class Timestamp {
     return this.timestamp
   }
 
-  static validate(timestamp: number | string): boolean {
+  static validate(timestamp: number | string | Date): boolean {
     return new Date(timestamp).getTime() > 0
   }
 }

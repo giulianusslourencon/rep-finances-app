@@ -1,32 +1,59 @@
-import { TransactionCore } from '@repositories/ITransactionsRepository'
+import { Either, left, right } from '@shared/Either'
+import { BalanceProps, IndividualBalanceProps } from '@shared/types/Balance'
+import { TransactionCoreProps } from '@shared/types/Transaction'
 
-import { Transaction } from '../Transaction'
+import { InvalidRelatedError } from '../atomics/errors/InvalidRelated'
+import { IndividualBalance } from './IndividualBalance'
 
 export class Balance {
-  public individual_balance!: {
-    [user_id: string]: number
+  public individual_balance!: IndividualBalance
+
+  private constructor(individual_balance: IndividualBalance) {
+    this.individual_balance = individual_balance
+    Object.freeze(this)
   }
 
-  constructor(transaction: TransactionCore | (TransactionCore | Balance)[]) {
-    if (!(transaction instanceof Array)) {
-      this.individual_balance = { ...transaction.payers }
+  static create(
+    transactionOrList:
+      | TransactionCoreProps
+      | (TransactionCoreProps | IndividualBalanceProps)[]
+  ): Either<InvalidRelatedError, Balance> {
+    let usersBalance: IndividualBalanceProps
 
-      Object.values(transaction.items).forEach(item => {
+    if (!(transactionOrList instanceof Array)) {
+      usersBalance = { ...transactionOrList.payers }
+
+      Object.values(transactionOrList.items).forEach(item => {
         const nUsers = item.related_users.length
 
         item.related_users.forEach(user => {
-          this.individual_balance[user] = this.individual_balance[user] || 0
-          this.individual_balance[user] -= item.value / nUsers
+          usersBalance[user] = usersBalance[user] || 0
+          usersBalance[user] -= item.value / nUsers
         })
       })
     } else {
-      const balances = transaction.map(transac => {
-        if ((<Balance>transac).individual_balance)
-          return (<Balance>transac).individual_balance
-        return new Balance(<Transaction>transac).individual_balance
+      const balancesOrError: Either<
+        InvalidRelatedError,
+        IndividualBalanceProps
+      >[] = transactionOrList.map(transactionOrBalance => {
+        if ((<IndividualBalanceProps>transactionOrBalance).individual_balance)
+          return right(<IndividualBalanceProps>transactionOrBalance)
+        const balanceOrError = Balance.create(
+          <TransactionCoreProps>transactionOrBalance
+        )
+        if (balanceOrError.isLeft()) return left(balanceOrError.value)
+        return right(balanceOrError.value.individual_balance.value)
       })
 
-      this.individual_balance = balances.reduce((acc, cur) => {
+      for (const balanceOrError of balancesOrError) {
+        if (balanceOrError.isLeft()) return left(balanceOrError.value)
+      }
+
+      const balances = balancesOrError.map(
+        balanceOrError => <IndividualBalanceProps>balanceOrError.value
+      )
+
+      usersBalance = balances.reduce<IndividualBalanceProps>((acc, cur) => {
         for (const [user, user_balance] of Object.entries(cur)) {
           acc[user] = acc[user] || 0
           acc[user] += user_balance
@@ -35,8 +62,19 @@ export class Balance {
       }, {})
     }
 
-    Object.keys(this.individual_balance).forEach(user => {
-      if (!this.individual_balance[user]) delete this.individual_balance[user]
+    Object.keys(usersBalance).forEach(user => {
+      if (!usersBalance[user]) delete usersBalance[user]
     })
+
+    const individualBalanceOrError = IndividualBalance.create(usersBalance)
+
+    if (individualBalanceOrError.isLeft())
+      return left(individualBalanceOrError.value)
+
+    return right(new Balance(individualBalanceOrError.value))
+  }
+
+  get value(): BalanceProps {
+    return { individual_balance: this.individual_balance.value }
   }
 }

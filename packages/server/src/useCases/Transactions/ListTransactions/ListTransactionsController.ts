@@ -23,7 +23,7 @@ export class ListTransactionsController {
 
       return response.status(200).json(transactions)
     } catch (error) {
-      return response.status(400).json({
+      return response.status(500).json({
         message: error.message || 'Unexpected error.'
       })
     }

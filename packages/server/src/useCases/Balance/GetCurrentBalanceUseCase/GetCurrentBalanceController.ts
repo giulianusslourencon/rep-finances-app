@@ -12,7 +12,7 @@ export class GetCurrentBalanceController {
 
       return response.json({ balance: balance.individual_balance })
     } catch (error) {
-      return response.status(400).json({
+      return response.status(500).json({
         message: error.message || 'Unexpected error.'
       })
     }

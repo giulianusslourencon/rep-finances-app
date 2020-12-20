@@ -1,12 +1,12 @@
-import { Balance } from '@entities/Balance'
-
 import { IBalanceRepository } from '@repositories/IBalanceRepository'
+
+import { BalanceProps } from '@shared/types/Balance'
 
 export class GetCurrentBalanceUseCase {
   // eslint-disable-next-line prettier/prettier
   constructor(private balanceRepository: IBalanceRepository) { }
 
-  async execute(): Promise<Balance> {
+  async execute(): Promise<BalanceProps> {
     return await this.balanceRepository.getCurrentBalance()
   }
 }

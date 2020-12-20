@@ -1,10 +1,9 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
-export type BalanceAttributes = {
+import { BalanceProps } from '@shared/types/Balance'
+
+export type BalanceAttributes = BalanceProps & {
   _id: string
-  individual_balance: {
-    [user_id: string]: number
-  }
   updated: boolean
 }
 

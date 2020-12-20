@@ -16,7 +16,7 @@ export class CountTransactionsController {
 
       return response.status(200).json({ count: transactionsCount })
     } catch (error) {
-      return response.status(400).json({
+      return response.status(500).json({
         message: error.message || 'Unexpected error.'
       })
     }

@@ -1,19 +1,13 @@
 import { Either, left, right } from '@shared/Either'
+import { TransactionItemsProps } from '@shared/types/Transaction'
 
-import { Amount } from './Amount'
+import { Amount } from '../atomics/Amount'
+import { InvalidAmountError } from '../atomics/errors/InvalidAmount'
+import { InvalidRelatedError } from '../atomics/errors/InvalidRelated'
+import { InvalidTitleError } from '../atomics/errors/InvalidTitle'
+import { Title } from '../atomics/Title'
 import { EmptyListError } from './errors/EmptyList'
-import { InvalidAmountError } from './errors/InvalidAmount'
-import { InvalidRelatedError } from './errors/InvalidRelated'
-import { InvalidTitleError } from './errors/InvalidTitle'
 import { RelatedList } from './RelatedList'
-import { Title } from './Title'
-
-type Items = {
-  [title: string]: {
-    value: number
-    related_users: string[]
-  }
-}
 
 type ValidatedItems = [Title, { value: Amount; related_users: RelatedList }][]
 
@@ -26,7 +20,7 @@ export class TransactionItems {
   }
 
   static create(
-    items: Items
+    items: TransactionItemsProps
   ): Either<
     | InvalidTitleError
     | InvalidAmountError
@@ -55,8 +49,15 @@ export class TransactionItems {
     return right(new TransactionItems(finalList))
   }
 
-  get value(): ValidatedItems {
-    return this.items
+  get value(): TransactionItemsProps {
+    const items: TransactionItemsProps = {}
+    for (const [title, { value, related_users }] of this.items) {
+      items[title.value] = {
+        value: value.value,
+        related_users: related_users.value
+      }
+    }
+    return items
   }
 
   static validate(items: ValidatedItems): boolean {

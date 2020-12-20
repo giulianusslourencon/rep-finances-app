@@ -17,15 +17,22 @@ export class FindTransactionController {
 
     try {
       const transaction = await this.findTransactionUseCase.execute({ id })
-      if (!transaction) throw new Error('Transaction not found')
+      if (!transaction)
+        return response.status(404).json({ message: 'Transaction not found' })
 
-      const balance = this.getTransactionBalanceUseCase.execute({ transaction })
+      const balanceOrError = this.getTransactionBalanceUseCase.execute({
+        transaction
+      })
+      if (balanceOrError.isLeft()) {
+        const { name, message } = balanceOrError.value
+        return response.status(400).json({ name, message })
+      }
 
       return response
         .status(200)
-        .json({ transaction, balance: balance.individual_balance })
+        .json({ transaction, balance: balanceOrError.value.individual_balance })
     } catch (error) {
-      return response.status(404).json({
+      return response.status(500).json({
         message: error.message || 'Unexpected error.'
       })
     }

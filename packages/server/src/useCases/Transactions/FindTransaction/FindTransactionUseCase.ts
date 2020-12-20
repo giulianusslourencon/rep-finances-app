@@ -1,6 +1,6 @@
-import { Transaction } from '@entities/Transaction'
-
 import { ITransactionsRepository } from '@repositories/ITransactionsRepository'
+
+import { TransactionProps } from '@shared/types/Transaction'
 
 import { IFindTransactionRequestDTO } from './FindTransactionDTO'
 
@@ -10,7 +10,7 @@ export class FindTransactionUseCase {
 
   async execute(
     props: IFindTransactionRequestDTO
-  ): Promise<Transaction | null | undefined> {
+  ): Promise<TransactionProps | null | undefined> {
     const transaction = this.transactionsRepository.findById(props.id)
 
     return transaction

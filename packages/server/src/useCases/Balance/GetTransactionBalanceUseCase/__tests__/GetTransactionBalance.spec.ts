@@ -1,7 +1,8 @@
-import { Transaction } from '@entities/Transaction'
-
 import MongoMock from '@repositories/mongodb/MongoMock'
 import TransactionSchema from '@repositories/mongodb/schemas/Transaction'
+
+import { BalanceProps } from '@shared/types/Balance'
+import { TransactionProps } from '@shared/types/Transaction'
 
 import { createTransactionUseCase } from '@useCases/Transactions/CreateTransaction'
 
@@ -9,7 +10,7 @@ import { getTransactionBalanceUseCase } from '..'
 
 import * as data from './testData'
 
-let createdTransactions: Transaction[]
+let createdTransactions: TransactionProps[]
 
 describe('Get Transaction Balance', () => {
   beforeAll(async () => {
@@ -17,10 +18,15 @@ describe('Get Transaction Balance', () => {
 
     await TransactionSchema.deleteMany({})
 
-    createdTransactions = await Promise.all(
-      data.transactions.map(transaction =>
-        createTransactionUseCase.execute(transaction)
+    createdTransactions = (
+      await Promise.all(
+        data.transactions.map(transaction =>
+          createTransactionUseCase.execute(transaction)
+        )
       )
+    ).map(
+      createdTransactionOrError =>
+        <TransactionProps>createdTransactionOrError.value
     )
   })
 
@@ -33,7 +39,7 @@ describe('Get Transaction Balance', () => {
       transaction: createdTransactions[0]
     })
 
-    expect(balance.individual_balance).toEqual({
+    expect((<BalanceProps>balance.value).individual_balance).toEqual({
       P: 10,
       G: -10
     })
@@ -44,6 +50,6 @@ describe('Get Transaction Balance', () => {
       transaction: createdTransactions[1]
     })
 
-    expect(balance.individual_balance).toEqual({})
+    expect((<BalanceProps>balance.value).individual_balance).toEqual({})
   })
 })

@@ -1,4 +1,4 @@
-import { Transaction } from '@entities/Transaction'
+import { TransactionInitProps } from '@shared/types/Transaction'
 
 export const transactions = [
   {
@@ -61,4 +61,4 @@ export const transactions = [
       P: 200
     }
   }
-] as Omit<Transaction, '_id' | 'month' | 'amount' | 'related'>[]
+] as TransactionInitProps[]

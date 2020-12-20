@@ -1,16 +1,19 @@
 import { Transaction } from '@entities/Transaction'
 
-import {
-  ITransactionsRepository,
-  TransactionList
-} from '@repositories/ITransactionsRepository'
+import { ITransactionsRepository } from '@repositories/ITransactionsRepository'
 import TransactionSchema from '@repositories/mongodb/schemas/Transaction'
+
+import {
+  TransactionCoreProps,
+  TransactionProps,
+  TransactionResumeProps
+} from '@shared/types/Transaction'
 
 export class MongoTransactionsRepository implements ITransactionsRepository {
   async list(skipLimit?: {
     skip: number
     limit: number
-  }): Promise<TransactionList> {
+  }): Promise<TransactionResumeProps[]> {
     return await TransactionSchema.find(
       {},
       { _id: 1, title: 1, timestamp: 1, amount: 1, related: 1 },
@@ -21,7 +24,7 @@ export class MongoTransactionsRepository implements ITransactionsRepository {
   async listByMonth(
     month: string,
     skipLimit?: { skip: number; limit: number }
-  ): Promise<TransactionList> {
+  ): Promise<TransactionResumeProps[]> {
     return await TransactionSchema.find(
       { month },
       { _id: 1, title: 1, timestamp: 1, amount: 1, related: 1 },
@@ -39,19 +42,19 @@ export class MongoTransactionsRepository implements ITransactionsRepository {
 
   async listItemsAndPayersByMonth(
     month: string
-  ): Promise<Pick<Transaction, 'items' | 'payers'>[]> {
+  ): Promise<TransactionCoreProps[]> {
     return await TransactionSchema.find(
       { month },
       { items: 1, payers: 1 }
     ).lean()
   }
 
-  async findById(id: string): Promise<Transaction | null | undefined> {
+  async findById(id: string): Promise<TransactionProps | null | undefined> {
     return await TransactionSchema.findById(id).lean()
   }
 
   async save(transaction: Transaction): Promise<void> {
-    await TransactionSchema.create(transaction)
+    await TransactionSchema.create(transaction.value)
   }
 
   async getNotRegisteredMonths(lastMonth: string): Promise<string[]> {

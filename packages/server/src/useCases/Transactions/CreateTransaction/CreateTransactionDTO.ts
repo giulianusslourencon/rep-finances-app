@@ -1,6 +1,6 @@
 export interface ICreateTransactionRequestDTO {
   title: string
-  timestamp: number
+  timestamp: number | string
   items: {
     [title: string]: {
       value: number

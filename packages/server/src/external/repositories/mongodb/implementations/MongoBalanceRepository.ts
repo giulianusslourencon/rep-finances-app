@@ -1,10 +1,14 @@
 import { Balance } from '@entities/Balance'
+import DomainError from '@entities/errors/DomainError'
 
 import { IBalanceRepository } from '@repositories/IBalanceRepository'
 import { ITransactionsRepository } from '@repositories/ITransactionsRepository'
 import BalanceSchema, {
   BalanceAttributes
 } from '@repositories/mongodb/schemas/Balance'
+
+import { Either, left, right } from '@shared/Either'
+import { BalanceProps } from '@shared/types/Balance'
 
 export class MongoBalanceRepository implements IBalanceRepository {
   // eslint-disable-next-line prettier/prettier
@@ -17,7 +21,7 @@ export class MongoBalanceRepository implements IBalanceRepository {
     )
   }
 
-  async getCurrentBalance(): Promise<Balance> {
+  async getCurrentBalance(): Promise<BalanceProps> {
     const notUpdatedMonths = (
       await BalanceSchema.find(
         { updated: false },
@@ -49,7 +53,9 @@ export class MongoBalanceRepository implements IBalanceRepository {
     return balance || { individual_balance: {} }
   }
 
-  private async updateBalance(notUpdatedMonths: string[]): Promise<void> {
+  private async updateBalance(
+    notUpdatedMonths: string[]
+  ): Promise<Either<DomainError & Error, null>> {
     let [lastUpdatedMonth] = (await BalanceSchema.find(
       { updated: true },
       {},
@@ -63,16 +69,20 @@ export class MongoBalanceRepository implements IBalanceRepository {
       )
       const { individual_balance } = lastUpdatedMonth
 
-      const { individual_balance: monthBalance } = new Balance([
+      const balanceOrError = Balance.create([
         ...transactions,
         { individual_balance }
       ])
+      if (balanceOrError.isLeft()) return left(balanceOrError.value)
+      const { individual_balance: monthBalance } = balanceOrError.value
 
       lastUpdatedMonth = (await BalanceSchema.findByIdAndUpdate(
         month,
-        { $set: { individual_balance: monthBalance, updated: true } },
+        { $set: { individual_balance: monthBalance.value, updated: true } },
         { upsert: true, new: true }
       ).lean()) as BalanceAttributes
     }
+
+    return right(null)
   }
 }
