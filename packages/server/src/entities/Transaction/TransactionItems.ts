@@ -1,30 +1,66 @@
 import { Either, left, right } from '@shared/Either'
 
-import { InvalidNameError } from './errors/invalid-name'
+import { Amount } from './Amount'
+import { EmptyListError } from './errors/EmptyList'
+import { InvalidAmountError } from './errors/InvalidAmount'
+import { InvalidRelatedError } from './errors/InvalidRelated'
+import { InvalidTitleError } from './errors/InvalidTitle'
+import { RelatedList } from './RelatedList'
+import { Title } from './Title'
 
-export class Name {
-  private readonly name: string
+type Items = {
+  [title: string]: {
+    value: number
+    related_users: string[]
+  }
+}
 
-  private constructor(name: string) {
-    this.name = name
+type ValidatedItems = [Title, { value: Amount; related_users: RelatedList }][]
+
+export class TransactionItems {
+  private readonly items: ValidatedItems
+
+  private constructor(items: ValidatedItems) {
+    this.items = [...items]
     Object.freeze(this)
   }
 
-  static create(name: string): Either<InvalidNameError, Name> {
-    if (!Name.validate(name)) {
-      return left(new InvalidNameError(name))
+  static create(
+    items: Items
+  ): Either<
+    | InvalidTitleError
+    | InvalidAmountError
+    | InvalidRelatedError
+    | EmptyListError,
+    TransactionItems
+  > {
+    const finalList: ValidatedItems = []
+    for (const [title, { value, related_users }] of Object.entries(items)) {
+      const titleOrError = Title.create(title)
+      const valueOrError = Amount.create(value)
+      const relatedUsersOrError = RelatedList.create(related_users)
+
+      if (titleOrError.isLeft()) return left(titleOrError.value)
+      if (valueOrError.isLeft()) return left(valueOrError.value)
+      if (relatedUsersOrError.isLeft()) return left(relatedUsersOrError.value)
+
+      finalList.push([
+        titleOrError.value,
+        { value: valueOrError.value, related_users: relatedUsersOrError.value }
+      ])
     }
-    return right(new Name(name))
+
+    if (!TransactionItems.validate(finalList)) return left(new EmptyListError())
+
+    return right(new TransactionItems(finalList))
   }
 
-  get value(): string {
-    return this.name
+  get value(): ValidatedItems {
+    return this.items
   }
 
-  static validate(name: string): boolean {
-    if (!name || name.trim().length < 2 || name.trim().length > 255) {
-      return false
-    }
+  static validate(items: ValidatedItems): boolean {
+    if (items.length === 0) return false
     return true
   }
 }
