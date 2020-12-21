@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 
 import { GetTransactionBalanceUseCase } from '@useCases/Balance/GetTransactionBalanceUseCase/GetTransactionBalanceUseCase'
 
+import { TransactionNotFoundError } from '../errors/TransactionNotFound'
 import { FindTransactionUseCase } from './FindTransactionUseCase'
 
 export class FindTransactionController {
@@ -17,8 +18,10 @@ export class FindTransactionController {
 
     try {
       const transaction = await this.findTransactionUseCase.execute({ id })
-      if (!transaction)
-        return response.status(404).json({ message: 'Transaction not found' })
+      if (!transaction) {
+        const { name, message } = new TransactionNotFoundError(id)
+        return response.status(404).json({ name, message })
+      }
 
       const balanceOrError = this.getTransactionBalanceUseCase.execute({
         transaction
