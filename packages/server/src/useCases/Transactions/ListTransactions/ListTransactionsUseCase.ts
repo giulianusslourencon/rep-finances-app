@@ -1,6 +1,6 @@
 import { ITransactionsRepository } from '@repositories/ITransactionsRepository'
 
-import { TransactionResumeProps } from '@shared/types/Transaction'
+import { TransactionResumeProps } from '@shared/@types/Transaction'
 
 import { IListTransactionsRequestDTO } from './ListTransactionsDTO'
 

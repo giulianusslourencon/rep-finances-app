@@ -4,7 +4,7 @@ import TransactionSchema from '@repositories/mongodb/schemas/Transaction'
 
 import { createTransactionUseCase } from '..'
 
-import { TransactionProps } from '@shared/types/Transaction'
+import { TransactionProps } from '@shared/@types/Transaction'
 
 import { getCurrentBalanceUseCase } from '@useCases/Balance/GetCurrentBalanceUseCase'
 

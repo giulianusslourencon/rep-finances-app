@@ -7,7 +7,7 @@ import {
   TransactionCoreProps,
   TransactionProps,
   TransactionResumeProps
-} from '@shared/types/Transaction'
+} from '@shared/@types/Transaction'
 
 export class MongoTransactionsRepository implements ITransactionsRepository {
   async list(skipLimit?: {

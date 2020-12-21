@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
-import { TransactionProps } from '@shared/types/Transaction'
+import { TransactionProps } from '@shared/@types/Transaction'
 
 export type TransactionDocument = Document & TransactionProps
 

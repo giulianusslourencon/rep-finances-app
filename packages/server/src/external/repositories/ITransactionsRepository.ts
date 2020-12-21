@@ -4,7 +4,7 @@ import {
   TransactionCoreProps,
   TransactionProps,
   TransactionResumeProps
-} from '@shared/types/Transaction'
+} from '@shared/@types/Transaction'
 
 export interface ITransactionsRepository {
   save(transaction: Transaction): Promise<void>

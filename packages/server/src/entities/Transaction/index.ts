@@ -1,10 +1,10 @@
 import { v4 as uuid } from 'uuid'
 
-import { Either, left, right } from '@shared/Either'
 import {
   TransactionInitProps,
   TransactionProps
-} from '@shared/types/Transaction'
+} from '@shared/@types/Transaction'
+import { Either, left, right } from '@shared/Either'
 import DateParser from '@shared/utils/DateParser'
 
 import { Amount } from '../atomics/Amount'

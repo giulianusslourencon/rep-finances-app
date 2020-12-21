@@ -3,7 +3,7 @@ import TransactionSchema from '@repositories/mongodb/schemas/Transaction'
 
 import { findTransactionUseCase } from '..'
 
-import { TransactionProps } from '@shared/types/Transaction'
+import { TransactionProps } from '@shared/@types/Transaction'
 
 import { createTransactionUseCase } from '@useCases/Transactions/CreateTransaction'
 

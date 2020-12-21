@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
-import { BalanceProps } from '@shared/types/Balance'
+import { BalanceProps } from '@shared/@types/Balance'
 
 export type BalanceAttributes = BalanceProps & {
   _id: string

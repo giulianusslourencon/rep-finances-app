@@ -1,6 +1,6 @@
 import { IBalanceRepository } from '@repositories/IBalanceRepository'
 
-import { BalanceProps } from '@shared/types/Balance'
+import { BalanceProps } from '@shared/@types/Balance'
 
 export class GetCurrentBalanceUseCase {
   // eslint-disable-next-line prettier/prettier

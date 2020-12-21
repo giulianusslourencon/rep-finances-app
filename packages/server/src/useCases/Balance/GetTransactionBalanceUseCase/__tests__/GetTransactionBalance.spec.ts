@@ -1,8 +1,8 @@
 import MongoMock from '@repositories/mongodb/MongoMock'
 import TransactionSchema from '@repositories/mongodb/schemas/Transaction'
 
-import { BalanceProps } from '@shared/types/Balance'
-import { TransactionProps } from '@shared/types/Transaction'
+import { BalanceProps } from '@shared/@types/Balance'
+import { TransactionProps } from '@shared/@types/Transaction'
 
 import { createTransactionUseCase } from '@useCases/Transactions/CreateTransaction'
 

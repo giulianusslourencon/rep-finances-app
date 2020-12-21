@@ -27,7 +27,7 @@ describe('Get Current Balance', () => {
 
   it('Should get the current balance among all related users.', async () => {
     const balance = await getCurrentBalanceUseCase.execute()
-
+    console.log(balance)
     expect(balance.individual_balance).toEqual({
       P: 237.5,
       G: -32.5,

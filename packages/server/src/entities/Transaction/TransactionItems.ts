@@ -1,5 +1,5 @@
+import { TransactionItemsProps } from '@shared/@types/Transaction'
 import { Either, left, right } from '@shared/Either'
-import { TransactionItemsProps } from '@shared/types/Transaction'
 
 import { Amount } from '../atomics/Amount'
 import { InvalidAmountError } from '../atomics/errors/InvalidAmount'

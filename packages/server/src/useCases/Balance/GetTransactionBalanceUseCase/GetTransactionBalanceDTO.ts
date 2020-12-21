@@ -1,4 +1,4 @@
-import { TransactionCoreProps } from '@shared/types/Transaction'
+import { TransactionCoreProps } from '@shared/@types/Transaction'
 
 export interface IGetTransactionBalanceDTO {
   transaction: TransactionCoreProps

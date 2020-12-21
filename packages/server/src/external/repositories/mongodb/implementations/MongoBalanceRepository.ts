@@ -7,8 +7,8 @@ import BalanceSchema, {
   BalanceAttributes
 } from '@repositories/mongodb/schemas/Balance'
 
+import { BalanceProps } from '@shared/@types/Balance'
 import { Either, left, right } from '@shared/Either'
-import { BalanceProps } from '@shared/types/Balance'
 
 export class MongoBalanceRepository implements IBalanceRepository {
   // eslint-disable-next-line prettier/prettier

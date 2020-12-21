@@ -1,6 +1,6 @@
+import { BalanceProps, IndividualBalanceProps } from '@shared/@types/Balance'
+import { TransactionCoreProps } from '@shared/@types/Transaction'
 import { Either, left, right } from '@shared/Either'
-import { BalanceProps, IndividualBalanceProps } from '@shared/types/Balance'
-import { TransactionCoreProps } from '@shared/types/Transaction'
 
 import { InvalidRelatedError } from '../atomics/errors/InvalidRelated'
 import { IndividualBalance } from './IndividualBalance'

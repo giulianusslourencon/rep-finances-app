@@ -1,4 +1,4 @@
-import { TransactionInitProps } from '@shared/types/Transaction'
+import { TransactionInitProps } from '@shared/@types/Transaction'
 
 export const transactions = [
   {

@@ -1,5 +1,5 @@
+import { IndividualBalanceProps } from '@shared/@types/Balance'
 import { Either, left, right } from '@shared/Either'
-import { IndividualBalanceProps } from '@shared/types/Balance'
 
 import { InvalidRelatedError } from '../atomics/errors/InvalidRelated'
 import { Related } from '../atomics/Related'

@@ -14,7 +14,7 @@ export class Related {
     if (!Related.validate(related)) {
       return left(new InvalidRelatedError(related))
     }
-    return right(new Related(related.toUpperCase()))
+    return right(new Related(related.toUpperCase().trim()))
   }
 
   get value(): string {
@@ -22,7 +22,7 @@ export class Related {
   }
 
   static validate(related: string): boolean {
-    const tester = /[a-zA-Z][a-zA-Z0-9]/
+    const tester = /^[a-zA-Z][a-zA-Z0-9]?/
     if (!related || related.trim().length < 1 || related.trim().length > 2) {
       return false
     }
