@@ -61,7 +61,11 @@ export class MongoBalanceRepository implements IBalanceRepository {
       {},
       { sort: { _id: -1 } }
     ).lean()) as BalanceAttributes[]
-    lastUpdatedMonth ||= { _id: '', individual_balance: {}, updated: true }
+    lastUpdatedMonth = lastUpdatedMonth || {
+      _id: '',
+      individual_balance: {},
+      updated: true
+    }
 
     for (const month of notUpdatedMonths) {
       const transactions = await this.transactionsRepository.listItemsAndPayersByMonth(

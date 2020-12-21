@@ -18,14 +18,19 @@ export class CreateTransactionController {
 
       const { title, timestamp, items, payers } = request.body
 
-      const transaction = await this.createTransactionUseCase.execute({
+      const transactionOrError = await this.createTransactionUseCase.execute({
         title,
         timestamp,
         items,
         payers
       })
 
-      return response.status(201).json(transaction)
+      if (transactionOrError.isLeft()) {
+        const { name, message } = transactionOrError.value
+        return response.status(400).json({ name, message })
+      }
+
+      return response.status(201).json(transactionOrError.value)
     } catch (error) {
       return response.status(500).json({
         message: error.message || 'Unexpected error.'
