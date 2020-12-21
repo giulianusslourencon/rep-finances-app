@@ -3,7 +3,7 @@ import { left } from '@shared/Either'
 import { InvalidTitleError } from '../errors/InvalidTitle'
 import { Title } from '../Title'
 
-describe('Title validator', () => {
+describe('Title', () => {
   it('Should allow valid titles', () => {
     const titleOrError = Title.create('Titulo')
 

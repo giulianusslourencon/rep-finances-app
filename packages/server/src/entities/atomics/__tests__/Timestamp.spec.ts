@@ -3,7 +3,7 @@ import { left } from '@shared/Either'
 import { InvalidTimestampError } from '../errors/InvalidTimestamp'
 import { Timestamp } from '../Timestamp'
 
-describe('Timestamp validator', () => {
+describe('Timestamp', () => {
   it('Should allow timestamps in number format', () => {
     const timestampOrError = Timestamp.create(1608336000000)
 

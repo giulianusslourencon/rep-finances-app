@@ -1,4 +1,4 @@
-import { BalanceProps, IndividualBalanceProps } from '@shared/@types/Balance'
+import { BalanceProps } from '@shared/@types/Balance'
 import { TransactionCoreProps } from '@shared/@types/Transaction'
 import { Either, left, right } from '@shared/Either'
 
@@ -16,33 +16,34 @@ export class Balance {
   static create(
     transactionOrList:
       | TransactionCoreProps
-      | (TransactionCoreProps | IndividualBalanceProps)[]
+      | (TransactionCoreProps | BalanceProps)[]
   ): Either<InvalidRelatedError, Balance> {
-    let usersBalance: IndividualBalanceProps
+    let usersBalance: BalanceProps = { individual_balance: {} }
 
     if (!(transactionOrList instanceof Array)) {
-      usersBalance = { ...transactionOrList.payers }
+      usersBalance.individual_balance = { ...transactionOrList.payers }
 
       Object.values(transactionOrList.items).forEach(item => {
         const nUsers = item.related_users.length
 
         item.related_users.forEach(user => {
-          usersBalance[user] = usersBalance[user] || 0
-          usersBalance[user] -= item.value / nUsers
+          usersBalance.individual_balance[user] =
+            usersBalance.individual_balance[user] || 0
+          usersBalance.individual_balance[user] -= item.value / nUsers
         })
       })
     } else {
       const balancesOrError: Either<
         InvalidRelatedError,
-        IndividualBalanceProps
+        BalanceProps
       >[] = transactionOrList.map(transactionOrBalance => {
-        if ((<IndividualBalanceProps>transactionOrBalance).individual_balance)
-          return right(<IndividualBalanceProps>transactionOrBalance)
+        if ((<BalanceProps>transactionOrBalance).individual_balance)
+          return right(<BalanceProps>transactionOrBalance)
         const balanceOrError = Balance.create(
           <TransactionCoreProps>transactionOrBalance
         )
         if (balanceOrError.isLeft()) return left(balanceOrError.value)
-        return right(balanceOrError.value.individual_balance.value)
+        return right(balanceOrError.value.value)
       })
 
       for (const balanceOrError of balancesOrError) {
@@ -50,23 +51,31 @@ export class Balance {
       }
 
       const balances = balancesOrError.map(
-        balanceOrError => <IndividualBalanceProps>balanceOrError.value
+        balanceOrError => <BalanceProps>balanceOrError.value
       )
 
-      usersBalance = balances.reduce<IndividualBalanceProps>((acc, cur) => {
-        for (const [user, user_balance] of Object.entries(cur)) {
-          acc[user] = acc[user] || 0
-          acc[user] += user_balance
-        }
-        return acc
-      }, {})
+      usersBalance = balances.reduce<BalanceProps>(
+        (acc, cur) => {
+          for (const [user, user_balance] of Object.entries(
+            cur.individual_balance
+          )) {
+            acc.individual_balance[user] = acc.individual_balance[user] || 0
+            acc.individual_balance[user] += user_balance
+          }
+          return acc
+        },
+        { individual_balance: {} }
+      )
     }
 
-    Object.keys(usersBalance).forEach(user => {
-      if (!usersBalance[user]) delete usersBalance[user]
+    Object.keys(usersBalance.individual_balance).forEach(user => {
+      if (!usersBalance.individual_balance[user])
+        delete usersBalance.individual_balance[user]
     })
 
-    const individualBalanceOrError = IndividualBalance.create(usersBalance)
+    const individualBalanceOrError = IndividualBalance.create(
+      usersBalance.individual_balance
+    )
 
     if (individualBalanceOrError.isLeft())
       return left(individualBalanceOrError.value)

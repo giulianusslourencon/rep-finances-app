@@ -3,7 +3,7 @@ import { left } from '@shared/Either'
 import { Amount } from '../Amount'
 import { InvalidAmountError } from '../errors/InvalidAmount'
 
-describe('Amount validator', () => {
+describe('Amount', () => {
   it('Should allow positive values', () => {
     const amountOrError = Amount.create(5)
 

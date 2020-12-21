@@ -3,7 +3,7 @@ import { left } from '@shared/Either'
 import { InvalidRelatedError } from '../errors/InvalidRelated'
 import { Related } from '../Related'
 
-describe('Related validator', () => {
+describe('Related', () => {
   it('Should allow single character string', () => {
     const relatedOrError = Related.create('P')
 

@@ -4,7 +4,7 @@ import { left } from '@shared/Either'
 
 import { IndividualBalance } from '../IndividualBalance'
 
-describe('Individual balance validator', () => {
+describe('Individual Balance', () => {
   it('Should allow balance with valid related', () => {
     const individualBalance = {
       P: 5,
