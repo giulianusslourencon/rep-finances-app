@@ -1,4 +1,4 @@
-import MongoMock from '@repositories/mongodb/MongoMock'
+import MongoMock from '@repositories/mongodb/implementations/MongoMock'
 import TransactionSchema from '@repositories/mongodb/schemas/Transaction'
 
 import { BalanceProps } from '@shared/@types/Balance'

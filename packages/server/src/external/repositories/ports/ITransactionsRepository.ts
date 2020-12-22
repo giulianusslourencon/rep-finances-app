@@ -1,29 +1,31 @@
-import { Transaction } from '@entities/Transaction'
+import { TransactionAttributes } from '@repositories/attributes'
+import { IRepository } from '@repositories/ports'
 
-import {
-  TransactionCoreProps,
-  TransactionProps,
-  TransactionResumeProps
-} from '@shared/@types/Transaction'
+export type TransactionList = Pick<
+  TransactionAttributes,
+  '_id' | 'title' | 'timestamp' | 'amount' | 'related'
+>[]
 
-export interface ITransactionsRepository {
-  save(transaction: Transaction): Promise<void>
+export type ItemsAndPayersList = Pick<
+  TransactionAttributes,
+  'items' | 'payers'
+>[]
 
-  list(skipLimit?: {
-    skip: number
-    limit: number
-  }): Promise<TransactionResumeProps[]>
+export interface ITransactionsRepository extends IRepository {
+  save(transaction: TransactionAttributes): Promise<void>
+
+  list(skipLimit?: { skip: number; limit: number }): Promise<TransactionList>
   listByMonth(
     month: string,
     skipLimit?: { skip: number; limit: number }
-  ): Promise<TransactionResumeProps[]>
+  ): Promise<TransactionList>
 
   count(): Promise<number>
   countByMonth(month: string): Promise<number>
 
-  listItemsAndPayersByMonth(month: string): Promise<TransactionCoreProps[]>
+  listItemsAndPayersByMonth(month: string): Promise<ItemsAndPayersList>
 
-  findById(id: string): Promise<TransactionProps | null | undefined>
+  findById(id: string): Promise<TransactionAttributes | null | undefined>
 
   getNotRegisteredMonths(lastMonth: string): Promise<string[]>
 }

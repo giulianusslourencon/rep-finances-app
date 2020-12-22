@@ -1,4 +1,4 @@
-import MongoMock from '@repositories/mongodb/MongoMock'
+import MongoMock from '@repositories/mongodb/implementations/MongoMock'
 import Transaction from '@repositories/mongodb/schemas/Transaction'
 
 import { createTransactionUseCase } from '@useCases/Transactions/CreateTransaction'

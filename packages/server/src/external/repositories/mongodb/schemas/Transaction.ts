@@ -1,8 +1,8 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
-import { TransactionProps } from '@shared/@types/Transaction'
+import { TransactionAttributes } from '@repositories/attributes'
 
-export type TransactionDocument = Document & TransactionProps
+export type TransactionDocument = Document & TransactionAttributes
 
 const TransactionSchema = new Schema({
   _id: {
@@ -43,7 +43,7 @@ const TransactionSchema = new Schema({
   }
 })
 
-export default mongoose.model<TransactionDocument>(
+export const TransactionModel = mongoose.model<TransactionDocument>(
   'Transaction',
   TransactionSchema
 )

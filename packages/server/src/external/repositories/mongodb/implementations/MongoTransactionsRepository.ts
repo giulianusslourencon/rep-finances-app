@@ -1,20 +1,26 @@
-import { Transaction } from '@entities/Transaction'
-
-import TransactionSchema from '@repositories/mongodb/schemas/Transaction'
-import { ITransactionsRepository } from '@repositories/ports/ITransactionsRepository'
-
+import { TransactionAttributes } from '@repositories/attributes'
+import { MongoRepository } from '@repositories/mongodb/implementations'
+import { TransactionModel } from '@repositories/mongodb/schemas'
 import {
-  TransactionCoreProps,
-  TransactionProps,
-  TransactionResumeProps
-} from '@shared/@types/Transaction'
+  ItemsAndPayersList,
+  ITransactionsRepository,
+  TransactionList
+} from '@repositories/ports'
 
-export class MongoTransactionsRepository implements ITransactionsRepository {
+export class MongoTransactionsRepository
+  extends MongoRepository
+  implements ITransactionsRepository {
+  collection = TransactionModel.name
+
+  async erase(): Promise<void> {
+    await TransactionModel.deleteMany()
+  }
+
   async list(skipLimit?: {
     skip: number
     limit: number
-  }): Promise<TransactionResumeProps[]> {
-    return await TransactionSchema.find(
+  }): Promise<TransactionList> {
+    return await TransactionModel.find(
       {},
       { _id: 1, title: 1, timestamp: 1, amount: 1, related: 1 },
       { sort: { timestamp: -1 }, ...skipLimit }
@@ -24,8 +30,8 @@ export class MongoTransactionsRepository implements ITransactionsRepository {
   async listByMonth(
     month: string,
     skipLimit?: { skip: number; limit: number }
-  ): Promise<TransactionResumeProps[]> {
-    return await TransactionSchema.find(
+  ): Promise<TransactionList> {
+    return await TransactionModel.find(
       { month },
       { _id: 1, title: 1, timestamp: 1, amount: 1, related: 1 },
       { sort: { timestamp: -1 }, ...skipLimit }
@@ -33,32 +39,32 @@ export class MongoTransactionsRepository implements ITransactionsRepository {
   }
 
   async count(): Promise<number> {
-    return await TransactionSchema.count()
+    return await TransactionModel.count()
   }
 
   async countByMonth(month: string): Promise<number> {
-    return await TransactionSchema.count({ month })
+    return await TransactionModel.count({ month })
   }
 
-  async listItemsAndPayersByMonth(
-    month: string
-  ): Promise<TransactionCoreProps[]> {
-    return await TransactionSchema.find(
+  async listItemsAndPayersByMonth(month: string): Promise<ItemsAndPayersList> {
+    return await TransactionModel.find(
       { month },
       { items: 1, payers: 1 }
     ).lean()
   }
 
-  async findById(id: string): Promise<TransactionProps | null | undefined> {
-    return await TransactionSchema.findById(id).lean()
+  async findById(
+    id: string
+  ): Promise<TransactionAttributes | null | undefined> {
+    return await TransactionModel.findById(id).lean()
   }
 
-  async save(transaction: Transaction): Promise<void> {
-    await TransactionSchema.create(transaction.value)
+  async save(transaction: TransactionAttributes): Promise<void> {
+    await TransactionModel.create(transaction)
   }
 
   async getNotRegisteredMonths(lastMonth: string): Promise<string[]> {
-    const doc = await TransactionSchema.aggregate<{ _id: string }>([
+    const doc = await TransactionModel.aggregate<{ _id: string }>([
       { $match: { month: { $gt: lastMonth } } },
       { $group: { _id: '$month' } },
       { $sort: { _id: 1 } }

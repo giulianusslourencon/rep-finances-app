@@ -1,11 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
-import { BalanceProps } from '@shared/@types/Balance'
-
-export type BalanceAttributes = BalanceProps & {
-  _id: string
-  updated: boolean
-}
+import { BalanceAttributes } from '@repositories/attributes'
 
 export type BalanceDocument = Document & BalanceAttributes
 
@@ -24,4 +19,7 @@ const BalanceSchema = new Schema({
   }
 })
 
-export default mongoose.model<BalanceDocument>('Balance', BalanceSchema)
+export const BalanceModel = mongoose.model<BalanceDocument>(
+  'Balance',
+  BalanceSchema
+)
