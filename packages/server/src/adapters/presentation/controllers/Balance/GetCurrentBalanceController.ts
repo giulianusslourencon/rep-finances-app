@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { GetCurrentBalanceUseCase } from './GetCurrentBalanceUseCase'
+import { GetCurrentBalanceUseCase } from '@useCases/Balance/GetCurrentBalanceUseCase/GetCurrentBalanceUseCase'
 
 export class GetCurrentBalanceController {
   // eslint-disable-next-line prettier/prettier

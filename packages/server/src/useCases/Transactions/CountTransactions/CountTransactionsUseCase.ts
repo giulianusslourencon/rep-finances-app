@@ -1,4 +1,4 @@
-import { ITransactionsRepository } from '@repositories/ITransactionsRepository'
+import { ITransactionsRepository } from '@repositories/ports/ITransactionsRepository'
 
 import { ICountTransactionsRequestDTO } from './CountTransactionsDTO'
 

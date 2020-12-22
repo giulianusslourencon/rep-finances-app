@@ -2,7 +2,7 @@ import { MongoTransactionsRepository } from '@repositories/mongodb/implementatio
 
 import { getTransactionBalanceUseCase } from '@useCases/Balance/GetTransactionBalanceUseCase'
 
-import { FindTransactionController } from './FindTransactionController'
+import { FindTransactionController } from '../../../adapters/presentation/controllers/Transactions/FindTransactionController'
 import { FindTransactionUseCase } from './FindTransactionUseCase'
 
 const mongoTransactionRepository = new MongoTransactionsRepository()

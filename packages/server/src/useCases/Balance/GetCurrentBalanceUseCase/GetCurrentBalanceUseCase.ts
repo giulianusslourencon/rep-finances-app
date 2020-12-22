@@ -1,4 +1,4 @@
-import { IBalanceRepository } from '@repositories/IBalanceRepository'
+import { IBalanceRepository } from '@repositories/ports/IBalanceRepository'
 
 import { BalanceProps } from '@shared/@types/Balance'
 

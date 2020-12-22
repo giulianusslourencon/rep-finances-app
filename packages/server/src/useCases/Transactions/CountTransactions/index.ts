@@ -1,6 +1,6 @@
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations/MongoTransactionsRepository'
 
-import { CountTransactionsController } from './CountTransactionsController'
+import { CountTransactionsController } from '../../../adapters/presentation/controllers/Transactions/CountTransactionsController'
 import { CountTransactionsUseCase } from './CountTransactionsUseCase'
 
 const mongoTransactionRepository = new MongoTransactionsRepository()

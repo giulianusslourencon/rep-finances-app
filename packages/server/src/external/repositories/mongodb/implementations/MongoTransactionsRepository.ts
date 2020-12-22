@@ -1,7 +1,7 @@
 import { Transaction } from '@entities/Transaction'
 
-import { ITransactionsRepository } from '@repositories/ITransactionsRepository'
 import TransactionSchema from '@repositories/mongodb/schemas/Transaction'
+import { ITransactionsRepository } from '@repositories/ports/ITransactionsRepository'
 
 import {
   TransactionCoreProps,

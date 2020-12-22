@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
-import { CreateTransactionUseCase } from './CreateTransactionUseCase'
-import { CreateTransactionValidation } from './CreateTransactionValidation'
+import { CreateTransactionUseCase } from '@useCases/Transactions/CreateTransaction/CreateTransactionUseCase'
+import { CreateTransactionValidation } from '@useCases/Transactions/CreateTransaction/CreateTransactionValidation'
 
 export class CreateTransactionController {
   /* eslint-disable prettier/prettier */
