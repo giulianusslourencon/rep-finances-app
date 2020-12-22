@@ -1,3 +1,5 @@
 export * from './Balance'
+export * from './BalanceFromArray'
+export * from './BalanceFromTransactionCore'
 export * from './BalanceProps'
 export * from './IndividualBalance'

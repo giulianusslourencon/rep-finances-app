@@ -1,4 +1,4 @@
-import { DomainError } from '@entities/errors/DomainError'
+import { DomainError } from '@entities/errors'
 
 export class EmptyListError extends Error implements DomainError {
   constructor() {

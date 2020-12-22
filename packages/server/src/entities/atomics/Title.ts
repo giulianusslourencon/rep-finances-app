@@ -1,6 +1,6 @@
-import { Either, left, right } from '@shared/Either'
+import { InvalidTitleError } from '@entities/atomics/errors'
 
-import { InvalidTitleError } from './errors'
+import { Either, left, right } from '@shared/Either'
 
 export class Title {
   private readonly title: string

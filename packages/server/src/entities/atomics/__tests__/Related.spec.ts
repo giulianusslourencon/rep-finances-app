@@ -1,7 +1,7 @@
-import { left } from '@shared/Either'
+import { Related } from '@entities/atomics'
+import { InvalidRelatedError } from '@entities/atomics/errors'
 
-import { InvalidRelatedError } from '../errors/InvalidRelated'
-import { Related } from '../Related'
+import { left } from '@shared/Either'
 
 describe('Related', () => {
   it('Should allow single character string', () => {

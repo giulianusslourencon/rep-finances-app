@@ -1,7 +1,7 @@
-import { left } from '@shared/Either'
+import { Amount } from '@entities/atomics'
+import { InvalidAmountError } from '@entities/atomics/errors'
 
-import { Amount } from '../Amount'
-import { InvalidAmountError } from '../errors/InvalidAmount'
+import { left } from '@shared/Either'
 
 describe('Amount', () => {
   it('Should allow positive values', () => {

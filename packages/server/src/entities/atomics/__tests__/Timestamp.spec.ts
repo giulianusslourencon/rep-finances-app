@@ -1,7 +1,7 @@
-import { left } from '@shared/Either'
+import { Timestamp } from '@entities/atomics'
+import { InvalidTimestampError } from '@entities/atomics/errors'
 
-import { InvalidTimestampError } from '../errors/InvalidTimestamp'
-import { Timestamp } from '../Timestamp'
+import { left } from '@shared/Either'
 
 describe('Timestamp', () => {
   it('Should allow timestamps in number format', () => {

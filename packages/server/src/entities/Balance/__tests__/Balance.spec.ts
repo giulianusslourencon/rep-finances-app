@@ -1,100 +1,20 @@
-import { Balance, BalanceProps, TransactionCoreProps } from '@entities/Balance'
+import { Balance, BalanceProps } from '@entities/Balance'
 
 describe('Balance', () => {
-  it('Should generate balance from a single transaction', () => {
-    const transaction: TransactionCoreProps = {
-      items: {
-        item1: {
-          value: 10,
-          related_users: ['P', 'G']
-        }
-      },
-      payers: {
-        P: 10
+  it('Should remove related users with null balance', () => {
+    const balance: BalanceProps = {
+      individual_balance: {
+        P: 10,
+        G: -10,
+        M: 0
       }
     }
 
-    const balanceOrError = Balance.create(transaction)
+    const balanceOrError = Balance.create(balance)
 
     expect(balanceOrError.isRight()).toBeTruthy()
     expect(
       (<Balance>balanceOrError.value).value.individual_balance
-    ).toStrictEqual({ P: 5, G: -5 })
-  })
-
-  it('Should generate balance from an array of transactions', () => {
-    const transactions: TransactionCoreProps[] = [
-      {
-        items: {
-          item1: {
-            value: 10,
-            related_users: ['P', 'G']
-          }
-        },
-        payers: {
-          P: 10
-        }
-      },
-      {
-        items: {
-          item1: {
-            value: 20,
-            related_users: ['P', 'M']
-          }
-        },
-        payers: {
-          P: 5,
-          M: 15
-        }
-      }
-    ]
-
-    const balanceOrError = Balance.create(transactions)
-
-    expect(balanceOrError.isRight()).toBeTruthy()
-    expect(
-      (<Balance>balanceOrError.value).value.individual_balance
-    ).toStrictEqual({ M: 5, G: -5 })
-  })
-
-  it('Should generate balance from an array of transactions and balances', () => {
-    const transactions: (TransactionCoreProps | BalanceProps)[] = [
-      {
-        items: {
-          item1: {
-            value: 10,
-            related_users: ['P', 'G']
-          }
-        },
-        payers: {
-          P: 10
-        }
-      },
-      {
-        items: {
-          item1: {
-            value: 20,
-            related_users: ['P', 'M']
-          }
-        },
-        payers: {
-          P: 5,
-          M: 15
-        }
-      },
-      {
-        individual_balance: {
-          M: -5,
-          G: 5
-        }
-      }
-    ]
-
-    const balanceOrError = Balance.create(transactions)
-
-    expect(balanceOrError.isRight()).toBeTruthy()
-    expect(
-      (<Balance>balanceOrError.value).value.individual_balance
-    ).toStrictEqual({})
+    ).toStrictEqual({ P: 10, G: -10 })
   })
 })

@@ -1,6 +1,6 @@
-import { Either, left, right } from '@shared/Either'
+import { InvalidTimestampError } from '@entities/atomics/errors'
 
-import { InvalidTimestampError } from './errors'
+import { Either, left, right } from '@shared/Either'
 
 export class Timestamp {
   private readonly timestamp: number

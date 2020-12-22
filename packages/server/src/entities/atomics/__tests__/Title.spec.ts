@@ -1,7 +1,7 @@
-import { left } from '@shared/Either'
+import { Title } from '@entities/atomics'
+import { InvalidTitleError } from '@entities/atomics/errors'
 
-import { InvalidTitleError } from '../errors/InvalidTitle'
-import { Title } from '../Title'
+import { left } from '@shared/Either'
 
 describe('Title', () => {
   it('Should allow valid titles', () => {

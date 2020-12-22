@@ -1,6 +1,6 @@
-import { Either, left, right } from '@shared/Either'
+import { InvalidAmountError } from '@entities/atomics/errors'
 
-import { InvalidAmountError } from './errors'
+import { Either, left, right } from '@shared/Either'
 
 export class Amount {
   private readonly amount: number

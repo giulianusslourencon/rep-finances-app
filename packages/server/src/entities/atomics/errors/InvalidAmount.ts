@@ -1,4 +1,4 @@
-import DomainError from '@entities/errors/DomainError'
+import { DomainError } from '@entities/errors/DomainError'
 
 export class InvalidAmountError extends Error implements DomainError {
   constructor(amount: string) {
