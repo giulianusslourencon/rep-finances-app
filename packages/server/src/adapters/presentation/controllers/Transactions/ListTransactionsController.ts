@@ -1,12 +1,12 @@
-import { Request, Response } from 'express'
+import { Controller, HttpRequest, HttpResponse } from '@presentation/contracts'
 
 import { ListTransactionsUseCase } from '@useCases/Transactions/ListTransactions/ListTransactionsUseCase'
 
-export class ListTransactionsController {
+export class ListTransactionsController implements Controller {
   // eslint-disable-next-line prettier/prettier
   constructor(private listTransactionsUseCase: ListTransactionsUseCase) { }
 
-  async handle(request: Request, response: Response): Promise<Response> {
+  async handle(request: HttpRequest): Promise<HttpResponse> {
     const { skip, limit, month } = request.query
 
     const skipNumber = parseInt(<string>skip)

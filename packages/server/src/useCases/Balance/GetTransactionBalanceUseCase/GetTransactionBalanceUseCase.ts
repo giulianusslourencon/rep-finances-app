@@ -1,5 +1,5 @@
 import { Balance } from '@entities/Balance'
-import DomainError from '@entities/errors/DomainError'
+import { DomainError } from '@entities/errors'
 
 import { BalanceProps } from '@shared/@types/Balance'
 import { Either, left, right } from '@shared/Either'

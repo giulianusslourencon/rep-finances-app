@@ -1,14 +1,13 @@
-import { InvalidAmountError } from '@entities/atomics/errors/InvalidAmount'
-import { InvalidRelatedError } from '@entities/atomics/errors/InvalidRelated'
-import { InvalidTimestampError } from '@entities/atomics/errors/InvalidTimestamp'
-import { InvalidTitleError } from '@entities/atomics/errors/InvalidTitle'
+import {
+  InvalidAmountError,
+  InvalidRelatedError,
+  InvalidTimestampError,
+  InvalidTitleError
+} from '@entities/atomics/errors'
+import { Transaction, TransactionInitProps } from '@entities/Transaction'
+import { InvalidValueError } from '@entities/Transaction/errors'
 
-import { TransactionInitProps } from '@shared/@types/Transaction'
 import { left } from '@shared/Either'
-
-import { Transaction } from '..'
-
-import { InvalidValueError } from '../errors/InvalidValue'
 
 describe('Transaction', () => {
   it('Should allow a valid transaction and fill readonly fields', () => {

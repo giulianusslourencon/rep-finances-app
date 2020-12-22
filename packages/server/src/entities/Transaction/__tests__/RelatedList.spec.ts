@@ -1,9 +1,8 @@
-import { InvalidRelatedError } from '@entities/atomics/errors/InvalidRelated'
+import { InvalidRelatedError } from '@entities/atomics/errors'
+import { RelatedList } from '@entities/Transaction'
+import { EmptyListError } from '@entities/Transaction/errors'
 
 import { left } from '@shared/Either'
-
-import { EmptyListError } from '../errors/EmptyList'
-import { RelatedList } from '../RelatedList'
 
 describe('Related list', () => {
   it('Should allow a list with valid related users', () => {

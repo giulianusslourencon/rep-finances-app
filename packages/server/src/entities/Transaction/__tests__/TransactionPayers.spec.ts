@@ -1,11 +1,14 @@
-import { InvalidAmountError } from '@entities/atomics/errors/InvalidAmount'
-import { InvalidRelatedError } from '@entities/atomics/errors/InvalidRelated'
+import {
+  InvalidAmountError,
+  InvalidRelatedError
+} from '@entities/atomics/errors'
+import {
+  TransactionPayersProps,
+  TransactionPayers
+} from '@entities/Transaction'
+import { EmptyListError } from '@entities/Transaction/errors'
 
-import { TransactionPayersProps } from '@shared/@types/Transaction'
 import { left } from '@shared/Either'
-
-import { EmptyListError } from '../errors/EmptyList'
-import { TransactionPayers } from '../TransactionPayers'
 
 describe('Transaction payers', () => {
   it('Should allow a list with valid items', () => {

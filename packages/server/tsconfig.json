@@ -3,6 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@presentation/*": [
+        "./src/adapters/presentation/*"
+      ],
       "@entities/*": [
         "./src/entities/*"
       ],
@@ -15,7 +18,7 @@
       "@useCases/*": [
         "./src/useCases/*"
       ],
-      "@server/*": [
+      "@/*": [
         "./src/*"
       ]
     }

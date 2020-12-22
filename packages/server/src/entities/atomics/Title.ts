@@ -1,6 +1,6 @@
 import { Either, left, right } from '@shared/Either'
 
-import { InvalidTitleError } from './errors/InvalidTitle'
+import { InvalidTitleError } from './errors'
 
 export class Title {
   private readonly title: string

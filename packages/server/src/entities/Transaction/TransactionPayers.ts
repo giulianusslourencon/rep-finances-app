@@ -1,11 +1,12 @@
-import { TransactionPayersProps } from '@shared/@types/Transaction'
-import { Either, left, right } from '@shared/Either'
+import { Amount, Related } from '@entities/atomics'
+import {
+  InvalidAmountError,
+  InvalidRelatedError
+} from '@entities/atomics/errors'
+import { TransactionPayersProps } from '@entities/Transaction'
+import { EmptyListError } from '@entities/Transaction/errors'
 
-import { Amount } from '../atomics/Amount'
-import { InvalidAmountError } from '../atomics/errors/InvalidAmount'
-import { InvalidRelatedError } from '../atomics/errors/InvalidRelated'
-import { Related } from '../atomics/Related'
-import { EmptyListError } from './errors/EmptyList'
+import { Either, left, right } from '@shared/Either'
 
 type ValidatedPayers = [Related, Amount][]
 

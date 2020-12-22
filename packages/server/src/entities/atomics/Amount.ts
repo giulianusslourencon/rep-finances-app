@@ -1,6 +1,6 @@
 import { Either, left, right } from '@shared/Either'
 
-import { InvalidAmountError } from './errors/InvalidAmount'
+import { InvalidAmountError } from './errors'
 
 export class Amount {
   private readonly amount: number

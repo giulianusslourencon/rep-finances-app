@@ -1,13 +1,14 @@
-import { TransactionItemsProps } from '@shared/@types/Transaction'
-import { Either, left, right } from '@shared/Either'
+import { Amount, Title } from '@entities/atomics'
+import {
+  InvalidAmountError,
+  InvalidRelatedError,
+  InvalidTitleError
+} from '@entities/atomics/errors'
+import { TransactionItemsProps } from '@entities/Transaction'
+import { EmptyListError } from '@entities/Transaction/errors'
+import { RelatedList } from '@entities/Transaction/RelatedList'
 
-import { Amount } from '../atomics/Amount'
-import { InvalidAmountError } from '../atomics/errors/InvalidAmount'
-import { InvalidRelatedError } from '../atomics/errors/InvalidRelated'
-import { InvalidTitleError } from '../atomics/errors/InvalidTitle'
-import { Title } from '../atomics/Title'
-import { EmptyListError } from './errors/EmptyList'
-import { RelatedList } from './RelatedList'
+import { Either, left, right } from '@shared/Either'
 
 type ValidatedItems = [Title, { value: Amount; related_users: RelatedList }][]
 

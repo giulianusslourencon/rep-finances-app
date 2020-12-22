@@ -1,8 +1,8 @@
-import { Either, left, right } from '@shared/Either'
+import { Related } from '@entities/atomics'
+import { InvalidRelatedError } from '@entities/atomics/errors'
+import { EmptyListError } from '@entities/Transaction/errors'
 
-import { InvalidRelatedError } from '../atomics/errors/InvalidRelated'
-import { Related } from '../atomics/Related'
-import { EmptyListError } from './errors/EmptyList'
+import { Either, left, right } from '@shared/Either'
 
 export class RelatedList {
   private readonly relatedList: Related[]

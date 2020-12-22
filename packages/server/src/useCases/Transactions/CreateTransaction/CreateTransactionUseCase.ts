@@ -1,4 +1,4 @@
-import DomainError from '@entities/errors/DomainError'
+import { DomainError } from '@entities/errors'
 import { Transaction } from '@entities/Transaction'
 
 import { IBalanceRepository } from '@repositories/ports/IBalanceRepository'

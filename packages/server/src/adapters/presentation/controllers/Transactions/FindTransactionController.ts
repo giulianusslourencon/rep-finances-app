@@ -1,9 +1,8 @@
 import { Request, Response } from 'express'
 
 import { GetTransactionBalanceUseCase } from '@useCases/Balance/GetTransactionBalanceUseCase/GetTransactionBalanceUseCase'
-
-import { TransactionNotFoundError } from '../../../../useCases/Transactions/errors/TransactionNotFound'
-import { FindTransactionUseCase } from '../../../../useCases/Transactions/FindTransaction/FindTransactionUseCase'
+import { TransactionNotFoundError } from '@useCases/Transactions/errors/TransactionNotFound'
+import { FindTransactionUseCase } from '@useCases/Transactions/FindTransaction/FindTransactionUseCase'
 
 export class FindTransactionController {
   /* eslint-disable prettier/prettier */

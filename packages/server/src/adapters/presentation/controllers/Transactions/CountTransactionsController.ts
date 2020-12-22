@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { CountTransactionsUseCase } from '../../../../useCases/Transactions/CountTransactions/CountTransactionsUseCase'
+import { CountTransactionsUseCase } from '@useCases/Transactions/CountTransactions/CountTransactionsUseCase'
 
 export class CountTransactionsController {
   // eslint-disable-next-line prettier/prettier

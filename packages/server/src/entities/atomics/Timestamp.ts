@@ -1,6 +1,6 @@
 import { Either, left, right } from '@shared/Either'
 
-import { InvalidTimestampError } from './errors/InvalidTimestamp'
+import { InvalidTimestampError } from './errors'
 
 export class Timestamp {
   private readonly timestamp: number

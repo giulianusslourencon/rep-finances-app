@@ -1,8 +1,7 @@
-import { InvalidRelatedError } from '@entities/atomics/errors/InvalidRelated'
+import { InvalidRelatedError } from '@entities/atomics/errors'
+import { IndividualBalance } from '@entities/Balance'
 
 import { left } from '@shared/Either'
-
-import { IndividualBalance } from '../IndividualBalance'
 
 describe('Individual Balance', () => {
   it('Should allow balance with valid related', () => {

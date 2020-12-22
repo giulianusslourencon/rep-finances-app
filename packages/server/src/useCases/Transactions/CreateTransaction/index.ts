@@ -1,9 +1,10 @@
+import { CreateTransactionController } from '@server/adapters/presentation/controllers/Transactions'
+import { CreateTransactionValidation } from '@server/adapters/presentation/validators/CreateTransactionValidation'
+
 import { MongoBalanceRepository } from '@repositories/mongodb/implementations/MongoBalanceRepository'
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations/MongoTransactionsRepository'
 
-import { CreateTransactionController } from './CreateTransactionController'
 import { CreateTransactionUseCase } from './CreateTransactionUseCase'
-import { CreateTransactionValidation } from './CreateTransactionValidation'
 
 const mongoTransactionRepository = new MongoTransactionsRepository()
 const mongoBalanceRepository = new MongoBalanceRepository(

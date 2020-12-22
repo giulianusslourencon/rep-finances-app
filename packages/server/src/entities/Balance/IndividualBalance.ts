@@ -1,8 +1,8 @@
-import { IndividualBalanceProps } from '@shared/@types/Balance'
-import { Either, left, right } from '@shared/Either'
+import { Related } from '@entities/atomics'
+import { InvalidRelatedError } from '@entities/atomics/errors'
+import { IndividualBalanceProps } from '@entities/Balance'
 
-import { InvalidRelatedError } from '../atomics/errors/InvalidRelated'
-import { Related } from '../atomics/Related'
+import { Either, left, right } from '@shared/Either'
 
 type ValidatedBalance = [Related, number][]
 

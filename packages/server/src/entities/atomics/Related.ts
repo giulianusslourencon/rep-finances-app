@@ -1,6 +1,6 @@
 import { Either, left, right } from '@shared/Either'
 
-import { InvalidRelatedError } from './errors/InvalidRelated'
+import { InvalidRelatedError } from './errors'
 
 export class Related {
   private readonly related: string

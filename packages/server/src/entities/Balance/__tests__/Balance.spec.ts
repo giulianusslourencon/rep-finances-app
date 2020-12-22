@@ -1,7 +1,4 @@
-import { BalanceProps } from '@shared/@types/Balance'
-import { TransactionCoreProps } from '@shared/@types/Transaction'
-
-import { Balance } from '..'
+import { Balance, BalanceProps, TransactionCoreProps } from '@entities/Balance'
 
 describe('Balance', () => {
   it('Should generate balance from a single transaction', () => {

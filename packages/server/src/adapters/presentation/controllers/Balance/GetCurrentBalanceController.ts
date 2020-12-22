@@ -1,20 +1,21 @@
-import { Request, Response } from 'express'
+import { Controller, HttpRequest, HttpResponse } from '@presentation/contracts'
+import { serverError, success } from '@presentation/controllers/helpers'
+
+import { BalanceProps } from '@shared/@types/Balance'
 
 import { GetCurrentBalanceUseCase } from '@useCases/Balance/GetCurrentBalanceUseCase/GetCurrentBalanceUseCase'
 
-export class GetCurrentBalanceController {
+export class GetCurrentBalanceController implements Controller {
   // eslint-disable-next-line prettier/prettier
   constructor(private getCurrentBalanceUseCase: GetCurrentBalanceUseCase) { }
 
-  async handle(_request: Request, response: Response): Promise<Response> {
+  async handle(_request: HttpRequest): Promise<HttpResponse<BalanceProps>> {
     try {
       const balance = await this.getCurrentBalanceUseCase.execute()
 
-      return response.json({ balance: balance.individual_balance })
+      return success({ balance: balance.individual_balance })
     } catch (error) {
-      return response.status(500).json({
-        message: error.message || 'Unexpected error.'
-      })
+      return serverError(error.message)
     }
   }
 }
