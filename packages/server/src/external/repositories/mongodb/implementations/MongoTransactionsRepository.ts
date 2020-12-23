@@ -12,7 +12,7 @@ export class MongoTransactionsRepository
   implements ITransactionsRepository {
   collection = TransactionModel.name
 
-  async erase(): Promise<void> {
+  async clearCollection(): Promise<void> {
     await TransactionModel.deleteMany()
   }
 
@@ -39,11 +39,11 @@ export class MongoTransactionsRepository
   }
 
   async count(): Promise<number> {
-    return await TransactionModel.count()
+    return await TransactionModel.countDocuments()
   }
 
   async countByMonth(month: string): Promise<number> {
-    return await TransactionModel.count({ month })
+    return await TransactionModel.countDocuments({ month })
   }
 
   async listItemsAndPayersByMonth(month: string): Promise<ItemsAndPayersList> {
@@ -63,9 +63,9 @@ export class MongoTransactionsRepository
     await TransactionModel.create(transaction)
   }
 
-  async getNotRegisteredMonths(lastMonth: string): Promise<string[]> {
+  async getNotRegisteredMonths(lastRegisteredMonth: string): Promise<string[]> {
     const doc = await TransactionModel.aggregate<{ _id: string }>([
-      { $match: { month: { $gt: lastMonth } } },
+      { $match: { month: { $gt: lastRegisteredMonth } } },
       { $group: { _id: '$month' } },
       { $sort: { _id: 1 } }
     ])

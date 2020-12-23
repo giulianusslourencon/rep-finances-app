@@ -6,7 +6,7 @@ export class MongoBalanceRepository
   extends MongoRepository
   implements IBalanceRepository {
   collection = BalanceModel.name
-  async erase(): Promise<void> {
+  async clearCollection(): Promise<void> {
     await BalanceModel.deleteMany()
   }
 

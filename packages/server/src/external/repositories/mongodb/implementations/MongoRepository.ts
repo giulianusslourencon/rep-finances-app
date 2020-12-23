@@ -38,5 +38,5 @@ export abstract class MongoRepository implements IRepository {
     return this.database.connection.close()
   }
 
-  abstract erase(): Promise<void>
+  abstract clearCollection(): Promise<void>
 }

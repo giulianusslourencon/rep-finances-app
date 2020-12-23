@@ -3,5 +3,5 @@ export interface IRepository {
 
   connect(): Promise<void>
   disconnect(): Promise<void>
-  erase(): Promise<void>
+  clearCollection(): Promise<void>
 }

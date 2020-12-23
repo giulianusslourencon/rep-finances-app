@@ -27,5 +27,5 @@ export interface ITransactionsRepository extends IRepository {
 
   findById(id: string): Promise<TransactionAttributes | null | undefined>
 
-  getNotRegisteredMonths(lastMonth: string): Promise<string[]>
+  getNotRegisteredMonths(lastRegisteredMonth: string): Promise<string[]>
 }
