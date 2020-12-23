@@ -97,4 +97,16 @@ describe('Mongo balance repository', () => {
 
     expect(notUpdatedMonths).toStrictEqual(['202011', '202012'])
   })
+
+  it('Should return the last updated month if exists', async () => {
+    const lastUpdatedMonth = await MongoBalance.getLastUpdatedMonth()
+
+    expect(lastUpdatedMonth).toBe('202011')
+  })
+
+  it('Should return the last registered month if exists', async () => {
+    const lastRegisteredMonth = await MongoBalance.getLastRegisteredMonth()
+
+    expect(lastRegisteredMonth).toBe('202012')
+  })
 })
