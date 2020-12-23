@@ -12,15 +12,13 @@ export class CreateTransactionValidation {
         .of(
           Yup.object({
             value: Yup.number().required(),
-            related_users: Yup.array().of(Yup.string()).min(1)
+            related_users: Yup.array().of(Yup.string())
           })
         )
-        .min(1)
         .required(),
       payers: Yup.array()
         .transform((_, orig) => Object.values(orig))
         .of(Yup.number().required())
-        .min(1)
         .required()
     })
 

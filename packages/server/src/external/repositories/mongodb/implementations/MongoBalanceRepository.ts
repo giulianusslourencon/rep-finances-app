@@ -7,6 +7,7 @@ export class MongoBalanceRepository
   extends MongoRepository
   implements IBalanceRepository {
   collection = BalanceModel.name
+
   async clearCollection(): Promise<void> {
     await BalanceModel.deleteMany()
   }
@@ -18,9 +19,33 @@ export class MongoBalanceRepository
   }
 
   async getNotUpdatedMonths(): Promise<string[]> {
-    return await BalanceModel.find({ updated: false }, { _id: 1 })
+    return await BalanceModel.find(
+      { updated: false },
+      { _id: 1 },
+      { sort: { _id: 1 } }
+    )
       .lean()
       .map(document => document._id)
+  }
+
+  async getLastRegisteredMonth(): Promise<string | null | undefined> {
+    const lastRegisteredMonth = await BalanceModel.findOne(
+      {},
+      { _id: 1 },
+      { sort: { _id: -1 } }
+    ).lean()
+
+    return lastRegisteredMonth ? lastRegisteredMonth._id : lastRegisteredMonth
+  }
+
+  async getLastUpdatedMonth(): Promise<string | null | undefined> {
+    const lastUpdatedMonth = await BalanceModel.findOne(
+      { updated: true },
+      { _id: 1 },
+      { sort: { _id: -1 } }
+    ).lean()
+
+    return lastUpdatedMonth ? lastUpdatedMonth._id : lastUpdatedMonth
   }
 
   async updateMonth(month: string, balance: MonthBalance): Promise<void> {
