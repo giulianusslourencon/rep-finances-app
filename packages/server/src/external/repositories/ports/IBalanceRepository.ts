@@ -1,7 +1,5 @@
-import { BalanceAttributes } from '@repositories/attributes'
+import { MonthBalance } from '@repositories/attributes'
 import { IRepository } from '@repositories/ports'
-
-export type MonthBalance = Pick<BalanceAttributes, 'individual_balance'>
 
 export interface IBalanceRepository extends IRepository {
   setNotUpdatedFromMonth(month: string): Promise<void>

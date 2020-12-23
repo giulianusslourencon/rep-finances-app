@@ -1,6 +1,7 @@
+import { MonthBalance } from '@repositories/attributes'
 import { MongoRepository } from '@repositories/mongodb/implementations'
 import { BalanceModel } from '@repositories/mongodb/schemas'
-import { IBalanceRepository, MonthBalance } from '@repositories/ports'
+import { IBalanceRepository } from '@repositories/ports'
 
 export class MongoBalanceRepository
   extends MongoRepository
@@ -23,9 +24,13 @@ export class MongoBalanceRepository
   }
 
   async updateMonth(month: string, balance: MonthBalance): Promise<void> {
-    await BalanceModel.findByIdAndUpdate(month, {
-      $set: { individual_balance: balance.individual_balance, updated: false }
-    })
+    await BalanceModel.findByIdAndUpdate(
+      month,
+      {
+        $set: { individual_balance: balance.individual_balance, updated: true }
+      },
+      { upsert: true }
+    )
   }
 
   async setNotUpdatedFromMonth(month: string): Promise<void> {

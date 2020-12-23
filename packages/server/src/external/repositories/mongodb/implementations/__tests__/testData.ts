@@ -1,4 +1,7 @@
-import { TransactionAttributes } from '@repositories/attributes'
+import {
+  BalanceAttributes,
+  TransactionAttributes
+} from '@repositories/attributes'
 
 export const transactions: TransactionAttributes[] = [
   {
@@ -29,7 +32,7 @@ export const transactions: TransactionAttributes[] = [
     },
     month: '202012',
     payers: {
-      F: 50
+      F: 30
     },
     related: ['F', 'M'],
     timestamp: 1608723196865,
@@ -88,3 +91,23 @@ export const transactionToSave: TransactionAttributes = {
   timestamp: 1608865200000,
   title: 'Vinho pra gay night de Natal'
 }
+
+export const balances: BalanceAttributes[] = [
+  {
+    _id: '202011',
+    individual_balance: {
+      M: 60,
+      P: -60
+    },
+    updated: true
+  },
+  {
+    _id: '202012',
+    individual_balance: {
+      P: -10,
+      M: 60,
+      G: -50
+    },
+    updated: false
+  }
+]

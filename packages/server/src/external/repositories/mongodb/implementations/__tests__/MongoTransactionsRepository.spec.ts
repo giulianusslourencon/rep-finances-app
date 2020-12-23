@@ -1,4 +1,5 @@
-import { MongoTransactionsRepository } from '../MongoTransactionsRepository'
+import { MongoTransactionsRepository } from '@repositories/mongodb/implementations'
+
 import { transactions, transactionToSave } from './testData'
 
 const MongoTransactions = new MongoTransactionsRepository()
