@@ -12,7 +12,7 @@ export default class DateParser {
     })
 
     const dateValues = dateString.split('/')
-    const [month, , year] = dateValues
+    const [, month, year] = dateValues
 
     const dateId = year + month
     return dateId

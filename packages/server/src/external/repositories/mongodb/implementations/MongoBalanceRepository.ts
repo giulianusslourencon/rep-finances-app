@@ -15,17 +15,20 @@ export class MongoBalanceRepository
   async getMonthBalance(
     month: string
   ): Promise<MonthBalance | null | undefined> {
-    return await BalanceModel.findById(month, { individual_balance: 1 }).lean()
+    return await BalanceModel.findById(month, {
+      _id: 0,
+      individual_balance: 1
+    }).lean()
   }
 
   async getNotUpdatedMonths(): Promise<string[]> {
-    return await BalanceModel.find(
+    const docs = await BalanceModel.find(
       { updated: false },
       { _id: 1 },
       { sort: { _id: 1 } }
-    )
-      .lean()
-      .map(document => document._id)
+    ).lean()
+
+    return docs.map(document => document._id)
   }
 
   async getLastRegisteredMonth(): Promise<string | null | undefined> {

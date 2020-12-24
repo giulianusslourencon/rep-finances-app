@@ -1,4 +1,5 @@
 .eslintrc.js
 packages/**/*.js
+packages/**/*.cjs
 node_modules
 dist

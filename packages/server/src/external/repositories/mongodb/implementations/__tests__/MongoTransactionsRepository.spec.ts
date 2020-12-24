@@ -16,7 +16,7 @@ describe('Mongo transactions repository', () => {
   beforeEach(async () => {
     await MongoTransactions.clearCollection()
 
-    Promise.all(
+    await Promise.all(
       transactions.map(transaction => MongoTransactions.save(transaction))
     )
   })
@@ -81,9 +81,8 @@ describe('Mongo transactions repository', () => {
     )
 
     expect(itemsAndPayers).toHaveLength(1)
-    expect(itemsAndPayers).toStrictEqual([
-      { items: transactions[2].items, payers: transactions[2].payers }
-    ])
+    expect(itemsAndPayers[0]).toHaveProperty('items')
+    expect(itemsAndPayers[0]).toHaveProperty('payers')
   })
 
   it('Should add a new transaction to database', async () => {

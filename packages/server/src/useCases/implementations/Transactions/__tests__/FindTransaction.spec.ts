@@ -1,6 +1,8 @@
+import { TransactionProps } from '@entities/Transaction'
+
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations'
 
-import { left, right } from '@shared/Either'
+import { left } from '@shared/Either'
 
 import { TransactionNotFoundError } from '@useCases/errors'
 import { FindTransactionUseCase } from '@useCases/implementations/Transactions'
@@ -22,7 +24,7 @@ describe('Find transaction use case', () => {
   beforeEach(async () => {
     await MongoTransactions.clearCollection()
 
-    Promise.all(
+    await Promise.all(
       transactions.map(transaction => MongoTransactions.save(transaction))
     )
   })
@@ -32,7 +34,8 @@ describe('Find transaction use case', () => {
       id: '20201219'
     })
 
-    expect(foundTransaction).toEqual(right(transactions[0]))
+    expect(foundTransaction.isRight()).toBeTruthy()
+    expect((<TransactionProps>foundTransaction.value)._id).toBe('20201219')
   })
 
   it('Should return an error if there is no transaction registered with the given id', async () => {

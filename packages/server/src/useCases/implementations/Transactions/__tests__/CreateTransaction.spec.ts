@@ -35,11 +35,13 @@ describe('Create transaction use case', () => {
     await MongoTransactions.clearCollection()
     await MongoBalance.clearCollection()
 
-    Promise.all(
+    await Promise.all(
       transactions.map(transaction => MongoTransactions.save(transaction))
     )
 
-    Promise.all(balances.map(monthBalance => BalanceModel.create(monthBalance)))
+    await Promise.all(
+      balances.map(monthBalance => BalanceModel.create(monthBalance))
+    )
   })
 
   it('Should add a new valid transaction to collection and set all following months to not updated', async () => {

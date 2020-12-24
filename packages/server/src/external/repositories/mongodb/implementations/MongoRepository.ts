@@ -23,7 +23,8 @@ export abstract class MongoRepository implements IRepository {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
-        useFindAndModify: false
+        useFindAndModify: false,
+        keepAlive: true
       })
       .then(database => {
         console.log(`Mongo ${this.collection} connected`)

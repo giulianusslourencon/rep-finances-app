@@ -19,7 +19,7 @@ describe('Count transactions use case', () => {
   beforeEach(async () => {
     await MongoTransactions.clearCollection()
 
-    Promise.all(
+    await Promise.all(
       transactions.map(transaction => MongoTransactions.save(transaction))
     )
   })

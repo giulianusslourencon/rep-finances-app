@@ -49,7 +49,7 @@ export class MongoTransactionsRepository
   async listItemsAndPayersByMonth(month: string): Promise<ItemsAndPayersList> {
     return await TransactionModel.find(
       { month },
-      { items: 1, payers: 1 }
+      { _id: 0, items: 1, payers: 1 }
     ).lean()
   }
 

@@ -18,7 +18,9 @@ describe('Mongo balance repository', () => {
   beforeEach(async () => {
     await MongoBalance.clearCollection()
 
-    Promise.all(balances.map(monthBalance => BalanceModel.create(monthBalance)))
+    await Promise.all(
+      balances.map(monthBalance => BalanceModel.create(monthBalance))
+    )
   })
 
   it('Should update month with new balance and set it to updated', async () => {
@@ -35,7 +37,9 @@ describe('Mongo balance repository', () => {
 
     const updatedMonth = await BalanceModel.findById('202012').lean()
 
-    expect(updatedMonth?.individual_balance).toStrictEqual(updatedBalance)
+    expect(updatedMonth?.individual_balance).toStrictEqual(
+      updatedBalance.individual_balance
+    )
     expect(updatedMonth?.updated).toBeTruthy()
   })
 
@@ -54,7 +58,9 @@ describe('Mongo balance repository', () => {
     const updatedMonth = await BalanceModel.findById('202101').lean()
 
     expect(updatedMonth).toBeTruthy()
-    expect(updatedMonth?.individual_balance).toStrictEqual(updatedBalance)
+    expect(updatedMonth?.individual_balance).toStrictEqual(
+      updatedBalance.individual_balance
+    )
     expect(updatedMonth?.updated).toBeTruthy()
   })
 

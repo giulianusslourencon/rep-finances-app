@@ -37,17 +37,19 @@ describe('Get current balance use case', () => {
     await MongoTransactions.clearCollection()
     await MongoBalance.clearCollection()
 
-    Promise.all(
+    await Promise.all(
       transactions.map(transaction => MongoTransactions.save(transaction))
     )
 
-    Promise.all(balances.map(monthBalance => BalanceModel.create(monthBalance)))
+    await Promise.all(
+      balances.map(monthBalance => BalanceModel.create(monthBalance))
+    )
   })
 
   it('Should update all the month balances in collection and return the current balance', async () => {
     const currentBalance = await getCurrentBalanceUseCase.execute()
 
-    const balances = await BalanceModel.find().lean()
+    const balances = await BalanceModel.find({}, { __v: 0 }).lean()
 
     expect(balances).toStrictEqual(updatedBalances)
     expect(currentBalance).toStrictEqual({
