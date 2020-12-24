@@ -1,12 +1,18 @@
 import { Controller, HttpRequest, HttpResponse } from '@presentation/contracts'
+import { serverError, success } from '@presentation/controllers/helpers'
+import { TransactionsArrayViewModel } from '@presentation/viewModels'
 
-import { ListTransactionsUseCase } from '@useCases/Transactions/ListTransactions/ListTransactionsUseCase'
+import { ListTransactions } from '@useCases/ports/Transactions'
 
 export class ListTransactionsController implements Controller {
-  // eslint-disable-next-line prettier/prettier
-  constructor(private listTransactionsUseCase: ListTransactionsUseCase) { }
+  constructor(private listTransactions: ListTransactions) {}
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
+  async handle(
+    request: HttpRequest<
+      unknown,
+      { skip?: string; limit?: string; month?: string }
+    >
+  ): Promise<HttpResponse<TransactionsArrayViewModel>> {
     const { skip, limit, month } = request.query
 
     const skipNumber = parseInt(<string>skip)
@@ -16,16 +22,14 @@ export class ListTransactionsController implements Controller {
       const skipLimit =
         skip && limit ? { skip: skipNumber, limit: limitNumber } : undefined
 
-      const transactions = await this.listTransactionsUseCase.execute({
+      const transactions = await this.listTransactions.execute({
         skipLimit,
         month: <string>month
       })
 
-      return response.status(200).json(transactions)
+      return success(transactions)
     } catch (error) {
-      return response.status(500).json({
-        message: error.message || 'Unexpected error.'
-      })
+      return serverError(error.message)
     }
   }
 }

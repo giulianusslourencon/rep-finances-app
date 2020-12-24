@@ -1,24 +1,25 @@
-import { Request, Response } from 'express'
+import { HttpRequest, HttpResponse } from '@presentation/contracts'
+import { serverError, success } from '@presentation/controllers/helpers'
+import { TransactionsCountViewModel } from '@presentation/viewModels'
 
-import { CountTransactionsUseCase } from '@useCases/Transactions/CountTransactions/CountTransactionsUseCase'
+import { CountTransactions } from '@useCases/ports/Transactions'
 
 export class CountTransactionsController {
-  // eslint-disable-next-line prettier/prettier
-  constructor(private countTransactionsUseCase: CountTransactionsUseCase) { }
+  constructor(private countTransactions: CountTransactions) {}
 
-  async handle(request: Request, response: Response): Promise<Response> {
+  async handle(
+    request: HttpRequest<unknown, { month?: string }>
+  ): Promise<HttpResponse<TransactionsCountViewModel>> {
     const { month } = request.query
 
     try {
-      const transactionsCount = await this.countTransactionsUseCase.execute({
-        month: <string>month
+      const transactionsCount = await this.countTransactions.execute({
+        month
       })
 
-      return response.status(200).json({ count: transactionsCount })
+      return success({ count: transactionsCount })
     } catch (error) {
-      return response.status(500).json({
-        message: error.message || 'Unexpected error.'
-      })
+      return serverError(error.message)
     }
   }
 }

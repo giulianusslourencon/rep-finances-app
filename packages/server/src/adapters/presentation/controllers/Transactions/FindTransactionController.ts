@@ -1,42 +1,41 @@
-import { Request, Response } from 'express'
+import { HttpRequest, HttpResponse } from '@presentation/contracts'
+import { error, serverError, success } from '@presentation/controllers/helpers'
+import { TransactionDetailsViewModel } from '@presentation/viewModels'
 
-import { GetTransactionBalanceUseCase } from '@useCases/Balance/GetTransactionBalanceUseCase/GetTransactionBalanceUseCase'
-import { TransactionNotFoundError } from '@useCases/errors/TransactionNotFound'
-import { FindTransactionUseCase } from '@useCases/Transactions/FindTransaction/FindTransactionUseCase'
+import { GetTransactionBalance } from '@useCases/ports/Balance'
+import { FindTransaction } from '@useCases/ports/Transactions'
 
 export class FindTransactionController {
-  /* eslint-disable prettier/prettier */
   constructor(
-    private findTransactionUseCase: FindTransactionUseCase,
-    private getTransactionBalanceUseCase: GetTransactionBalanceUseCase
-  ) { }
-  /* eslint-enable prettier/prettier */
+    private findTransaction: FindTransaction,
+    private getTransactionBalance: GetTransactionBalance
+  ) {}
 
-  async handle(request: Request, response: Response): Promise<Response> {
+  async handle(
+    request: HttpRequest<unknown, unknown, { id: string }>
+  ): Promise<HttpResponse<TransactionDetailsViewModel>> {
     const { id } = request.params
 
     try {
-      const transaction = await this.findTransactionUseCase.execute({ id })
-      if (!transaction) {
-        const { name, message } = new TransactionNotFoundError(id)
-        return response.status(404).json({ name, message })
+      const transactionOrError = await this.findTransaction.execute({ id })
+      if (transactionOrError.isLeft()) {
+        return error(transactionOrError.value, 404)
       }
 
-      const balanceOrError = this.getTransactionBalanceUseCase.execute({
+      const transaction = transactionOrError.value
+
+      const balanceOrError = await this.getTransactionBalance.execute({
         transaction
       })
       if (balanceOrError.isLeft()) {
-        const { name, message } = balanceOrError.value
-        return response.status(400).json({ name, message })
+        return error(balanceOrError.value)
       }
 
-      return response
-        .status(200)
-        .json({ transaction, balance: balanceOrError.value.individual_balance })
+      const balance = balanceOrError.value
+
+      return success({ transaction, balance })
     } catch (error) {
-      return response.status(500).json({
-        message: error.message || 'Unexpected error.'
-      })
+      return serverError(error.message)
     }
   }
 }

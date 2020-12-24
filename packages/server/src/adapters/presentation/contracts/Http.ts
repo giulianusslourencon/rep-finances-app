@@ -1,14 +1,15 @@
-export interface HttpResponse<BodyType = unknown> {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export interface HttpResponse<BodyType = any> {
   statusCode: number
   body: BodyType
 }
 
 export interface HttpRequest<
-  BodyType = unknown,
-  QueryType = unknown,
-  ParamsType = unknown
+  BodyType = any,
+  QueryType = any,
+  ParamsType = any
 > {
-  body?: BodyType
-  query?: QueryType
-  params?: ParamsType
+  body: BodyType
+  query: QueryType
+  params: ParamsType
 }

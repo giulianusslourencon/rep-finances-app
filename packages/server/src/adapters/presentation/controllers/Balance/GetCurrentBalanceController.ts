@@ -1,17 +1,15 @@
 import { Controller, HttpRequest, HttpResponse } from '@presentation/contracts'
 import { serverError, success } from '@presentation/controllers/helpers'
+import { CurrentBalanceViewModel } from '@presentation/viewModels'
 
-import { BalanceProps } from '@shared/@types/Balance'
-
-import { GetCurrentBalanceUseCase } from '@useCases/Balance/GetCurrentBalanceUseCase/GetCurrentBalanceUseCase'
+import { GetCurrentBalance } from '@useCases/ports/Balance'
 
 export class GetCurrentBalanceController implements Controller {
-  // eslint-disable-next-line prettier/prettier
-  constructor(private getCurrentBalanceUseCase: GetCurrentBalanceUseCase) { }
+  constructor(private getCurrentBalance: GetCurrentBalance) {}
 
-  async handle(_request: HttpRequest): Promise<HttpResponse<BalanceProps>> {
+  async handle(_: HttpRequest): Promise<HttpResponse<CurrentBalanceViewModel>> {
     try {
-      const balance = await this.getCurrentBalanceUseCase.execute()
+      const balance = await this.getCurrentBalance.execute(undefined)
 
       return success({ balance: balance.individual_balance })
     } catch (error) {

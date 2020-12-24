@@ -1,25 +1,26 @@
-import { Request, Response } from 'express'
+import { HttpRequest, HttpResponse } from '@presentation/contracts'
+import { error, serverError, success } from '@presentation/controllers/helpers'
+import { CreateTransactionValidation } from '@presentation/validators'
+import { CreateTransactionViewModel } from '@presentation/viewModels'
 
-import { CreateTransactionValidation } from '@server/adapters/presentation/validators'
-
-import { CreateTransactionUseCase } from '@useCases/Transactions/CreateTransaction/CreateTransactionUseCase'
+import { CreateTransaction } from '@useCases/ports/Transactions'
 
 export class CreateTransactionController {
-  /* eslint-disable prettier/prettier */
-  constructor(
-    private createTransactionUseCase: CreateTransactionUseCase,
-    private createTransactionValidation: CreateTransactionValidation
-  ) { }
-  /* eslint-enable prettier/prettier */
+  constructor(private createTransaction: CreateTransaction) {}
 
-  async handle(request: Request, response: Response): Promise<Response> {
+  async handle(
+    request: HttpRequest<CreateTransactionViewModel>
+  ): Promise<HttpResponse> {
     try {
-      if (!this.createTransactionValidation.validate(request))
-        return response.status(406).json({ message: 'Missing field.' })
+      const validatedInputOrError = CreateTransactionValidation.validate(
+        request
+      )
+      if (validatedInputOrError.isLeft())
+        return error(validatedInputOrError.value, 406)
 
-      const { title, timestamp, items, payers } = request.body
+      const { title, timestamp, items, payers } = validatedInputOrError.value
 
-      const transactionOrError = await this.createTransactionUseCase.execute({
+      const transactionOrError = await this.createTransaction.execute({
         title,
         timestamp,
         items,
@@ -27,15 +28,12 @@ export class CreateTransactionController {
       })
 
       if (transactionOrError.isLeft()) {
-        const { name, message } = transactionOrError.value
-        return response.status(400).json({ name, message })
+        return error(transactionOrError.value)
       }
 
-      return response.status(201).json(transactionOrError.value)
+      return success(transactionOrError.value, 201)
     } catch (error) {
-      return response.status(500).json({
-        message: error.message || 'Unexpected error.'
-      })
+      return serverError(error.message)
     }
   }
 }

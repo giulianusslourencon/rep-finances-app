@@ -1,9 +1,14 @@
-import { Request } from 'express'
+import { HttpRequest } from '@presentation/contracts'
+import { MissingParamError } from '@presentation/controllers/errors'
+import { CreateTransactionViewModel } from '@presentation/viewModels'
+import Yup from 'yup'
 
-import * as Yup from 'yup'
+import { Either, left, right } from '@shared/Either'
 
 export class CreateTransactionValidation {
-  public validate(request: Request): boolean {
+  static validate(
+    request: HttpRequest<CreateTransactionViewModel>
+  ): Either<MissingParamError, CreateTransactionViewModel> {
     const schema = Yup.object().shape({
       title: Yup.string().required(),
       timestamp: Yup.number().required(),
@@ -22,6 +27,11 @@ export class CreateTransactionValidation {
         .required()
     })
 
-    return schema.isValidSync(request.body)
+    try {
+      const obj = schema.validateSync(request.body)
+      return right(obj)
+    } catch (error) {
+      return left(new MissingParamError(error.errors[0]))
+    }
   }
 }
