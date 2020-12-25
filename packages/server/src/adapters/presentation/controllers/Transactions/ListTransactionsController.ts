@@ -20,7 +20,9 @@ export class ListTransactionsController implements Controller {
 
     try {
       const skipLimit =
-        skip && limit ? { skip: skipNumber, limit: limitNumber } : undefined
+        !isNaN(skipNumber) && !isNaN(limitNumber)
+          ? { skip: skipNumber, limit: limitNumber }
+          : undefined
 
       const transactions = await this.listTransactions.execute({
         skipLimit,

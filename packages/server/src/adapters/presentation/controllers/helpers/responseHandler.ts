@@ -14,5 +14,5 @@ export const success = <T = unknown>(
   body: data
 })
 
-export const serverError = (reason = 'Unexpected error'): HttpResponse =>
-  error(new ServerError(reason), 500)
+export const serverError = (reason: string): HttpResponse =>
+  error(new ServerError(reason || 'Unexpected error'), 500)

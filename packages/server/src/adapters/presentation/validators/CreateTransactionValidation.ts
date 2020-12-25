@@ -1,7 +1,7 @@
 import { HttpRequest } from '@presentation/contracts'
 import { MissingParamError } from '@presentation/controllers/errors'
 import { CreateTransactionViewModel } from '@presentation/viewModels'
-import Yup from 'yup'
+import * as Yup from 'yup'
 
 import { Either, left, right } from '@shared/Either'
 

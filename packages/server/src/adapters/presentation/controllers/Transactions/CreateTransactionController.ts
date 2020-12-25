@@ -1,7 +1,10 @@
 import { HttpRequest, HttpResponse } from '@presentation/contracts'
 import { error, serverError, success } from '@presentation/controllers/helpers'
 import { CreateTransactionValidation } from '@presentation/validators'
-import { CreateTransactionViewModel } from '@presentation/viewModels'
+import {
+  CreateTransactionViewModel,
+  TransactionViewModel
+} from '@presentation/viewModels'
 
 import { CreateTransaction } from '@useCases/ports/Transactions'
 
@@ -10,7 +13,7 @@ export class CreateTransactionController {
 
   async handle(
     request: HttpRequest<CreateTransactionViewModel>
-  ): Promise<HttpResponse> {
+  ): Promise<HttpResponse<TransactionViewModel>> {
     try {
       const validatedInputOrError = CreateTransactionValidation.validate(
         request
