@@ -1,11 +1,11 @@
 import express from 'express'
 
+import { setupMiddleware } from './middleware'
 import { setupRoutes } from './routes'
 
 const app = express()
 
-app.use(express.json())
-
+setupMiddleware(app)
 setupRoutes(app)
 
 export { app }
