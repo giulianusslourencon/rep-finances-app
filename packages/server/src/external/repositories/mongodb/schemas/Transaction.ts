@@ -1,10 +1,10 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import mongoose from 'mongoose'
 
 import { TransactionAttributes } from '@repositories/attributes'
 
-export type TransactionDocument = Document & TransactionAttributes
+export type TransactionDocument = mongoose.Document & TransactionAttributes
 
-const TransactionSchema = new Schema({
+const TransactionSchema = new mongoose.Schema({
   _id: {
     type: String,
     trim: true

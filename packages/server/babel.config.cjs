@@ -5,7 +5,8 @@ module.exports = {
       {
         targets: {
           node: 'current'
-        }
+        },
+        modules: false
       }
     ],
     '@babel/preset-typescript'
@@ -13,13 +14,15 @@ module.exports = {
   plugins: [
     ['module-resolver', {
       alias: {
-        '@server': './src',
+        '@presentation': './src/adapters/presentation',
         '@entities': './src/entities',
         '@repositories': './src/external/repositories',
+        '@main': './src/main',
         '@shared': './src/shared',
         '@useCases': './src/useCases'
       }
-    }]
+    }],
+    ["babel-plugin-add-import-extension", { extension: "mjs" }]
   ],
   ignore: [
     '**/*.spec.ts'

@@ -21,7 +21,7 @@ export class CreateTransactionController {
       if (validatedInputOrError.isLeft())
         return error(validatedInputOrError.value, 406)
 
-      const { title, timestamp, items, payers } = validatedInputOrError.value
+      const { title, timestamp, items, payers } = request.body
 
       const transactionOrError = await this.createTransaction.execute({
         title,

@@ -1,10 +1,10 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import mongoose from 'mongoose'
 
 import { BalanceAttributes } from '@repositories/attributes'
 
-export type BalanceDocument = Document & BalanceAttributes
+export type BalanceDocument = mongoose.Document & BalanceAttributes
 
-const BalanceSchema = new Schema({
+const BalanceSchema = new mongoose.Schema({
   _id: {
     type: String,
     trim: true

@@ -8,6 +8,10 @@ export abstract class MongoRepository implements IRepository {
 
   private database!: Mongoose
 
+  constructor() {
+    this.connect()
+  }
+
   async connect(): Promise<void> {
     const mongoUserPass = mongoConfig.username
       ? `${mongoConfig.username}:${mongoConfig.password}@`

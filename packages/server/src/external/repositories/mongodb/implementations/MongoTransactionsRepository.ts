@@ -10,7 +10,7 @@ import {
 export class MongoTransactionsRepository
   extends MongoRepository
   implements ITransactionsRepository {
-  collection = TransactionModel.name
+  collection = TransactionModel.collection.name
 
   async clearCollection(): Promise<void> {
     await TransactionModel.deleteMany()

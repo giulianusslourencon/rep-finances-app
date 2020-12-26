@@ -15,6 +15,8 @@ services:
       - /usr/src/app/node_modules
     env_file:
       - ./packages/server/.env
+    environment:
+      - MONGO_URL=db
 
   db:
     image: mongo

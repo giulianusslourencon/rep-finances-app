@@ -6,7 +6,7 @@ import { IBalanceRepository } from '@repositories/ports'
 export class MongoBalanceRepository
   extends MongoRepository
   implements IBalanceRepository {
-  collection = BalanceModel.name
+  collection = BalanceModel.collection.name
 
   async clearCollection(): Promise<void> {
     await BalanceModel.deleteMany()
