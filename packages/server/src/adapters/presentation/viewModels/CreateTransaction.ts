@@ -1,3 +1,6 @@
-import { TransactionInitProps } from '@entities/Transaction'
+import { TransactionViewModel } from '@presentation/viewModels'
 
-export type CreateTransactionViewModel = TransactionInitProps
+export type CreateTransactionViewModel = Pick<
+  TransactionViewModel,
+  'title' | 'timestamp' | 'items' | 'payers'
+>

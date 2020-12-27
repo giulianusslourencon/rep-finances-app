@@ -1,6 +1,9 @@
 import { Controller, HttpRequest, HttpResponse } from '@presentation/contracts'
 import { serverError, success } from '@presentation/controllers/helpers'
-import { TransactionsArrayViewModel } from '@presentation/viewModels'
+import {
+  TransactionResume,
+  TransactionsArrayViewModel
+} from '@presentation/viewModels'
 
 import { ListTransactions } from '@useCases/ports/Transactions'
 
@@ -29,7 +32,7 @@ export class ListTransactionsController implements Controller {
         month: <string>month
       })
 
-      return success(transactions)
+      return success(TransactionResume.mapCollection(transactions))
     } catch (error) {
       return serverError(error.message)
     }

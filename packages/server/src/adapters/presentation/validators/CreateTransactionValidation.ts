@@ -16,7 +16,7 @@ export class CreateTransactionValidation {
         .transform((_, orig) => Object.values(orig))
         .of(
           Yup.object({
-            value: Yup.number().required(),
+            amount: Yup.number().required(),
             related_users: Yup.array().of(Yup.string())
           })
         )

@@ -1,4 +1,4 @@
-import { InvalidRelatedError } from '@entities/atomics/errors'
+import { InvalidUserIdError } from '@entities/atomics/errors'
 import { Balance, BalanceProps, TransactionCoreProps } from '@entities/Balance'
 
 import { Either } from '@shared/Either'
@@ -6,7 +6,7 @@ import { Either } from '@shared/Either'
 export class BalanceFromTransactionCore {
   static create(
     transaction: TransactionCoreProps
-  ): Either<InvalidRelatedError, Balance> {
+  ): Either<InvalidUserIdError, Balance> {
     const usersBalance: BalanceProps = {
       individual_balance: { ...transaction.payers }
     }
@@ -17,7 +17,7 @@ export class BalanceFromTransactionCore {
       item.related_users.forEach(user => {
         usersBalance.individual_balance[user] =
           usersBalance.individual_balance[user] || 0
-        usersBalance.individual_balance[user] -= item.value / nUsers
+        usersBalance.individual_balance[user] -= item.amount / nUsers
       })
     })
 

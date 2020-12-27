@@ -34,7 +34,9 @@ export class CreateTransactionController {
         return error(transactionOrError.value)
       }
 
-      return success(transactionOrError.value, 201)
+      const transaction = transactionOrError.value
+
+      return success(TransactionViewModel.map(transaction), 201)
     } catch (error) {
       return serverError(error.message)
     }

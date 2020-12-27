@@ -34,7 +34,7 @@ const makeFindTransactionStub = (): FindTransaction => {
         items: {
           item: {
             related_users: ['P', 'G'],
-            value: 30
+            amount: 30
           }
         },
         month: '202012',
@@ -42,7 +42,7 @@ const makeFindTransactionStub = (): FindTransaction => {
           P: 30
         },
         related: ['P', 'G'],
-        timestamp: 21212121211,
+        date: new Date(21212121211),
         title: 'AAAAAAA'
       }
       return Promise.resolve(

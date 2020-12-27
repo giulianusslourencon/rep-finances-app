@@ -21,19 +21,19 @@ describe('Mongo transactions repository', () => {
     )
   })
 
-  it('Should list all transactions ordered by timestamp', async () => {
+  it('Should list all transactions ordered by Date', async () => {
     const registeredTransactions = await MongoTransactions.list()
 
-    const transactionsTimestamps = registeredTransactions.map(
-      transaction => transaction.timestamp
+    const transactionsDates = registeredTransactions.map(transaction =>
+      transaction.date.getTime()
     )
 
-    const orderedTimestamps = transactions
-      .map(transaction => +transaction.timestamp)
+    const orderedDates = transactions
+      .map(transaction => transaction.date.getTime())
       .sort((a, b) => b - a)
 
     expect(registeredTransactions).toHaveLength(4)
-    expect(transactionsTimestamps).toStrictEqual(orderedTimestamps)
+    expect(transactionsDates).toStrictEqual(orderedDates)
   })
 
   it('Should list transactions with skip and limit', async () => {

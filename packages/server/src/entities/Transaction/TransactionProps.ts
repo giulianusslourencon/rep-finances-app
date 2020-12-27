@@ -1,12 +1,14 @@
-export type TransactionInitProps = Pick<
-  TransactionProps,
-  'title' | 'timestamp' | 'items' | 'payers'
->
+export type TransactionInitProps = {
+  title: string
+  timestamp: number
+  items: TransactionItemsProps
+  payers: TransactionPayersProps
+}
 
 export type TransactionProps = {
   _id: string
   title: string
-  timestamp: number | string
+  date: Date
   month: string
   items: TransactionItemsProps
   payers: TransactionPayersProps
@@ -16,7 +18,7 @@ export type TransactionProps = {
 
 export type TransactionItemsProps = {
   [title: string]: {
-    value: number
+    amount: number
     related_users: string[]
   }
 }

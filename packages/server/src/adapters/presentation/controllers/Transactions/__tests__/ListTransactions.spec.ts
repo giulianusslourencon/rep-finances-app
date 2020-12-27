@@ -22,7 +22,7 @@ const makeListTransactionsStub = (): ListTransactions => {
           _id: 'id',
           amount: 10,
           related: ['a'],
-          timestamp: 20,
+          date: new Date(20),
           title: 'A'
         }
       ]

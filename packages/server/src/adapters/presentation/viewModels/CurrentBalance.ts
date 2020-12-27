@@ -1,5 +1,13 @@
-import { IndividualBalanceProps } from '@entities/Balance'
+import { BalanceProps } from '@entities/Balance'
 
-export type CurrentBalanceViewModel = {
-  balance: IndividualBalanceProps
+export class CurrentBalanceViewModel {
+  balance!: {
+    [userId: string]: number
+  }
+
+  static map(entity: BalanceProps): CurrentBalanceViewModel {
+    return {
+      balance: entity.individual_balance
+    }
+  }
 }

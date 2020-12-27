@@ -1,10 +1,10 @@
-import { Related } from '@entities/atomics'
-import { InvalidRelatedError } from '@entities/atomics/errors'
+import { UserId } from '@entities/atomics'
+import { InvalidUserIdError } from '@entities/atomics/errors'
 import { IndividualBalanceProps } from '@entities/Balance'
 
 import { Either, left, right } from '@shared/Either'
 
-type ValidatedBalance = [Related, number][]
+type ValidatedBalance = [UserId, number][]
 
 export class IndividualBalance {
   private readonly balance: ValidatedBalance
@@ -16,22 +16,22 @@ export class IndividualBalance {
 
   static create(
     balance: IndividualBalanceProps
-  ): Either<InvalidRelatedError, IndividualBalance> {
+  ): Either<InvalidUserIdError, IndividualBalance> {
     const finalList: ValidatedBalance = []
-    for (const [user, amount] of Object.entries(balance)) {
-      const userOrError = Related.create(user)
+    for (const [userId, amount] of Object.entries(balance)) {
+      const userIdOrError = UserId.create(userId)
 
-      if (userOrError.isLeft()) return left(userOrError.value)
+      if (userIdOrError.isLeft()) return left(userIdOrError.value)
 
-      finalList.push([userOrError.value, amount])
+      finalList.push([userIdOrError.value, amount])
     }
     return right(new IndividualBalance(finalList))
   }
 
   get value(): IndividualBalanceProps {
     const balance: IndividualBalanceProps = {}
-    for (const [user, amount] of this.balance) {
-      balance[user.value] = amount
+    for (const [userId, amount] of this.balance) {
+      balance[userId.value] = amount
     }
     return balance
   }

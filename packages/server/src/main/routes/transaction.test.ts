@@ -29,7 +29,7 @@ describe('Transaction routes', () => {
         items: {
           item: {
             related_users: ['P', 'D'],
-            value: 10
+            amount: 10
           }
         },
         payers: {

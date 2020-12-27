@@ -1,4 +1,4 @@
-import { InvalidTitleError } from '@entities/atomics/errors'
+import { InvalidLabelError } from '@entities/atomics/errors'
 import { TransactionProps } from '@entities/Transaction'
 
 import {
@@ -69,7 +69,7 @@ describe('Create transaction use case', () => {
       title: 'A'
     })
 
-    expect(transactionError).toEqual(left(new InvalidTitleError('A')))
+    expect(transactionError).toEqual(left(new InvalidLabelError('A')))
 
     const monthBalances = await BalanceModel.find({}).lean()
     for (const balance of monthBalances) {

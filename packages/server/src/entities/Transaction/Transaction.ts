@@ -1,11 +1,11 @@
 import { v4 as uuid } from 'uuid'
 
-import { Amount, Timestamp, Title } from '@entities/atomics'
+import { Amount, Label } from '@entities/atomics'
 import {
   InvalidAmountError,
-  InvalidRelatedError,
-  InvalidTimestampError,
-  InvalidTitleError
+  InvalidUserIdError,
+  InvalidDateError,
+  InvalidLabelError
 } from '@entities/atomics/errors'
 import {
   TransactionProps,
@@ -14,7 +14,10 @@ import {
   TransactionPayers,
   TransactionInitProps
 } from '@entities/Transaction'
-import { InvalidValueError, EmptyListError } from '@entities/Transaction/errors'
+import {
+  InvalidPaymentError,
+  EmptyListError
+} from '@entities/Transaction/errors'
 
 import { Either, left, right } from '@shared/Either'
 import DateParser from '@shared/utils/DateParser'
@@ -22,8 +25,8 @@ import DateParser from '@shared/utils/DateParser'
 export class Transaction {
   public readonly _id!: string
 
-  public title!: Title
-  public timestamp!: Timestamp
+  public title!: Label
+  public date!: Date
   public items!: TransactionItems
   public payers!: TransactionPayers
 
@@ -32,8 +35,8 @@ export class Transaction {
   public readonly related!: RelatedList
 
   private constructor(
-    title: Title,
-    timestamp: Timestamp,
+    title: Label,
+    date: Date,
     items: TransactionItems,
     payers: TransactionPayers,
     month: string,
@@ -42,7 +45,7 @@ export class Transaction {
     id?: string
   ) {
     this.title = title
-    this.timestamp = timestamp
+    this.date = date
     this.items = items
     this.payers = payers
     this.month = month
@@ -57,50 +60,50 @@ export class Transaction {
     props: TransactionInitProps,
     id?: string
   ): Either<
-    | InvalidTitleError
-    | InvalidTimestampError
-    | InvalidRelatedError
+    | InvalidLabelError
+    | InvalidDateError
+    | InvalidUserIdError
     | InvalidAmountError
     | EmptyListError
-    | InvalidValueError,
+    | InvalidPaymentError,
     Transaction
   > {
-    const titleOrError = Title.create(props.title)
-    const timestampOrError = Timestamp.create(props.timestamp)
+    const titleOrError = Label.create(props.title)
     const itemsOrError = TransactionItems.create(props.items)
     const payersOrError = TransactionPayers.create(props.payers)
 
     if (titleOrError.isLeft()) return left(titleOrError.value)
-    if (timestampOrError.isLeft()) return left(timestampOrError.value)
     if (itemsOrError.isLeft()) return left(itemsOrError.value)
     if (payersOrError.isLeft()) return left(payersOrError.value)
 
     const title = titleOrError.value
 
-    const timestamp = timestampOrError.value
-    const month = DateParser.parseDate(timestamp.value)
+    const date = new Date(props.timestamp)
+    if (isNaN(date.getTime()))
+      return left(new InvalidDateError(props.timestamp.toString()))
+    const month = DateParser.parseDate(props.timestamp)
 
     const items = itemsOrError.value
     const payers = payersOrError.value
 
-    const itemsValues = Object.entries(items.value).reduce((acc, cur) => {
-      return acc + cur[1].value
+    const itemsAmount = Object.entries(items.value).reduce((acc, cur) => {
+      return acc + cur[1].amount
     }, 0)
 
     const totalPaid = Object.entries(payers.value).reduce((acc, cur) => {
       return acc + cur[1]
     }, 0)
 
-    if (itemsValues !== totalPaid) return left(new InvalidValueError())
+    if (itemsAmount !== totalPaid) return left(new InvalidPaymentError())
 
-    const amountOrError = Amount.create(itemsValues)
+    const amountOrError = Amount.create(itemsAmount)
     if (amountOrError.isLeft()) return left(amountOrError.value)
     const amount = amountOrError.value
 
     let related = Object.keys(payers.value)
-    Object.values(items.value).forEach(item => {
+    for (const item of Object.values(items.value)) {
       related = related.concat(item.related_users)
-    })
+    }
     related = [...new Set(related)]
 
     const relatedUsersOrError = RelatedList.create(related)
@@ -111,7 +114,7 @@ export class Transaction {
     return right(
       new Transaction(
         title,
-        timestamp,
+        date,
         items,
         payers,
         month,
@@ -126,7 +129,7 @@ export class Transaction {
     return {
       _id: this._id,
       title: this.title.value,
-      timestamp: this.timestamp.value,
+      date: this.date,
       items: this.items.value,
       payers: this.payers.value,
       month: this.month,

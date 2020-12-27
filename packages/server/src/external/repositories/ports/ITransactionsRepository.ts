@@ -3,7 +3,7 @@ import { IRepository } from '@repositories/ports'
 
 export type TransactionList = Pick<
   TransactionAttributes,
-  '_id' | 'title' | 'timestamp' | 'amount' | 'related'
+  '_id' | 'title' | 'date' | 'amount' | 'related'
 >[]
 
 export type ItemsAndPayersList = Pick<

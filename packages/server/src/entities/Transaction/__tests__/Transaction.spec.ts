@@ -1,11 +1,11 @@
 import {
   InvalidAmountError,
-  InvalidRelatedError,
-  InvalidTimestampError,
-  InvalidTitleError
+  InvalidUserIdError,
+  InvalidDateError,
+  InvalidLabelError
 } from '@entities/atomics/errors'
 import { Transaction, TransactionInitProps } from '@entities/Transaction'
-import { InvalidValueError } from '@entities/Transaction/errors'
+import { InvalidPaymentError } from '@entities/Transaction/errors'
 
 import { left } from '@shared/Either'
 
@@ -16,7 +16,7 @@ describe('Transaction', () => {
       timestamp: 1608336000000,
       items: {
         item1: {
-          value: 20,
+          amount: 20,
           related_users: ['F', 'G']
         }
       },
@@ -42,7 +42,7 @@ describe('Transaction', () => {
       timestamp: 1608336000000,
       items: {
         item1: {
-          value: 20,
+          amount: 20,
           related_users: ['F', 'G']
         }
       },
@@ -52,16 +52,16 @@ describe('Transaction', () => {
     }
     const transactionOrError = Transaction.create(transactionInit)
 
-    expect(transactionOrError).toEqual(left(new InvalidTitleError('X')))
+    expect(transactionOrError).toEqual(left(new InvalidLabelError('X')))
   })
 
   it('Should not allow a transaction with invalid timestamp', () => {
     const transactionInit: TransactionInitProps = {
       title: 'Compra X',
-      timestamp: -1,
+      timestamp: NaN,
       items: {
         item1: {
-          value: 20,
+          amount: 20,
           related_users: ['F', 'G']
         }
       },
@@ -71,7 +71,9 @@ describe('Transaction', () => {
     }
     const transactionOrError = Transaction.create(transactionInit)
 
-    expect(transactionOrError).toEqual(left(new InvalidTimestampError('-1')))
+    expect(transactionOrError).toEqual(
+      left(new InvalidDateError(NaN.toString()))
+    )
   })
 
   it('Should not allow a transaction with invalid items', () => {
@@ -80,7 +82,7 @@ describe('Transaction', () => {
       timestamp: 1608336000000,
       items: {
         item1: {
-          value: 20,
+          amount: 20,
           related_users: ['F', '__']
         }
       },
@@ -90,7 +92,7 @@ describe('Transaction', () => {
     }
     const transactionOrError = Transaction.create(transactionInit)
 
-    expect(transactionOrError).toEqual(left(new InvalidRelatedError('__')))
+    expect(transactionOrError).toEqual(left(new InvalidUserIdError('__')))
   })
 
   it('Should not allow a transaction with invalid payers', () => {
@@ -99,7 +101,7 @@ describe('Transaction', () => {
       timestamp: 1608336000000,
       items: {
         item1: {
-          value: 20,
+          amount: 20,
           related_users: ['F', 'G']
         }
       },
@@ -118,7 +120,7 @@ describe('Transaction', () => {
       timestamp: 1608336000000,
       items: {
         item1: {
-          value: 20,
+          amount: 20,
           related_users: ['F', 'G']
         }
       },
@@ -128,6 +130,6 @@ describe('Transaction', () => {
     }
     const transactionOrError = Transaction.create(transactionInit)
 
-    expect(transactionOrError).toEqual(left(new InvalidValueError()))
+    expect(transactionOrError).toEqual(left(new InvalidPaymentError()))
   })
 })

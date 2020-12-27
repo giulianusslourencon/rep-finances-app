@@ -1,4 +1,4 @@
-import { InvalidAmountError, InvalidTitleError } from '@entities/atomics/errors'
+import { InvalidAmountError, InvalidLabelError } from '@entities/atomics/errors'
 import { TransactionItemsProps, TransactionItems } from '@entities/Transaction'
 import { EmptyListError } from '@entities/Transaction/errors'
 
@@ -8,11 +8,11 @@ describe('Transaction items', () => {
   it('Should allow a list with valid items', () => {
     const items: TransactionItemsProps = {
       item1: {
-        value: 10,
+        amount: 10,
         related_users: ['P', 'G']
       },
       item2: {
-        value: 20,
+        amount: 20,
         related_users: ['P']
       }
     }
@@ -24,30 +24,30 @@ describe('Transaction items', () => {
     ).toStrictEqual(items)
   })
 
-  it('Should not allow a list with invalid title', () => {
+  it('Should not allow a list with invalid item name', () => {
     const items: TransactionItemsProps = {
       i: {
-        value: 10,
+        amount: 10,
         related_users: ['P', 'G']
       },
       item2: {
-        value: 20,
+        amount: 20,
         related_users: ['P']
       }
     }
     const transactionItemsOrError = TransactionItems.create(items)
 
-    expect(transactionItemsOrError).toEqual(left(new InvalidTitleError('i')))
+    expect(transactionItemsOrError).toEqual(left(new InvalidLabelError('i')))
   })
 
-  it('Should not allow a list with invalid value', () => {
+  it('Should not allow a list with invalid amount', () => {
     const items: TransactionItemsProps = {
       item1: {
-        value: 10,
+        amount: 10,
         related_users: ['P', 'G']
       },
       item2: {
-        value: -20,
+        amount: -20,
         related_users: ['P']
       }
     }
@@ -59,11 +59,11 @@ describe('Transaction items', () => {
   it('Should not allow a list with invalid related list', () => {
     const items: TransactionItemsProps = {
       item1: {
-        value: 10,
+        amount: 10,
         related_users: ['P', 'G']
       },
       item2: {
-        value: 20,
+        amount: 20,
         related_users: []
       }
     }

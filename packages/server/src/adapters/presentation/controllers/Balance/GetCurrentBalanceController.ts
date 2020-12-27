@@ -11,7 +11,7 @@ export class GetCurrentBalanceController implements Controller {
     try {
       const balance = await this.getCurrentBalance.execute(undefined)
 
-      return success({ balance: balance.individual_balance })
+      return success(CurrentBalanceViewModel.map(balance))
     } catch (error) {
       return serverError(error.message)
     }

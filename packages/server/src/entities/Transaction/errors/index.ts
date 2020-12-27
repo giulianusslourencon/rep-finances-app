@@ -1,2 +1,2 @@
 export * from './EmptyList'
-export * from './InvalidValue'
+export * from './InvalidPayment'

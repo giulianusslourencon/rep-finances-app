@@ -22,8 +22,8 @@ export class MongoTransactionsRepository
   }): Promise<TransactionList> {
     return await TransactionModel.find(
       {},
-      { _id: 1, title: 1, timestamp: 1, amount: 1, related: 1 },
-      { sort: { timestamp: -1 }, ...skipLimit }
+      { _id: 1, title: 1, date: 1, amount: 1, related: 1 },
+      { sort: { date: -1 }, ...skipLimit }
     ).lean()
   }
 
@@ -33,8 +33,8 @@ export class MongoTransactionsRepository
   ): Promise<TransactionList> {
     return await TransactionModel.find(
       { month },
-      { _id: 1, title: 1, timestamp: 1, amount: 1, related: 1 },
-      { sort: { timestamp: -1 }, ...skipLimit }
+      { _id: 1, title: 1, date: 1, amount: 1, related: 1 },
+      { sort: { date: -1 }, ...skipLimit }
     ).lean()
   }
 

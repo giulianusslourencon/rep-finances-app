@@ -11,7 +11,7 @@ describe('Balance from array', () => {
       {
         items: {
           item1: {
-            value: 10,
+            amount: 10,
             related_users: ['P', 'G']
           }
         },
@@ -22,7 +22,7 @@ describe('Balance from array', () => {
       {
         items: {
           item1: {
-            value: 20,
+            amount: 20,
             related_users: ['P', 'M']
           }
         },
@@ -46,7 +46,7 @@ describe('Balance from array', () => {
       {
         items: {
           item1: {
-            value: 10,
+            amount: 10,
             related_users: ['P', 'G']
           }
         },
@@ -57,7 +57,7 @@ describe('Balance from array', () => {
       {
         items: {
           item1: {
-            value: 20,
+            amount: 20,
             related_users: ['P', 'M']
           }
         },

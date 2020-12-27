@@ -12,7 +12,7 @@ export type ListTransactionsProps = {
 
 export type ListTransactionsResponse = Pick<
   TransactionProps,
-  '_id' | 'amount' | 'related' | 'timestamp' | 'title'
+  '_id' | 'amount' | 'related' | 'date' | 'title'
 >[]
 
 export type ListTransactions = UseCase<

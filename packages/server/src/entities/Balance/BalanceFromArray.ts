@@ -1,4 +1,4 @@
-import { InvalidRelatedError } from '@entities/atomics/errors'
+import { InvalidUserIdError } from '@entities/atomics/errors'
 import {
   Balance,
   BalanceProps,
@@ -11,9 +11,9 @@ import { Either, left, right } from '@shared/Either'
 export class BalanceFromArray {
   static create(
     transactionsOrBalances: (TransactionCoreProps | BalanceProps)[]
-  ): Either<InvalidRelatedError, Balance> {
+  ): Either<InvalidUserIdError, Balance> {
     const balancesOrError: Either<
-      InvalidRelatedError,
+      InvalidUserIdError,
       BalanceProps
     >[] = transactionsOrBalances.map(transactionOrBalance => {
       if ((<BalanceProps>transactionOrBalance).individual_balance)
@@ -35,11 +35,11 @@ export class BalanceFromArray {
 
     const usersBalance = balances.reduce<BalanceProps>(
       (acc, cur) => {
-        for (const [user, user_balance] of Object.entries(
+        for (const [userId, user_balance] of Object.entries(
           cur.individual_balance
         )) {
-          acc.individual_balance[user] = acc.individual_balance[user] || 0
-          acc.individual_balance[user] += user_balance
+          acc.individual_balance[userId] = acc.individual_balance[userId] || 0
+          acc.individual_balance[userId] += user_balance
         }
         return acc
       },

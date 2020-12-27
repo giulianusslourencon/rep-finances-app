@@ -12,7 +12,7 @@ export const transactions: TransactionAttributes[] = [
     items: {
       item: {
         related_users: ['G'],
-        value: 50
+        amount: 50
       }
     },
     month: '202012',
@@ -20,7 +20,7 @@ export const transactions: TransactionAttributes[] = [
       P: 50
     },
     related: ['P', 'G'],
-    timestamp: 1608336000000,
+    date: new Date(1608336000000),
     title: 'Transf P-G'
   },
   {
@@ -29,7 +29,7 @@ export const transactions: TransactionAttributes[] = [
     items: {
       item: {
         related_users: ['M'],
-        value: 30
+        amount: 30
       }
     },
     month: '202012',
@@ -37,7 +37,7 @@ export const transactions: TransactionAttributes[] = [
       F: 30
     },
     related: ['F', 'M'],
-    timestamp: 1608723196865,
+    date: new Date(1608723196865),
     title: 'Transf F-M'
   },
   {
@@ -46,7 +46,7 @@ export const transactions: TransactionAttributes[] = [
     items: {
       item: {
         related_users: ['P'],
-        value: 60
+        amount: 60
       }
     },
     month: '202011',
@@ -54,7 +54,7 @@ export const transactions: TransactionAttributes[] = [
       M: 60
     },
     related: ['M', 'P'],
-    timestamp: 1605582000000,
+    date: new Date(1605582000000),
     title: 'Transf M-P'
   },
   {
@@ -63,7 +63,7 @@ export const transactions: TransactionAttributes[] = [
     items: {
       item: {
         related_users: ['F'],
-        value: 40
+        amount: 40
       }
     },
     month: '202101',
@@ -71,7 +71,7 @@ export const transactions: TransactionAttributes[] = [
       G: 40
     },
     related: ['G', 'F'],
-    timestamp: 1610161200000,
+    date: new Date(1610161200000),
     title: 'Transf G-F'
   }
 ]
@@ -80,7 +80,7 @@ export const transactionToSave: CreateTransactionProps = {
   items: {
     item: {
       related_users: ['P', 'D'],
-      value: 10
+      amount: 10
     }
   },
   payers: {

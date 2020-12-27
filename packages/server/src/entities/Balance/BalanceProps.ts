@@ -1,7 +1,7 @@
 import { TransactionProps } from '@entities/Transaction'
 
 export type IndividualBalanceProps = {
-  [user: string]: number
+  [userId: string]: number
 }
 
 export type BalanceProps = {

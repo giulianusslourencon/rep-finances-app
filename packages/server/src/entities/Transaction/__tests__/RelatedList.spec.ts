@@ -1,4 +1,4 @@
-import { InvalidRelatedError } from '@entities/atomics/errors'
+import { InvalidUserIdError } from '@entities/atomics/errors'
 import { RelatedList } from '@entities/Transaction'
 import { EmptyListError } from '@entities/Transaction/errors'
 
@@ -19,7 +19,7 @@ describe('Related list', () => {
     const related_users = ['P', 'G', '@']
     const relatedListOrError = RelatedList.create(related_users)
 
-    expect(relatedListOrError).toEqual(left(new InvalidRelatedError('@')))
+    expect(relatedListOrError).toEqual(left(new InvalidUserIdError('@')))
   })
 
   it('Should not allow an empty list', () => {

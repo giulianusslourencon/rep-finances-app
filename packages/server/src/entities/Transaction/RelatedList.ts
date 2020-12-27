@@ -1,23 +1,23 @@
-import { Related } from '@entities/atomics'
-import { InvalidRelatedError } from '@entities/atomics/errors'
+import { UserId } from '@entities/atomics'
+import { InvalidUserIdError } from '@entities/atomics/errors'
 import { EmptyListError } from '@entities/Transaction/errors'
 
 import { Either, left, right } from '@shared/Either'
 
 export class RelatedList {
-  private readonly relatedList: Related[]
+  private readonly relatedList: UserId[]
 
-  private constructor(relatedList: Related[]) {
+  private constructor(relatedList: UserId[]) {
     this.relatedList = [...relatedList]
     Object.freeze(this)
   }
 
   static create(
     relatedList: string[]
-  ): Either<InvalidRelatedError | EmptyListError, RelatedList> {
-    const finalList: Related[] = []
+  ): Either<InvalidUserIdError | EmptyListError, RelatedList> {
+    const finalList: UserId[] = []
     for (const related of relatedList) {
-      const relatedOrError = Related.create(related)
+      const relatedOrError = UserId.create(related)
 
       if (relatedOrError.isLeft()) return left(relatedOrError.value)
 
@@ -33,7 +33,7 @@ export class RelatedList {
     return this.relatedList.map(related => related.value)
   }
 
-  static validate(relatedList: Related[]): boolean {
+  static validate(relatedList: UserId[]): boolean {
     if (relatedList.length === 0) return false
     return true
   }

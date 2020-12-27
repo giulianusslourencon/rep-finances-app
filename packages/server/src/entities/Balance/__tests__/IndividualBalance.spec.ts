@@ -1,4 +1,4 @@
-import { InvalidRelatedError } from '@entities/atomics/errors'
+import { InvalidUserIdError } from '@entities/atomics/errors'
 import { IndividualBalance } from '@entities/Balance'
 
 import { left } from '@shared/Either'
@@ -24,7 +24,7 @@ describe('Individual Balance', () => {
     const individualBalanceOrError = IndividualBalance.create(individualBalance)
 
     expect(individualBalanceOrError).toEqual(
-      left(new InvalidRelatedError('AAAAA'))
+      left(new InvalidUserIdError('AAAAA'))
     )
   })
 })

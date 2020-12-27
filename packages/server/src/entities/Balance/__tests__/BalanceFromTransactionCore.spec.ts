@@ -9,7 +9,7 @@ describe('Balance from transaction core', () => {
     const transaction: TransactionCoreProps = {
       items: {
         item1: {
-          value: 10,
+          amount: 10,
           related_users: ['P', 'G']
         }
       },

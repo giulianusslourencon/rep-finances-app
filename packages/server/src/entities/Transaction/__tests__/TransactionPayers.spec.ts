@@ -1,6 +1,6 @@
 import {
   InvalidAmountError,
-  InvalidRelatedError
+  InvalidUserIdError
 } from '@entities/atomics/errors'
 import {
   TransactionPayersProps,
@@ -24,14 +24,14 @@ describe('Transaction payers', () => {
     ).toStrictEqual(items)
   })
 
-  it('Should not allow a list with invalid related', () => {
+  it('Should not allow a list with invalid user id', () => {
     const items: TransactionPayersProps = {
       AAAA: 30
     }
     const transactionPayersOrError = TransactionPayers.create(items)
 
     expect(transactionPayersOrError).toEqual(
-      left(new InvalidRelatedError('AAAA'))
+      left(new InvalidUserIdError('AAAA'))
     )
   })
 

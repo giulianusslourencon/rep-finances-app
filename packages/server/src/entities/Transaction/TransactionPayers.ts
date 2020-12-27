@@ -1,14 +1,14 @@
-import { Amount, Related } from '@entities/atomics'
+import { Amount, UserId } from '@entities/atomics'
 import {
   InvalidAmountError,
-  InvalidRelatedError
+  InvalidUserIdError
 } from '@entities/atomics/errors'
 import { TransactionPayersProps } from '@entities/Transaction'
 import { EmptyListError } from '@entities/Transaction/errors'
 
 import { Either, left, right } from '@shared/Either'
 
-type ValidatedPayers = [Related, Amount][]
+type ValidatedPayers = [UserId, Amount][]
 
 export class TransactionPayers {
   private readonly payers: ValidatedPayers
@@ -21,18 +21,18 @@ export class TransactionPayers {
   static create(
     payers: TransactionPayersProps
   ): Either<
-    InvalidAmountError | InvalidRelatedError | EmptyListError,
+    InvalidAmountError | InvalidUserIdError | EmptyListError,
     TransactionPayers
   > {
     const finalList: ValidatedPayers = []
-    for (const [user, amount] of Object.entries(payers)) {
-      const userOrError = Related.create(user)
+    for (const [userId, amount] of Object.entries(payers)) {
+      const userIdOrError = UserId.create(userId)
       const amountOrError = Amount.create(amount)
 
-      if (userOrError.isLeft()) return left(userOrError.value)
+      if (userIdOrError.isLeft()) return left(userIdOrError.value)
       if (amountOrError.isLeft()) return left(amountOrError.value)
 
-      finalList.push([userOrError.value, amountOrError.value])
+      finalList.push([userIdOrError.value, amountOrError.value])
     }
 
     if (!TransactionPayers.validate(finalList))
@@ -43,8 +43,8 @@ export class TransactionPayers {
 
   get value(): TransactionPayersProps {
     const payers: TransactionPayersProps = {}
-    for (const [user, amount] of this.payers) {
-      payers[user.value] = amount.value
+    for (const [userId, amount] of this.payers) {
+      payers[userId.value] = amount.value
     }
     return payers
   }

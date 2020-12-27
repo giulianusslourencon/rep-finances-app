@@ -1,7 +1,7 @@
 import { HttpRequest } from '@presentation/contracts'
 import { CreateTransactionController } from '@presentation/controllers/Transactions'
 
-import { InvalidTitleError } from '@entities/atomics/errors'
+import { InvalidLabelError } from '@entities/atomics/errors'
 
 import { left, right } from '@shared/Either'
 
@@ -23,14 +23,14 @@ const makeCreateTransactionStub = (): CreateTransaction => {
     ): Promise<CreateTransactionResponse> {
       return Promise.resolve(
         props.title === 'A'
-          ? left(new InvalidTitleError('A'))
+          ? left(new InvalidLabelError('A'))
           : right({
               _id: 'id',
               amount: 30,
               items: {
                 item: {
                   related_users: ['P', 'G'],
-                  value: 30
+                  amount: 30
                 }
               },
               month: '202012',
@@ -38,7 +38,7 @@ const makeCreateTransactionStub = (): CreateTransaction => {
                 P: 30
               },
               related: ['P', 'G'],
-              timestamp: 21212121211,
+              date: new Date(21212121211),
               title: 'AAAAAAA'
             })
       )
@@ -64,7 +64,7 @@ describe('Create transaction controller', () => {
         items: {
           item: {
             related_users: ['P', 'G'],
-            value: 30
+            amount: 30
           }
         },
         payers: {
@@ -89,7 +89,7 @@ describe('Create transaction controller', () => {
         items: {
           item: {
             related_users: ['P', 'G'],
-            value: 30
+            amount: 30
           }
         },
         payers: {
@@ -103,8 +103,8 @@ describe('Create transaction controller', () => {
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual({
-      name: 'InvalidTitleError',
-      message: 'The title "A" is invalid.'
+      name: 'InvalidLabelError',
+      message: 'The label "A" is invalid.'
     })
   })
 
@@ -116,7 +116,7 @@ describe('Create transaction controller', () => {
         items: {
           item: {
             related_users: ['P', 'G'],
-            value: 30
+            amount: 30
           }
         },
         payers: {
@@ -143,7 +143,7 @@ describe('Create transaction controller', () => {
         items: {
           item: {
             related_users: ['P', 'G'],
-            value: 30
+            amount: 30
           }
         },
         payers: {
@@ -171,7 +171,7 @@ describe('Create transaction controller', () => {
         items: {
           item: {
             related_users: ['P', 'G'],
-            value: 30
+            amount: 30
           }
         },
         payers: {
@@ -222,7 +222,7 @@ describe('Create transaction controller', () => {
         items: {
           item: {
             related_users: ['P', 'G'],
-            value: 30
+            amount: 30
           }
         }
       },
@@ -251,7 +251,7 @@ describe('Create transaction controller', () => {
         items: {
           item: {
             related_users: ['P', 'G'],
-            value: 30
+            amount: 30
           }
         },
         payers: {
@@ -283,7 +283,7 @@ describe('Create transaction controller', () => {
         items: {
           item: {
             related_users: ['P', 'G'],
-            value: 30
+            amount: 30
           }
         },
         payers: {

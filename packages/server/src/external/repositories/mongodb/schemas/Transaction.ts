@@ -18,8 +18,8 @@ const TransactionSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  timestamp: {
-    type: Number,
+  date: {
+    type: Date,
     required: true
   },
   month: {
@@ -29,7 +29,7 @@ const TransactionSchema = new mongoose.Schema({
   items: {
     type: Map,
     of: {
-      value: Number,
+      amount: Number,
       related_users: [String]
     }
   },

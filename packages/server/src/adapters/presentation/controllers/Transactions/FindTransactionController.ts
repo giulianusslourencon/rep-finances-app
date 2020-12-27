@@ -33,7 +33,7 @@ export class FindTransactionController {
 
       const balance = balanceOrError.value
 
-      return success({ transaction, balance })
+      return success(TransactionDetailsViewModel.map(transaction, balance))
     } catch (error) {
       return serverError(error.message)
     }
