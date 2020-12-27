@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "esnext",
+    "module": "CommonJS",
     "lib": ["ES6"],
     "allowJs": true,
     "noEmit": true,
@@ -17,7 +17,6 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
-    "isolatedModules": true,
+    "moduleResolution": "node"
   }
 }
