@@ -11,7 +11,7 @@ import RelatedList from '@components/relatedList'
 type Transaction = {
   _id: string
   title: string
-  timestamp: number
+  date: string
   amount: number
   related: string[]
 }
@@ -20,8 +20,8 @@ type Props = {
   transactions: Transaction[]
 }
 
-const getFormattedDateFromTimestamp = (timestamp: number) => {
-  const date = new Date(timestamp)
+const getFormattedDate = (isoDate: string) => {
+  const date = new Date(isoDate)
   return date.toLocaleDateString('pt-BR', {
     timeZone: 'America/Sao_Paulo',
     year: 'numeric',
@@ -49,7 +49,7 @@ const Historic: NextPage<Props> = ({ transactions }) => {
                   {transaction.title}
                 </Link>
                 <Box fontSize="16px" color="purple.600" fontWeight="600">
-                  {getFormattedDateFromTimestamp(transaction.timestamp)}
+                  {getFormattedDate(transaction.date)}
                 </Box>
               </Flex>
               <Flex justify="space-between" align="flex-end">
@@ -68,7 +68,7 @@ Historic.getInitialProps = async () => {
   // const page = parseInt(query.page?.toString() || '0')
 
   const response = await axios.get<Transaction[]>(
-    'http://localhost:3333/transactions'
+    'http://localhost:3333/api/transactions'
   )
   const transactions = response.data
 

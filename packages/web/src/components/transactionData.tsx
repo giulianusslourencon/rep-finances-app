@@ -5,7 +5,7 @@ import Cash from './cash'
 import IdBox from './idBox'
 
 type Props = {
-  data: { id: string; value: number }[]
+  data: { id: string; amount: number }[]
 }
 
 const TransactionData: React.FC<Props> = ({ children, data }) => {
@@ -17,7 +17,7 @@ const TransactionData: React.FC<Props> = ({ children, data }) => {
       {data.map(user => (
         <Flex key={user.id} align="center">
           <IdBox id={user.id} marginRight="4px" marginLeft="16px" />
-          <Cash amount={user.value} />
+          <Cash amount={user.amount} />
         </Flex>
       ))}
     </VStack>

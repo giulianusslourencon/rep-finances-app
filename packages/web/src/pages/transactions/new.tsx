@@ -28,18 +28,22 @@ import Layout from '@components/layout'
 import { validateTransaction } from '@utils/validateTransaction'
 
 type TransactionItem = {
-  title: string
+  itemName: string
   related_users: string[]
-  value: number
+  amount: number
 }
 
 type TransactionPayer = {
-  user: string
+  userId: string
   amount: number
 }
 
 const CreateTransaction: React.FC = () => {
-  const baseItem: TransactionItem = { title: '', related_users: [], value: 0 }
+  const baseItem: TransactionItem = {
+    itemName: '',
+    related_users: [],
+    amount: 0
+  }
 
   const [title, setTitle] = useState('')
   const [timestamp, setTimestamp] = useState(moment())
@@ -64,11 +68,11 @@ const CreateTransaction: React.FC = () => {
     setPayers(updatedPayers)
   }
 
-  const changeUserOnItem = (index: number, user: string) => {
+  const changeUserOnItem = (index: number, userId: string) => {
     const itemRelated = [...items[index].related_users]
-    const userIndex = itemRelated.indexOf(user)
+    const userIndex = itemRelated.indexOf(userId)
 
-    if (userIndex === -1) itemRelated.push(user)
+    if (userIndex === -1) itemRelated.push(userId)
     else itemRelated.splice(userIndex, 1)
 
     updateItem(index, { related_users: itemRelated })
@@ -86,7 +90,7 @@ const CreateTransaction: React.FC = () => {
     currentRelated.push(newRelated)
 
     const currentPayers = [...payers]
-    currentPayers.push({ user: newRelated, amount: 0 })
+    currentPayers.push({ userId: newRelated, amount: 0 })
 
     setNewRelated('')
     setRelated(currentRelated)
@@ -100,18 +104,20 @@ const CreateTransaction: React.FC = () => {
   const closePopup = () => setPopupOpened(false)
 
   const getTransactionObject = () => {
-    const objItems = {} as { [x: string]: Omit<TransactionItem, 'title'> }
+    const objItems = {} as {
+      [itemName: string]: Omit<TransactionItem, 'itemName'>
+    }
     items.map(
       item =>
-        (objItems[item.title] = {
-          value: item.value,
+        (objItems[item.itemName] = {
+          amount: item.amount,
           related_users: item.related_users
         })
     )
 
-    const objPayers = {} as { [x: string]: number }
+    const objPayers = {} as { [userId: string]: number }
     payers.forEach(payer => {
-      if (payer.amount) objPayers[payer.user] = payer.amount
+      if (payer.amount) objPayers[payer.userId] = payer.amount
     })
 
     return {
@@ -127,7 +133,7 @@ const CreateTransaction: React.FC = () => {
 
     if (validateTransaction(transaction)) {
       const response = await axios.post(
-        'http://localhost:3333/transactions',
+        'http://localhost:3333/api/transactions',
         transaction
       )
       if (response.status === 201)
@@ -200,9 +206,9 @@ const CreateTransaction: React.FC = () => {
                   focusBorderColor="purple.600"
                   placeholder="Título"
                   isRequired={true}
-                  value={items[index].title}
+                  value={items[index].itemName}
                   onChange={val =>
-                    updateItem(index, { title: val.target.value })
+                    updateItem(index, { itemName: val.target.value })
                   }
                 />
                 <Flex justify="space-between">
@@ -214,9 +220,9 @@ const CreateTransaction: React.FC = () => {
                     precision={2}
                     step={0.5}
                     min={0}
-                    value={items[index].value.toFixed(2)}
+                    value={items[index].amount.toFixed(2)}
                     onChange={val =>
-                      updateItem(index, { value: parseFloat(val) })
+                      updateItem(index, { amount: parseFloat(val) })
                     }
                   >
                     <NumberInputField fontSize="16px" width="100px" />
@@ -263,7 +269,9 @@ const CreateTransaction: React.FC = () => {
                         focusBorderColor="purple.600"
                         value={newRelated}
                         maxLength={2}
-                        onChange={val => setNewRelated(val.target.value)}
+                        onChange={val =>
+                          setNewRelated(val.target.value.trim().toUpperCase())
+                        }
                         onKeyDown={event => {
                           if (event.key.valueOf() === 'Enter') addRelated()
                         }}

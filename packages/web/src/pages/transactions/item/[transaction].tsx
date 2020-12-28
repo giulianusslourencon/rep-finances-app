@@ -13,22 +13,22 @@ type Transaction = {
   _id: string
   title: string
   amount: number
-  timestamp: number
+  date: string
   month: string
   items: {
-    [title: string]: {
-      value: number
+    [itemName: string]: {
+      amount: number
       related_users: string[]
     }
   }
   payers: {
-    [user_id: string]: number
+    [userId: string]: number
   }
   related: string[]
 }
 
 type Balance = {
-  [user_id: string]: number
+  [userId: string]: number
 }
 
 type Props = {
@@ -43,27 +43,28 @@ const Transaction: React.FC<Props> = ({ transaction, balance }) => {
     return <p>Carregando...</p>
   }
 
-  const date = new Date(transaction.timestamp)
+  const date = new Date(transaction.date)
   const formattedDate = date.toLocaleString('pt-BR')
 
   const individual_payment = transaction.related.map(id => {
     return {
       id,
-      value: transaction.payers[id] || 0
+      amount: transaction.payers[id] || 0
     }
   })
 
   const individual_balance = transaction.related.map(id => {
     return {
       id,
-      value: balance[id] || 0
+      amount: balance[id] || 0
     }
   })
 
   const individual_amount = transaction.related.map((id, index) => {
     return {
       id,
-      value: individual_payment[index].value - individual_balance[index].value
+      amount:
+        individual_payment[index].amount - individual_balance[index].amount
     }
   })
 
@@ -117,7 +118,7 @@ const Transaction: React.FC<Props> = ({ transaction, balance }) => {
               </Text>
               <RelatedList related={item[1].related_users} />
               <Flex flexDir="column" align="flex-end">
-                <Cash amount={item[1].value} />
+                <Cash amount={item[1].amount} />
                 {item[1].related_users.length > 1 && (
                   <Flex align="center">
                     <Text
@@ -129,7 +130,7 @@ const Transaction: React.FC<Props> = ({ transaction, balance }) => {
                       {item[1].related_users.length}x
                     </Text>
                     <Cash
-                      amount={item[1].value / item[1].related_users.length}
+                      amount={item[1].amount / item[1].related_users.length}
                     />
                   </Flex>
                 )}
@@ -144,7 +145,7 @@ const Transaction: React.FC<Props> = ({ transaction, balance }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const response = await axios.get<Transaction[]>(
-    'http://localhost:3333/transactions?skip=0&limit=5'
+    'http://localhost:3333/api/transactions?skip=0&limit=5'
   )
   const transactions = response.data
 
@@ -165,7 +166,7 @@ export const getStaticProps: GetStaticProps<
   const _id = context.params?.transaction || ''
 
   const response = await axios.get<Props>(
-    `http://localhost:3333/transactions/${_id}`
+    `http://localhost:3333/api/transactions/${_id}`
   )
   const { transaction, balance } = response.data
 

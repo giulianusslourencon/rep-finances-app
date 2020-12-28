@@ -9,7 +9,7 @@ import Layout from '@components/layout'
 
 type Balance = {
   balance: {
-    [x: string]: number
+    [userId: string]: number
   }
 }
 
@@ -42,7 +42,7 @@ const Home: React.FC<Props> = ({ balance }) => {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const response = await axios.get<Balance>('http://localhost:3333/balance')
+  const response = await axios.get<Balance>('http://localhost:3333/api/balance')
   const balance = response.data.balance
 
   return {
