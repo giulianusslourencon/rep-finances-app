@@ -1,3 +1,5 @@
+import { TransactionProps } from '@entities/Transaction'
+
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations'
 
 import { transactions, transactionToSave } from './testData'
@@ -101,7 +103,7 @@ describe('Mongo transactions repository', () => {
     )
 
     expect(foundTransaction).toBeTruthy()
-    expect(foundTransaction?._id).toBe(transactions[0]._id)
+    expect((<TransactionProps>foundTransaction)._id).toBe(transactions[0]._id)
   })
 
   it('Should return a falsy value if a transaction does not exist', async () => {

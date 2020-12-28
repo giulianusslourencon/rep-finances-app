@@ -25,6 +25,6 @@ module.exports = {
     ["babel-plugin-add-import-extension", { extension: "mjs" }]
   ],
   ignore: [
-    '**/*.spec.ts'
+    '**/__tests__'
   ]
 }

@@ -4,7 +4,7 @@ export default class DateParser {
     timeZone = 'America/Sao_Paulo'
   ): string => {
     const date = new Date(timestamp)
-    const dateString = date.toLocaleDateString('pt-BR', {
+    const dateString = date.toLocaleDateString('en-GB', {
       timeZone,
       year: 'numeric',
       month: '2-digit',
@@ -12,7 +12,7 @@ export default class DateParser {
     })
 
     const dateValues = dateString.split('/')
-    const [, month, year] = dateValues
+    const [month, , year] = dateValues
 
     const dateId = year + month
     return dateId
