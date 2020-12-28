@@ -4,7 +4,7 @@ export type TransactionsArrayViewModel = TransactionResume[]
 export class TransactionResume {
   _id!: string
   title!: string
-  timestamp!: number
+  date!: string
   amount!: number
   related!: string[]
 
@@ -15,7 +15,7 @@ export class TransactionResume {
       return {
         _id: entity._id,
         title: entity.title,
-        timestamp: entity.date.getTime(),
+        date: entity.date.toISOString(),
         amount: entity.amount,
         related: entity.related
       }

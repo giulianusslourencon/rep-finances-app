@@ -3,7 +3,7 @@ import { TransactionProps } from '@entities/Transaction'
 export class TransactionViewModel {
   _id!: string
   title!: string
-  timestamp!: number
+  date!: string
   month!: string
   items!: TransactionItemsProps
   payers!: TransactionPayersProps
@@ -14,7 +14,7 @@ export class TransactionViewModel {
     return {
       _id: entity._id,
       title: entity.title,
-      timestamp: entity.date.getTime(),
+      date: entity.date.toISOString(),
       amount: entity.amount,
       related: entity.related,
       month: entity.month,
@@ -25,12 +25,12 @@ export class TransactionViewModel {
 }
 
 type TransactionItemsProps = {
-  [title: string]: {
+  [itemName: string]: {
     amount: number
     related_users: string[]
   }
 }
 
 type TransactionPayersProps = {
-  [user: string]: number
+  [userId: string]: number
 }
