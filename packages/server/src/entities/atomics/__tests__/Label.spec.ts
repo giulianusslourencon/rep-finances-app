@@ -4,8 +4,8 @@ import { InvalidLabelError } from '@entities/atomics/errors'
 import { left } from '@shared/Either'
 
 describe('Label', () => {
-  it('Should allow valid labels', () => {
-    const labelOrError = Label.create('Label')
+  it('Should allow valid labels and trim on save', () => {
+    const labelOrError = Label.create('Label   ')
 
     expect(labelOrError.isRight()).toBeTruthy()
     expect((<Label>labelOrError.value).value).toBe('Label')

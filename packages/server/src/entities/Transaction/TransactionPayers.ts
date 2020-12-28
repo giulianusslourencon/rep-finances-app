@@ -4,7 +4,10 @@ import {
   InvalidUserIdError
 } from '@entities/atomics/errors'
 import { TransactionPayersProps } from '@entities/Transaction'
-import { EmptyListError } from '@entities/Transaction/errors'
+import {
+  DuplicatedUserIdOnListError,
+  EmptyListError
+} from '@entities/Transaction/errors'
 
 import { Either, left, right } from '@shared/Either'
 
@@ -31,6 +34,12 @@ export class TransactionPayers {
 
       if (userIdOrError.isLeft()) return left(userIdOrError.value)
       if (amountOrError.isLeft()) return left(amountOrError.value)
+
+      const duplicated = finalList.filter(
+        item => item[0].value === userIdOrError.value.value
+      )
+      if (duplicated.length > 0)
+        return left(new DuplicatedUserIdOnListError(userIdOrError.value.value))
 
       finalList.push([userIdOrError.value, amountOrError.value])
     }

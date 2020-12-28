@@ -14,7 +14,7 @@ export class Label {
     if (!Label.validate(label)) {
       return left(new InvalidLabelError(label))
     }
-    return right(new Label(label))
+    return right(new Label(label.trim()))
   }
 
   get value(): string {

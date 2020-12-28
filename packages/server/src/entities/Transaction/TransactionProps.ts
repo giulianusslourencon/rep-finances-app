@@ -17,12 +17,12 @@ export type TransactionProps = {
 }
 
 export type TransactionItemsProps = {
-  [title: string]: {
+  [name: string]: {
     amount: number
     related_users: string[]
   }
 }
 
 export type TransactionPayersProps = {
-  [user: string]: number
+  [userId: string]: number
 }

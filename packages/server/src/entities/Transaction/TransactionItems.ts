@@ -5,7 +5,10 @@ import {
   InvalidLabelError
 } from '@entities/atomics/errors'
 import { TransactionItemsProps } from '@entities/Transaction'
-import { EmptyListError } from '@entities/Transaction/errors'
+import {
+  DuplicatedItemNameOnTransactionError,
+  EmptyListError
+} from '@entities/Transaction/errors'
 import { RelatedList } from '@entities/Transaction/RelatedList'
 
 import { Either, left, right } from '@shared/Either'
@@ -30,17 +33,25 @@ export class TransactionItems {
     TransactionItems
   > {
     const finalList: ValidatedItems = []
-    for (const [label, { amount, related_users }] of Object.entries(items)) {
-      const labelOrError = Label.create(label)
+    for (const [name, { amount, related_users }] of Object.entries(items)) {
+      const nameOrError = Label.create(name)
       const amountOrError = Amount.create(amount)
       const relatedUsersOrError = RelatedList.create(related_users)
 
-      if (labelOrError.isLeft()) return left(labelOrError.value)
+      if (nameOrError.isLeft()) return left(nameOrError.value)
       if (amountOrError.isLeft()) return left(amountOrError.value)
       if (relatedUsersOrError.isLeft()) return left(relatedUsersOrError.value)
 
+      const duplicated = finalList.filter(
+        item => item[0].value === nameOrError.value.value
+      )
+      if (duplicated.length > 0)
+        return left(
+          new DuplicatedItemNameOnTransactionError(nameOrError.value.value)
+        )
+
       finalList.push([
-        labelOrError.value,
+        nameOrError.value,
         {
           amount: amountOrError.value,
           related_users: relatedUsersOrError.value
@@ -55,8 +66,8 @@ export class TransactionItems {
 
   get value(): TransactionItemsProps {
     const items: TransactionItemsProps = {}
-    for (const [label, { amount, related_users }] of this.items) {
-      items[label.value] = {
+    for (const [name, { amount, related_users }] of this.items) {
+      items[name.value] = {
         amount: amount.value,
         related_users: related_users.value
       }

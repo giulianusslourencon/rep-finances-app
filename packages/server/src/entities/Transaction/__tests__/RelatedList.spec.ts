@@ -1,6 +1,9 @@
 import { InvalidUserIdError } from '@entities/atomics/errors'
 import { RelatedList } from '@entities/Transaction'
-import { EmptyListError } from '@entities/Transaction/errors'
+import {
+  DuplicatedUserIdOnListError,
+  EmptyListError
+} from '@entities/Transaction/errors'
 
 import { left } from '@shared/Either'
 
@@ -27,5 +30,14 @@ describe('Related list', () => {
     const relatedListOrError = RelatedList.create(related_users)
 
     expect(relatedListOrError).toEqual(left(new EmptyListError()))
+  })
+
+  it('Should not allow duplicated ids in a list', () => {
+    const related_users = ['P', 'p ']
+    const relatedListOrError = RelatedList.create(related_users)
+
+    expect(relatedListOrError).toEqual(
+      left(new DuplicatedUserIdOnListError('P'))
+    )
   })
 })

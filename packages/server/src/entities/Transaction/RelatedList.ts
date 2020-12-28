@@ -1,6 +1,9 @@
 import { UserId } from '@entities/atomics'
 import { InvalidUserIdError } from '@entities/atomics/errors'
-import { EmptyListError } from '@entities/Transaction/errors'
+import {
+  DuplicatedUserIdOnListError,
+  EmptyListError
+} from '@entities/Transaction/errors'
 
 import { Either, left, right } from '@shared/Either'
 
@@ -20,6 +23,12 @@ export class RelatedList {
       const relatedOrError = UserId.create(related)
 
       if (relatedOrError.isLeft()) return left(relatedOrError.value)
+
+      const duplicated = finalList.filter(
+        item => item.value === relatedOrError.value.value
+      )
+      if (duplicated.length > 0)
+        return left(new DuplicatedUserIdOnListError(relatedOrError.value.value))
 
       finalList.push(relatedOrError.value)
     }

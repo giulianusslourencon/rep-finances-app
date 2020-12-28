@@ -6,7 +6,10 @@ import {
   TransactionPayersProps,
   TransactionPayers
 } from '@entities/Transaction'
-import { EmptyListError } from '@entities/Transaction/errors'
+import {
+  DuplicatedUserIdOnListError,
+  EmptyListError
+} from '@entities/Transaction/errors'
 
 import { left } from '@shared/Either'
 
@@ -50,5 +53,17 @@ describe('Transaction payers', () => {
     const transactionPayersOrError = TransactionPayers.create(items)
 
     expect(transactionPayersOrError).toEqual(left(new EmptyListError()))
+  })
+
+  it('Should not allow a list with duplicated user ids', () => {
+    const items: TransactionPayersProps = {
+      P: 20,
+      p: 10
+    }
+    const transactionPayersOrError = TransactionPayers.create(items)
+
+    expect(transactionPayersOrError).toEqual(
+      left(new DuplicatedUserIdOnListError('P'))
+    )
   })
 })
