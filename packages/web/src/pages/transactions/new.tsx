@@ -1,17 +1,4 @@
-import {
-  Box,
-  Flex,
-  HStack,
-  Input,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  StackDivider,
-  Text,
-  VStack
-} from '@chakra-ui/react'
+import { Box, Flex, HStack, StackDivider, Text, VStack } from '@chakra-ui/react'
 import axios from 'axios'
 import moment from 'moment'
 import Router from 'next/router'
@@ -21,8 +8,10 @@ import Popup from 'reactjs-popup'
 import 'react-datetime/css/react-datetime.css'
 import 'reactjs-popup/dist/index.css'
 
+import AmountInput from '@components/amountInput'
 import Button from '@components/button'
 import IdBox from '@components/idBox'
+import Input from '@components/input'
 import Layout from '@components/layout'
 
 import { validateTransaction } from '@utils/validateTransaction'
@@ -154,12 +143,7 @@ const CreateTransaction: React.FC = () => {
               Título:
             </Text>
             <Input
-              variant="flushed"
-              size="sm"
               width="200px"
-              fontSize="16px"
-              borderColor="purple.400"
-              focusBorderColor="purple.600"
               isRequired={true}
               value={title}
               onChange={val => setTitle(val.target.value)}
@@ -199,11 +183,6 @@ const CreateTransaction: React.FC = () => {
                 padding="16px"
               >
                 <Input
-                  variant="flushed"
-                  size="sm"
-                  fontSize="16px"
-                  borderColor="purple.400"
-                  focusBorderColor="purple.600"
                   placeholder="Título"
                   isRequired={true}
                   value={items[index].itemName}
@@ -212,25 +191,12 @@ const CreateTransaction: React.FC = () => {
                   }
                 />
                 <Flex justify="space-between">
-                  <NumberInput
-                    variant="flushed"
-                    borderColor="purple.400"
-                    focusBorderColor="purple.600"
-                    size="sm"
-                    precision={2}
-                    step={0.5}
-                    min={0}
+                  <AmountInput
                     value={items[index].amount.toFixed(2)}
                     onChange={val =>
                       updateItem(index, { amount: parseFloat(val) })
                     }
-                  >
-                    <NumberInputField fontSize="16px" width="100px" />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
+                  />
                   <HStack spacing="4px" justify="flex-end">
                     {related.map(user => (
                       <IdBox
@@ -258,15 +224,11 @@ const CreateTransaction: React.FC = () => {
                       contentStyle={{
                         width: '300px',
                         display: 'flex',
-                        flexDirection: 'column'
+                        flexDirection: 'column',
+                        padding: '16px'
                       }}
                     >
                       <Input
-                        variant="flushed"
-                        size="sm"
-                        fontSize="16px"
-                        borderColor="purple.400"
-                        focusBorderColor="purple.600"
                         value={newRelated}
                         maxLength={2}
                         onChange={val =>
@@ -303,23 +265,10 @@ const CreateTransaction: React.FC = () => {
             {related.map((user, index) => (
               <Flex key={user}>
                 <IdBox id={user} marginRight="8px" marginLeft="16px" />
-                <NumberInput
-                  variant="flushed"
-                  borderColor="purple.400"
-                  focusBorderColor="purple.600"
-                  size="sm"
-                  precision={2}
-                  step={0.5}
-                  min={0}
+                <AmountInput
                   value={payers[index].amount.toFixed(2)}
                   onChange={val => updatePayer(index, parseFloat(val))}
-                >
-                  <NumberInputField fontSize="16px" width="100px" />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+                />
               </Flex>
             ))}
           </VStack>
