@@ -1,7 +1,8 @@
 export const IdBox = {
   baseStyle: {
+    display: 'table-cell',
     textAlign: 'center',
-    verticalAlign: 'center',
+    verticalAlign: 'middle',
     textTransform: 'uppercase'
   },
   sizes: {
@@ -9,7 +10,7 @@ export const IdBox = {
       borderRadius: '2px',
       width: '24px',
       height: '24px',
-      fontSize: '18px'
+      fontSize: '16px'
     },
     lg: {
       borderRadius: '8px',

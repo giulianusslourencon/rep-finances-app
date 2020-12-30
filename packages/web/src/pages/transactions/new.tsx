@@ -14,7 +14,7 @@ import IdBox from '@components/idBox'
 import Input from '@components/input'
 import Layout from '@components/layout'
 
-import { validateTransaction } from '@utils/validateTransaction'
+import { validateTransaction, validateUserId } from '@utils/validateTransaction'
 
 type TransactionItem = {
   itemName: string
@@ -38,6 +38,10 @@ const CreateTransaction: React.FC = () => {
   const [timestamp, setTimestamp] = useState(moment())
 
   const [items, setItems] = useState([{ ...baseItem }])
+  const [invalidItemsNamesIndexes, setInvalidItemsNamesIndexes] = useState(
+    [] as number[]
+  )
+
   const [payers, setPayers] = useState([] as TransactionPayer[])
 
   const [related, setRelated] = useState([] as string[])
@@ -45,9 +49,31 @@ const CreateTransaction: React.FC = () => {
 
   const [popupOpened, setPopupOpened] = useState(false)
 
+  const verifyInvalidItemsNames = () => {
+    const registeredNames: string[] = []
+    const duplicatedNames: string[] = []
+    for (const item of items) {
+      if (registeredNames.includes(item.itemName.trim()))
+        duplicatedNames.push(item.itemName.trim())
+      else registeredNames.push(item.itemName.trim())
+    }
+
+    const invalidIndexes = items
+      .map((item, index) => {
+        return { index, name: item.itemName }
+      })
+      .filter(item => duplicatedNames.includes(item.name.trim()))
+      .map(item => item.index)
+
+    setInvalidItemsNamesIndexes(invalidIndexes)
+  }
+
   const updateItem = (index: number, values: Partial<TransactionItem>) => {
     const updatedItems = [...items]
     Object.assign(updatedItems[index], values)
+
+    if (values.itemName !== undefined) verifyInvalidItemsNames()
+
     setItems(updatedItems)
   }
 
@@ -67,13 +93,13 @@ const CreateTransaction: React.FC = () => {
     updateItem(index, { related_users: itemRelated })
   }
 
+  const validateNewRelated = () => {
+    if (!validateUserId(newRelated)) return false
+    return !related.includes(newRelated)
+  }
+
   const addRelated = () => {
-    if (
-      related.includes(newRelated) ||
-      newRelated.length <= 0 ||
-      newRelated.length > 2
-    )
-      return
+    if (!validateNewRelated()) return
 
     const currentRelated = [...related]
     currentRelated.push(newRelated)
@@ -120,7 +146,10 @@ const CreateTransaction: React.FC = () => {
   const handleCreateTransaction = async () => {
     const transaction = getTransactionObject()
 
-    if (validateTransaction(transaction)) {
+    if (
+      invalidItemsNamesIndexes.length === 0 &&
+      validateTransaction(transaction)
+    ) {
       const response = await axios.post(
         'http://localhost:3333/api/transactions',
         transaction
@@ -185,6 +214,7 @@ const CreateTransaction: React.FC = () => {
                 <Input
                   placeholder="Título"
                   isRequired={true}
+                  isInvalid={invalidItemsNamesIndexes.includes(index)}
                   value={items[index].itemName}
                   onChange={val =>
                     updateItem(index, { itemName: val.target.value })
@@ -243,7 +273,7 @@ const CreateTransaction: React.FC = () => {
                           addRelated()
                           closePopup()
                         }}
-                        isDisabled={newRelated.length === 0}
+                        isDisabled={!validateNewRelated()}
                         marginX={'50px'}
                         marginTop={'8px'}
                       >
@@ -276,7 +306,10 @@ const CreateTransaction: React.FC = () => {
         <Flex justify="center">
           <Button
             onClick={handleCreateTransaction}
-            isDisabled={!validateTransaction(getTransactionObject())}
+            isDisabled={
+              invalidItemsNamesIndexes.length > 0 ||
+              !validateTransaction(getTransactionObject())
+            }
           >
             Criar Transação
           </Button>

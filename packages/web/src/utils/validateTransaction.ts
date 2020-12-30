@@ -55,8 +55,8 @@ const validateRelatedList = (relatedList: string[]) => {
   return true
 }
 
-const validateUserId = (userId: string) => {
-  const tester = /^[a-zA-Z][a-zA-Z0-9]?/
+export const validateUserId = (userId: string) => {
+  const tester = /^[a-zA-Z][a-zA-Z0-9]?$/
   if (!userId || userId.trim().length < 1 || userId.trim().length > 2) {
     return false
   }

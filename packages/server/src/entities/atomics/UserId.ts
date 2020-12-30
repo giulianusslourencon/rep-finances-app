@@ -11,7 +11,7 @@ export class UserId {
   }
 
   static create(userId: string): Either<InvalidUserIdError, UserId> {
-    if (!UserId.validate(userId)) {
+    if (!UserId.validate(userId.trim())) {
       return left(new InvalidUserIdError(userId))
     }
     return right(new UserId(userId.toUpperCase().trim()))
@@ -22,8 +22,8 @@ export class UserId {
   }
 
   static validate(userId: string): boolean {
-    const tester = /^[a-zA-Z][a-zA-Z0-9]?/
-    if (!userId || userId.trim().length < 1 || userId.trim().length > 2) {
+    const tester = /^[a-zA-Z][a-zA-Z0-9]?$/
+    if (!userId || userId.length < 1 || userId.length > 2) {
       return false
     }
     if (!tester.test(userId)) {
