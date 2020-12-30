@@ -1,5 +1,4 @@
 import { Box, Flex, HStack, StackDivider, Text, VStack } from '@chakra-ui/react'
-import axios from 'axios'
 import moment from 'moment'
 import Router from 'next/router'
 import React, { useState } from 'react'
@@ -10,10 +9,12 @@ import 'reactjs-popup/dist/index.css'
 
 import AmountInput from '@components/amountInput'
 import Button from '@components/button'
+import ErrorPopup from '@components/errorPopup'
 import IdBox from '@components/idBox'
 import Input from '@components/input'
 import Layout from '@components/layout'
 
+import API from '@utils/api'
 import { validateTransaction, validateUserId } from '@utils/validateTransaction'
 
 type TransactionItem = {
@@ -48,6 +49,10 @@ const CreateTransaction: React.FC = () => {
   const [newRelated, setNewRelated] = useState('')
 
   const [popupOpened, setPopupOpened] = useState(false)
+
+  const [errors, setErrors] = useState(
+    [] as { name: string; message: string }[]
+  )
 
   const verifyInvalidItemsNames = () => {
     const registeredNames: string[] = []
@@ -150,12 +155,16 @@ const CreateTransaction: React.FC = () => {
       invalidItemsNamesIndexes.length === 0 &&
       validateTransaction(transaction)
     ) {
-      const response = await axios.post(
-        'http://localhost:3333/api/transactions',
-        transaction
-      )
-      if (response.status === 201)
+      try {
+        const response = await API.post('/transactions', transaction)
         Router.push(`/transactions/item/${response.data._id}`)
+      } catch (error) {
+        const errorMessage = error.response?.data || {
+          name: error.code,
+          message: error.message
+        }
+        setErrors([errorMessage])
+      }
     }
   }
 
@@ -166,6 +175,7 @@ const CreateTransaction: React.FC = () => {
         spacing="8px"
         align="stretch"
       >
+        {errors.length > 0 && <ErrorPopup error={errors[0]} />}
         <Box>
           <Flex justify="space-between" align="flex-end">
             <Text fontSize="18px" fontWeight="600" color="purple.800">

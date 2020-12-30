@@ -1,12 +1,14 @@
 import { Box, Flex, Link, StackDivider, VStack } from '@chakra-ui/react'
-import axios from 'axios'
 import { NextPage } from 'next'
 import NextLink from 'next/link'
 import React from 'react'
 
 import Cash from '@components/cash'
+import ErrorPopup from '@components/errorPopup'
 import Layout from '@components/layout'
 import RelatedList from '@components/relatedList'
+
+import API from '@utils/api'
 
 type Transaction = {
   _id: string
@@ -17,6 +19,7 @@ type Transaction = {
 }
 
 type Props = {
+  error?: { name: string; message: string }
   transactions: Transaction[]
 }
 
@@ -30,7 +33,7 @@ const getFormattedDate = (isoDate: string) => {
   })
 }
 
-const Historic: NextPage<Props> = ({ transactions }) => {
+const Historic: NextPage<Props> = ({ error, transactions }) => {
   return (
     <Layout buttons={[{ title: 'Voltar', href: '/' }]}>
       <VStack
@@ -38,6 +41,7 @@ const Historic: NextPage<Props> = ({ transactions }) => {
         spacing="8px"
         align="stretch"
       >
+        {error && <ErrorPopup error={error} />}
         {transactions.map(transaction => (
           <NextLink
             href={`/transactions/item/${transaction._id}`}
@@ -67,12 +71,22 @@ const Historic: NextPage<Props> = ({ transactions }) => {
 Historic.getInitialProps = async () => {
   // const page = parseInt(query.page?.toString() || '0')
 
-  const response = await axios.get<Transaction[]>(
-    'http://localhost:3333/api/transactions'
-  )
-  const transactions = response.data
+  const props: Props = {
+    transactions: []
+  }
 
-  return { transactions: transactions }
+  try {
+    const response = await API.get<Transaction[]>('/transactions')
+    props.transactions = response.data
+  } catch (error) {
+    const errorMessage = error.response?.data || {
+      name: error.code,
+      message: error.message
+    }
+    props.error = errorMessage
+  }
+
+  return props
 }
 
 export default Historic

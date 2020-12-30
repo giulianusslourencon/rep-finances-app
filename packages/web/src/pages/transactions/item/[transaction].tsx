@@ -1,13 +1,15 @@
 import { Box, Flex, StackDivider, Text, VStack } from '@chakra-ui/react'
-import axios from 'axios'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
 
 import Cash from '@components/cash'
+import ErrorPopup from '@components/errorPopup'
 import Layout from '@components/layout'
 import RelatedList from '@components/relatedList'
 import TransactionData from '@components/transactionData'
+
+import API from '@utils/api'
 
 type Transaction = {
   _id: string
@@ -32,11 +34,12 @@ type Balance = {
 }
 
 type Props = {
+  error?: { name: string; message: string }
   transaction: Transaction
   balance: Balance
 }
 
-const Transaction: React.FC<Props> = ({ transaction, balance }) => {
+const Transaction: React.FC<Props> = ({ error, transaction, balance }) => {
   const { isFallback } = useRouter()
 
   if (isFallback) {
@@ -75,6 +78,7 @@ const Transaction: React.FC<Props> = ({ transaction, balance }) => {
         spacing="8px"
         align="stretch"
       >
+        {error && <ErrorPopup error={error} />}
         <Flex as="section" flexDir="column" align="center">
           <Box as="span" fontSize="32px" fontWeight="700" color="purple.800">
             {transaction.title}
@@ -144,14 +148,20 @@ const Transaction: React.FC<Props> = ({ transaction, balance }) => {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await axios.get<Transaction[]>(
-    'http://localhost:3333/api/transactions?skip=0&limit=5'
-  )
-  const transactions = response.data
+  let paths: { params: { transaction: string } }[] = []
+  try {
+    const response = await API.get<Transaction[]>('/transactions', {
+      params: {
+        skip: 0,
+        limit: 5
+      }
+    })
+    const transactions = response.data
 
-  const paths = transactions.map(transaction => {
-    return { params: { transaction: transaction._id } }
-  })
+    paths = transactions.map(transaction => {
+      return { params: { transaction: transaction._id } }
+    })
+  } catch (error) {}
 
   return {
     paths,
@@ -165,16 +175,36 @@ export const getStaticProps: GetStaticProps<
 > = async context => {
   const _id = context.params?.transaction || ''
 
-  const response = await axios.get<Props>(
-    `http://localhost:3333/api/transactions/${_id}`
-  )
-  const { transaction, balance } = response.data
+  const props: Props = {
+    balance: {},
+    transaction: {
+      _id: '',
+      amount: 0,
+      date: Date.now().toString(),
+      items: {},
+      month: '',
+      payers: {},
+      related: [],
+      title: ''
+    }
+  }
+
+  try {
+    const response = await API.get<Props>(`/transactions/${_id}`)
+    const { transaction, balance } = response.data
+
+    props.transaction = transaction
+    props.balance = balance
+  } catch (error) {
+    const errorMessage = error.response?.data || {
+      name: error.code,
+      message: error.message
+    }
+    props.error = errorMessage
+  }
 
   return {
-    props: {
-      transaction,
-      balance
-    }
+    props
   }
 }
 

@@ -1,11 +1,13 @@
 import { Flex, StackDivider, VStack } from '@chakra-ui/react'
-import axios from 'axios'
 import { GetStaticProps } from 'next'
 import React from 'react'
 
 import Cash from '@components/cash'
+import ErrorPopup from '@components/errorPopup'
 import IdBox from '@components/idBox'
 import Layout from '@components/layout'
+
+import API from '@utils/api'
 
 type Balance = {
   balance: {
@@ -14,10 +16,11 @@ type Balance = {
 }
 
 type Props = {
+  error?: { name: string; message: string }
   balance: [string, number][]
 }
 
-const Home: React.FC<Props> = ({ balance }) => {
+const Home: React.FC<Props> = ({ error, balance }) => {
   return (
     <Layout
       buttons={[
@@ -25,6 +28,7 @@ const Home: React.FC<Props> = ({ balance }) => {
         { title: 'Adicionar', href: '/transactions/new' }
       ]}
     >
+      {error && <ErrorPopup error={error} />}
       <VStack
         divider={<StackDivider borderColor="purple.800" />}
         spacing="8px"
@@ -42,13 +46,25 @@ const Home: React.FC<Props> = ({ balance }) => {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const response = await axios.get<Balance>('http://localhost:3333/api/balance')
-  const balance = response.data.balance
+  const props: Props = {
+    balance: []
+  }
+
+  try {
+    const response = await API.get<Balance>('/balance')
+    const balance = response.data.balance
+
+    props.balance = Object.entries(balance)
+  } catch (error) {
+    const errorMessage = error.response?.data || {
+      name: error.code,
+      message: error.message
+    }
+    props.error = errorMessage
+  }
 
   return {
-    props: {
-      balance: Object.entries(balance)
-    },
+    props,
     revalidate: 10
   }
 }
