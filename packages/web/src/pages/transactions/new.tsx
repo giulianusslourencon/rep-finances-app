@@ -5,7 +5,8 @@ import {
   StackDivider,
   Text,
   VStack,
-  WrapItem
+  WrapItem,
+  CloseButton
 } from '@chakra-ui/react'
 import moment from 'moment'
 import Router from 'next/router'
@@ -129,6 +130,14 @@ const CreateTransaction: React.FC = () => {
     setItems([...items, { ...baseItem }])
   }
 
+  const removeItem = (index: number) => {
+    if (items.length > 1 && index < items.length) {
+      const allItems = [...items]
+      allItems.splice(index, 1)
+      setItems(allItems)
+    }
+  }
+
   const closePopup = () => setPopupOpened(false)
 
   const getTransactionObject = () => {
@@ -229,15 +238,23 @@ const CreateTransaction: React.FC = () => {
                 borderWidth="1px"
                 padding="16px"
               >
-                <Input
-                  placeholder="Título"
-                  isRequired={true}
-                  isInvalid={invalidItemsNamesIndexes.includes(index)}
-                  value={items[index].itemName}
-                  onChange={val =>
-                    updateItem(index, { itemName: val.target.value })
-                  }
-                />
+                <Flex justify="space-between" align="center">
+                  <Input
+                    placeholder="Título"
+                    isRequired={true}
+                    isInvalid={invalidItemsNamesIndexes.includes(index)}
+                    value={items[index].itemName}
+                    onChange={val =>
+                      updateItem(index, { itemName: val.target.value })
+                    }
+                  />
+                  <CloseButton
+                    size="sm"
+                    color="red.500"
+                    onClick={() => removeItem(index)}
+                    isDisabled={items.length <= 1}
+                  />
+                </Flex>
                 <Flex justify="space-between" align="center">
                   <AmountInput
                     value={items[index].amount.toFixed(2)}
