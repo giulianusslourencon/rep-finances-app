@@ -1,8 +1,5 @@
 export const IdBox = {
   baseStyle: {
-    display: 'table-cell',
-    textAlign: 'center',
-    verticalAlign: 'middle',
     textTransform: 'uppercase'
   },
   sizes: {

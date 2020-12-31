@@ -1,4 +1,4 @@
-import { Box, Heading, Text } from '@chakra-ui/react'
+import { Box, BoxProps, Heading, Text } from '@chakra-ui/react'
 import React from 'react'
 
 type ErrorProps = {
@@ -8,9 +8,9 @@ type ErrorProps = {
   }
 }
 
-const ErrorPopup: React.FC<ErrorProps> = ({ error }) => {
+const ErrorPopup: React.FC<ErrorProps & BoxProps> = ({ error, ...props }) => {
   return (
-    <Box textAlign="center">
+    <Box textAlign="center" {...props}>
       <Heading color="red.500">{error.name}</Heading>
       <Text color="purple.800">{error.message}</Text>
     </Box>

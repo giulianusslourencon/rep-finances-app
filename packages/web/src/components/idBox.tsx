@@ -1,4 +1,4 @@
-import { Box, BoxProps, useStyleConfig } from '@chakra-ui/react'
+import { Center, CenterProps, useStyleConfig } from '@chakra-ui/react'
 import React from 'react'
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
   variant?: string
 }
 
-const IdBox: React.FC<Props & BoxProps> = ({
+const IdBox: React.FC<Props & CenterProps> = ({
   id,
   size,
   variant,
@@ -16,9 +16,9 @@ const IdBox: React.FC<Props & BoxProps> = ({
   const styles = useStyleConfig('IdBox', { size, variant })
 
   return (
-    <Box sx={styles} {...remaining}>
+    <Center sx={styles} {...remaining}>
       {id}
-    </Box>
+    </Center>
   )
 }
 

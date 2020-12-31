@@ -1,4 +1,4 @@
-import { Flex, Text, VStack } from '@chakra-ui/react'
+import { Flex, StackProps, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
 
 import Cash from './cash'
@@ -8,9 +8,13 @@ type Props = {
   data: { id: string; amount: number }[]
 }
 
-const TransactionData: React.FC<Props> = ({ children, data }) => {
+const TransactionData: React.FC<Props & StackProps> = ({
+  children,
+  data,
+  ...props
+}) => {
   return (
-    <VStack spacing="4px" align="flex-start">
+    <VStack spacing="4px" align="flex-start" {...props}>
       <Text color="purple.600" fontSize="18px">
         {children}
       </Text>

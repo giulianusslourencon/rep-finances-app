@@ -1,4 +1,12 @@
-import { Box, Flex, HStack, StackDivider, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Flex,
+  Wrap,
+  StackDivider,
+  Text,
+  VStack,
+  WrapItem
+} from '@chakra-ui/react'
 import moment from 'moment'
 import Router from 'next/router'
 import React, { useState } from 'react'
@@ -230,25 +238,26 @@ const CreateTransaction: React.FC = () => {
                     updateItem(index, { itemName: val.target.value })
                   }
                 />
-                <Flex justify="space-between">
+                <Flex justify="space-between" align="center">
                   <AmountInput
                     value={items[index].amount.toFixed(2)}
                     onChange={val =>
                       updateItem(index, { amount: parseFloat(val) })
                     }
                   />
-                  <HStack spacing="4px" justify="flex-end">
+                  <Wrap spacing="4px" justify="flex-end" align="center">
                     {related.map(user => (
-                      <IdBox
-                        id={user}
-                        key={user}
-                        onClick={() => changeUserOnItem(index, user)}
-                        variant={
-                          items[index].related_users.includes(user)
-                            ? 'solid'
-                            : 'outline'
-                        }
-                      />
+                      <WrapItem key={user}>
+                        <IdBox
+                          id={user}
+                          onClick={() => changeUserOnItem(index, user)}
+                          variant={
+                            items[index].related_users.includes(user)
+                              ? 'solid'
+                              : 'outline'
+                          }
+                        />
+                      </WrapItem>
                     ))}
                     <Popup
                       trigger={
@@ -290,7 +299,7 @@ const CreateTransaction: React.FC = () => {
                         Adicionar
                       </Button>
                     </Popup>
-                  </HStack>
+                  </Wrap>
                 </Flex>
               </Box>
             ))}

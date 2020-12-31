@@ -1,4 +1,11 @@
-import { Flex, Grid, Link, StackDivider, VStack } from '@chakra-ui/react'
+import {
+  Flex,
+  Grid,
+  GridProps,
+  Link,
+  StackDivider,
+  VStack
+} from '@chakra-ui/react'
 import NextLink from 'next/link'
 import React from 'react'
 
@@ -6,7 +13,11 @@ type Props = {
   buttons: { title: string; href: string }[]
 }
 
-const Layout: React.FC<Props> = ({ buttons = [], children }) => {
+const Layout: React.FC<Props & GridProps> = ({
+  buttons = [],
+  children,
+  ...props
+}) => {
   return (
     <Grid
       as="main"
@@ -20,6 +31,7 @@ const Layout: React.FC<Props> = ({ buttons = [], children }) => {
       "
       justifyContent="center"
       alignItems="center"
+      {...props}
     >
       <Flex gridArea="content" flexDir="column" justify="stretch">
         {buttons.length > 0 && (
