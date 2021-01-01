@@ -39,11 +39,11 @@ export const validateTransaction = (transaction: Transaction): boolean => {
   return true
 }
 
-const validateLabel = (label: string) => {
+export const validateLabel = (label: string) => {
   return label.trim().length >= 2 && label.trim().length <= 255
 }
 
-const validateAmount = (amount: number) => {
+export const validateAmount = (amount: number) => {
   return amount > 0
 }
 

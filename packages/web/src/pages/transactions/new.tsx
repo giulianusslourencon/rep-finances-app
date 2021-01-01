@@ -6,7 +6,8 @@ import {
   Text,
   VStack,
   WrapItem,
-  CloseButton
+  CloseButton,
+  Tooltip
 } from '@chakra-ui/react'
 import moment from 'moment'
 import Router from 'next/router'
@@ -24,7 +25,12 @@ import Input from '@components/input'
 import Layout from '@components/layout'
 
 import API from '@utils/api'
-import { validateTransaction, validateUserId } from '@utils/validateTransaction'
+import {
+  validateAmount,
+  validateLabel,
+  validateTransaction,
+  validateUserId
+} from '@utils/validateTransaction'
 
 type TransactionItem = {
   itemName: string
@@ -58,6 +64,7 @@ const CreateTransaction: React.FC = () => {
   const [newRelated, setNewRelated] = useState('')
 
   const [popupOpened, setPopupOpened] = useState(false)
+  const [selectedItemIndex, setSelectedItemIndex] = useState(0)
 
   const [errors, setErrors] = useState(
     [] as { name: string; message: string }[]
@@ -121,6 +128,7 @@ const CreateTransaction: React.FC = () => {
     const currentPayers = [...payers]
     currentPayers.push({ userId: newRelated, amount: 0 })
 
+    changeUserOnItem(selectedItemIndex, newRelated)
     setNewRelated('')
     setRelated(currentRelated)
     setPayers(currentPayers)
@@ -194,36 +202,55 @@ const CreateTransaction: React.FC = () => {
       >
         {errors.length > 0 && <ErrorPopup error={errors[0]} />}
         <Box>
-          <Flex justify="space-between" align="flex-end">
-            <Text fontSize="18px" fontWeight="600" color="purple.800">
-              Título:
-            </Text>
-            <Input
-              width="200px"
-              isRequired={true}
-              value={title}
-              onChange={val => setTitle(val.target.value)}
-            />
-          </Flex>
-          <Flex justify="space-between" align="flex-end">
-            <Text fontSize="18px" fontWeight="600" color="purple.800">
-              Data/Hora:
-            </Text>
-            <DatePicker
-              dateFormat="DD-MM-YYYY"
-              timeFormat="hh:mm A"
-              inputProps={{
-                style: {
-                  backgroundColor: '#E6FB71',
-                  borderBottom: '1px solid #CB60D3',
-                  width: '200px',
-                  fontSize: '16px'
-                }
-              }}
-              value={timestamp}
-              onChange={val => setTimestamp(val as typeof timestamp)}
-            />
-          </Flex>
+          <Tooltip
+            shouldWrapChildren
+            label="Título da transação"
+            openDelay={500}
+            hasArrow
+            placement="top"
+          >
+            <Flex justify="space-between" align="flex-end">
+              <Text fontSize="18px" fontWeight="600" color="purple.800">
+                Título:
+              </Text>
+              <Input
+                width="200px"
+                placeholder="Título"
+                isRequired={true}
+                isInvalid={!validateLabel(title)}
+                value={title}
+                onChange={val => setTitle(val.target.value)}
+              />
+            </Flex>
+          </Tooltip>
+          <Tooltip
+            shouldWrapChildren
+            label="Momento em que a transação aconteceu"
+            openDelay={500}
+            hasArrow
+            placement="top"
+          >
+            <Flex justify="space-between" align="flex-end">
+              <Text fontSize="18px" fontWeight="600" color="purple.800">
+                Data/Hora:
+              </Text>
+              <DatePicker
+                dateFormat="DD-MM-YYYY"
+                timeFormat="hh:mm A"
+                inputProps={{
+                  style: {
+                    backgroundColor: '#E6FB71',
+                    borderBottom: '1px solid #CB60D3',
+                    width: '200px',
+                    fontSize: '16px'
+                  }
+                }}
+                locale={'pt-BR'}
+                value={timestamp}
+                onChange={val => setTimestamp(val as typeof timestamp)}
+              />
+            </Flex>
+          </Tooltip>
         </Box>
         <Box>
           <Text fontSize="18px" fontWeight="600" color="purple.800">
@@ -239,29 +266,61 @@ const CreateTransaction: React.FC = () => {
                 padding="16px"
               >
                 <Flex justify="space-between" align="center">
-                  <Input
-                    placeholder="Título"
-                    isRequired={true}
-                    isInvalid={invalidItemsNamesIndexes.includes(index)}
-                    value={items[index].itemName}
-                    onChange={val =>
-                      updateItem(index, { itemName: val.target.value })
+                  <Tooltip
+                    shouldWrapChildren
+                    label="Nome do item"
+                    openDelay={500}
+                    hasArrow
+                    placement="top"
+                  >
+                    <Input
+                      placeholder="Item"
+                      isRequired={true}
+                      isInvalid={
+                        !validateLabel(items[index].itemName) ||
+                        invalidItemsNamesIndexes.includes(index)
+                      }
+                      value={items[index].itemName}
+                      onChange={val =>
+                        updateItem(index, { itemName: val.target.value })
+                      }
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    shouldWrapChildren
+                    label={
+                      items.length <= 1
+                        ? 'Não é possível uma transação com menos de um item'
+                        : 'Excluir item'
                     }
-                  />
-                  <CloseButton
-                    size="sm"
-                    color="red.500"
-                    onClick={() => removeItem(index)}
-                    isDisabled={items.length <= 1}
-                  />
+                    openDelay={500}
+                    hasArrow
+                    placement="top"
+                  >
+                    <CloseButton
+                      size="sm"
+                      color="red.500"
+                      onClick={() => removeItem(index)}
+                      isDisabled={items.length <= 1}
+                    />
+                  </Tooltip>
                 </Flex>
                 <Flex justify="space-between" align="center">
-                  <AmountInput
-                    value={items[index].amount.toFixed(2)}
-                    onChange={val =>
-                      updateItem(index, { amount: parseFloat(val) })
-                    }
-                  />
+                  <Tooltip
+                    shouldWrapChildren
+                    label="Valor do item"
+                    openDelay={500}
+                    hasArrow
+                    placement="top"
+                  >
+                    <AmountInput
+                      value={items[index].amount.toFixed(2)}
+                      onChange={val =>
+                        updateItem(index, { amount: parseFloat(val) })
+                      }
+                      isInvalid={!validateAmount(items[index].amount)}
+                    />
+                  </Tooltip>
                   <Wrap spacing="4px" justify="flex-end" align="center">
                     {related.map(user => (
                       <WrapItem key={user}>
@@ -278,7 +337,21 @@ const CreateTransaction: React.FC = () => {
                     ))}
                     <Popup
                       trigger={
-                        <IdBox id={'+'} onClick={() => setPopupOpened(true)} />
+                        <Tooltip
+                          shouldWrapChildren
+                          label="Adicionar usuários relacionados"
+                          openDelay={500}
+                          hasArrow
+                          placement="top"
+                        >
+                          <IdBox
+                            id={'+'}
+                            onClick={() => {
+                              setPopupOpened(true)
+                              setSelectedItemIndex(index)
+                            }}
+                          />
+                        </Tooltip>
                       }
                       open={popupOpened}
                       onClose={closePopup}
@@ -294,16 +367,24 @@ const CreateTransaction: React.FC = () => {
                         padding: '16px'
                       }}
                     >
-                      <Input
-                        value={newRelated}
-                        maxLength={2}
-                        onChange={val =>
-                          setNewRelated(val.target.value.trim().toUpperCase())
-                        }
-                        onKeyDown={event => {
-                          if (event.key.valueOf() === 'Enter') addRelated()
-                        }}
-                      />
+                      <Tooltip
+                        shouldWrapChildren
+                        label="Id do usuário"
+                        openDelay={500}
+                        hasArrow
+                        placement="top"
+                      >
+                        <Input
+                          value={newRelated}
+                          maxLength={2}
+                          onChange={val =>
+                            setNewRelated(val.target.value.trim().toUpperCase())
+                          }
+                          onKeyDown={event => {
+                            if (event.key.valueOf() === 'Enter') addRelated()
+                          }}
+                        />
+                      </Tooltip>
                       <Button
                         onClick={() => {
                           addRelated()
