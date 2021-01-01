@@ -383,6 +383,7 @@ const CreateTransaction: React.FC = () => {
                           onKeyDown={event => {
                             if (event.key.valueOf() === 'Enter') addRelated()
                           }}
+                          isInvalid={!validateNewRelated()}
                         />
                       </Tooltip>
                       <Button

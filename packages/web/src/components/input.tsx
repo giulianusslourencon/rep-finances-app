@@ -9,6 +9,7 @@ const StyledInput: React.FC<InputProps> = ({ ...props }) => {
       fontSize="16px"
       borderColor="purple.400"
       focusBorderColor="purple.600"
+      errorBorderColor="red.500"
       minLength={2}
       maxLength={255}
       {...props}
