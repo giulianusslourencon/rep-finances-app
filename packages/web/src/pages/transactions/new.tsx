@@ -1,3 +1,4 @@
+import { InfoOutlineIcon } from '@chakra-ui/icons'
 import {
   Box,
   Flex,
@@ -7,7 +8,14 @@ import {
   VStack,
   WrapItem,
   CloseButton,
-  Tooltip
+  Tooltip,
+  HStack,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
+  Heading
 } from '@chakra-ui/react'
 import moment from 'moment'
 import Router from 'next/router'
@@ -173,13 +181,13 @@ const CreateTransaction: React.FC = () => {
     }
   }
 
-  const handleCreateTransaction = async () => {
-    const transaction = getTransactionObject()
+  const transaction = getTransactionObject()
+  let { validated, errorMessage } = validateTransaction(transaction)
 
-    if (
-      invalidItemsNamesIndexes.length === 0 &&
-      validateTransaction(transaction)
-    ) {
+  validated &&= invalidItemsNamesIndexes.length === 0
+
+  const handleCreateTransaction = async () => {
+    if (validated) {
       try {
         const response = await API.post('/transactions', transaction)
         Router.push(`/transactions/item/${response.data._id}`)
@@ -408,7 +416,7 @@ const CreateTransaction: React.FC = () => {
         </Box>
         <Box>
           <Text fontSize="18px" fontWeight="600" color="purple.800">
-            Pagadores:
+            Pagamento:
           </Text>
           <VStack spacing="4px" align="flex-start">
             {related.map((user, index) => (
@@ -422,17 +430,30 @@ const CreateTransaction: React.FC = () => {
             ))}
           </VStack>
         </Box>
-        <Flex justify="center">
-          <Button
-            onClick={handleCreateTransaction}
-            isDisabled={
-              invalidItemsNamesIndexes.length > 0 ||
-              !validateTransaction(getTransactionObject())
-            }
-          >
+        <HStack justify="center" align="center" spacing="8px">
+          <Button onClick={handleCreateTransaction} isDisabled={!validated}>
             Criar Transação
           </Button>
-        </Flex>
+          {!validated && (
+            <Popover trigger="hover">
+              <PopoverTrigger>
+                <InfoOutlineIcon color="red.500" />
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverHeader>
+                  <Heading size="lg" color="red.500">
+                    Error!
+                  </Heading>
+                </PopoverHeader>
+                <PopoverBody>
+                  {invalidItemsNamesIndexes.length > 0
+                    ? `Itens com índices (${invalidItemsNamesIndexes}) estão com nomes duplicados`
+                    : errorMessage}
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          )}
+        </HStack>
       </VStack>
     </Layout>
   )

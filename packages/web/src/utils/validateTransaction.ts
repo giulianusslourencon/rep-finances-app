@@ -16,10 +16,41 @@ type TransactionPayers = {
   [userId: string]: number
 }
 
-export const validateTransaction = (transaction: Transaction): boolean => {
-  if (!validateLabel(transaction.title)) return false
-  if (!validateItems(transaction.items)) return false
-  if (!validatePayers(transaction.payers)) return false
+type ValidationResult = {
+  validated: boolean
+  errorMessage?: string
+}
+
+export const validateTransaction = (
+  transaction: Transaction
+): ValidationResult => {
+  if (!validateLabel(transaction.title))
+    return {
+      validated: false,
+      errorMessage: 'O título da transação deve ter entre 2 e 255 caracteres'
+    }
+
+  for (const [itemName, { related_users, amount }] of Object.entries(
+    transaction.items
+  )) {
+    if (!validateLabel(itemName))
+      return {
+        validated: false,
+        errorMessage:
+          'Os títulos de todos os itens devem ter entre 2 e 255 caracteres'
+      }
+    if (!validateAmount(amount))
+      return {
+        validated: false,
+        errorMessage: 'Todos os valores devem ser maiores do que 0'
+      }
+
+    if (related_users.length === 0)
+      return {
+        validated: false,
+        errorMessage: 'Todos os itens devem ter ao menos uma pessoa relacionada'
+      }
+  }
 
   const itemsValues = Object.values(transaction.items).reduce((acc, cur) => {
     return acc + cur.amount
@@ -30,13 +61,15 @@ export const validateTransaction = (transaction: Transaction): boolean => {
   }, 0)
 
   if (itemsValues !== totalPaid) {
-    return false
-  }
-  if (itemsValues === 0) {
-    return false
+    return {
+      validated: false,
+      errorMessage: `Valor total dos itens (R$ ${itemsValues.toFixed(
+        2
+      )}) não corresponde ao total pago (R$ ${totalPaid.toFixed(2)})`
+    }
   }
 
-  return true
+  return { validated: true }
 }
 
 export const validateLabel = (label: string) => {
@@ -47,14 +80,6 @@ export const validateAmount = (amount: number) => {
   return amount > 0
 }
 
-const validateRelatedList = (relatedList: string[]) => {
-  if (relatedList.length === 0) return false
-  for (const userId of relatedList) {
-    if (!validateUserId(userId)) return false
-  }
-  return true
-}
-
 export const validateUserId = (userId: string) => {
   const tester = /^[a-zA-Z][a-zA-Z0-9]?$/
   if (!userId || userId.trim().length < 1 || userId.trim().length > 2) {
@@ -62,23 +87,6 @@ export const validateUserId = (userId: string) => {
   }
   if (!tester.test(userId)) {
     return false
-  }
-  return true
-}
-
-const validateItems = (items: TransactionItems) => {
-  for (const [itemName, { related_users, amount }] of Object.entries(items)) {
-    if (!validateLabel(itemName)) return false
-    if (!validateRelatedList(related_users)) return false
-    if (!validateAmount(amount)) return false
-  }
-  return true
-}
-
-const validatePayers = (payers: TransactionPayers) => {
-  for (const [userId, amount] of Object.entries(payers)) {
-    if (!validateUserId(userId)) return false
-    if (!validateAmount(amount)) return false
   }
   return true
 }
