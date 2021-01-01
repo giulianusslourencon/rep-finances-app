@@ -1,7 +1,7 @@
 import { Input, InputProps } from '@chakra-ui/react'
 import React from 'react'
 
-const StyledInput: React.FC<InputProps> = ({ ...props }) => {
+const LabelInput: React.FC<InputProps> = ({ ...props }) => {
   return (
     <Input
       variant="flushed"
@@ -17,4 +17,4 @@ const StyledInput: React.FC<InputProps> = ({ ...props }) => {
   )
 }
 
-export default StyledInput
+export default LabelInput

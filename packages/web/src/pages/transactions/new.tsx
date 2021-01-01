@@ -21,7 +21,7 @@ import AmountInput from '@components/amountInput'
 import Button from '@components/button'
 import ErrorPopup from '@components/errorPopup'
 import IdBox from '@components/idBox'
-import Input from '@components/input'
+import LabelInput from '@components/labelInput'
 import Layout from '@components/layout'
 
 import API from '@utils/api'
@@ -213,7 +213,7 @@ const CreateTransaction: React.FC = () => {
               <Text fontSize="18px" fontWeight="600" color="purple.800">
                 Título:
               </Text>
-              <Input
+              <LabelInput
                 width="200px"
                 placeholder="Título"
                 isRequired={true}
@@ -273,7 +273,7 @@ const CreateTransaction: React.FC = () => {
                     hasArrow
                     placement="top"
                   >
-                    <Input
+                    <LabelInput
                       placeholder="Item"
                       isRequired={true}
                       isInvalid={
@@ -374,8 +374,9 @@ const CreateTransaction: React.FC = () => {
                         hasArrow
                         placement="top"
                       >
-                        <Input
+                        <LabelInput
                           value={newRelated}
+                          minLength={1}
                           maxLength={2}
                           onChange={val =>
                             setNewRelated(val.target.value.trim().toUpperCase())
