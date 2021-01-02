@@ -16,7 +16,11 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Heading,
-  PopoverCloseButton
+  PopoverCloseButton,
+  Alert,
+  AlertIcon,
+  AlertDescription,
+  AlertTitle
 } from '@chakra-ui/react'
 import moment from 'moment'
 import Router from 'next/router'
@@ -422,15 +426,16 @@ const CreateTransaction: React.FC = () => {
                 <InfoOutlineIcon color="red.500" />
               </PopoverTrigger>
               <PopoverContent>
-                <PopoverHeader>
-                  <Heading size="lg" color="red.500">
-                    Error!
-                  </Heading>
-                </PopoverHeader>
                 <PopoverBody>
-                  {invalidItemsNamesIndexes.length > 0
-                    ? `Itens com índices (${invalidItemsNamesIndexes}) estão com nomes duplicados`
-                    : errorMessage}
+                  <Alert status="error">
+                    <AlertIcon color="red.500" />
+                    <AlertTitle mr={4}>Error!</AlertTitle>
+                    <AlertDescription textAlign="center">
+                      {invalidItemsNamesIndexes.length > 0
+                        ? `Itens com índices (${invalidItemsNamesIndexes}) estão com nomes duplicados`
+                        : errorMessage}
+                    </AlertDescription>
+                  </Alert>
                 </PopoverBody>
               </PopoverContent>
             </Popover>
