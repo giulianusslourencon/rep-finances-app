@@ -12,7 +12,7 @@ const RelatedList: React.FC<Props & WrapProps> = ({ related, ...props }) => {
     <Wrap spacing="4px" justify="flex-end" align="center" {...props}>
       {related.map(user => (
         <WrapItem key={user}>
-          <IdBox id={user} />
+          <IdBox userId={user} />
         </WrapItem>
       ))}
     </Wrap>

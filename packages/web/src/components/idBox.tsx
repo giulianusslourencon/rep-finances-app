@@ -2,13 +2,13 @@ import { Center, CenterProps, useStyleConfig } from '@chakra-ui/react'
 import React from 'react'
 
 type Props = {
-  id: string
+  userId: string
   size?: string
   variant?: string
 }
 
 const IdBox: React.FC<Props & CenterProps> = ({
-  id,
+  userId,
   size,
   variant,
   ...remaining
@@ -17,7 +17,7 @@ const IdBox: React.FC<Props & CenterProps> = ({
 
   return (
     <Center sx={styles} {...remaining}>
-      {id}
+      {userId}
     </Center>
   )
 }

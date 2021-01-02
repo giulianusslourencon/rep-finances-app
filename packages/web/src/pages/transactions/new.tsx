@@ -15,15 +15,14 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Heading
+  Heading,
+  PopoverCloseButton
 } from '@chakra-ui/react'
 import moment from 'moment'
 import Router from 'next/router'
 import React, { useState } from 'react'
 import DatePicker from 'react-datetime'
-import Popup from 'reactjs-popup'
 import 'react-datetime/css/react-datetime.css'
-import 'reactjs-popup/dist/index.css'
 
 import AmountInput from '@components/amountInput'
 import Button from '@components/button'
@@ -70,9 +69,6 @@ const CreateTransaction: React.FC = () => {
 
   const [related, setRelated] = useState([] as string[])
   const [newRelated, setNewRelated] = useState('')
-
-  const [popupOpened, setPopupOpened] = useState(false)
-  const [selectedItemIndex, setSelectedItemIndex] = useState(0)
 
   const [errors, setErrors] = useState(
     [] as { name: string; message: string }[]
@@ -127,7 +123,7 @@ const CreateTransaction: React.FC = () => {
     return !related.includes(newRelated)
   }
 
-  const addRelated = () => {
+  const addRelated = (selectedItemIndex: number) => {
     if (!validateNewRelated()) return
 
     const currentRelated = [...related]
@@ -153,8 +149,6 @@ const CreateTransaction: React.FC = () => {
       setItems(allItems)
     }
   }
-
-  const closePopup = () => setPopupOpened(false)
 
   const getTransactionObject = () => {
     const objItems = {} as {
@@ -333,7 +327,7 @@ const CreateTransaction: React.FC = () => {
                     {related.map(user => (
                       <WrapItem key={user}>
                         <IdBox
-                          id={user}
+                          userId={user}
                           onClick={() => changeUserOnItem(index, user)}
                           variant={
                             items[index].related_users.includes(user)
@@ -343,70 +337,58 @@ const CreateTransaction: React.FC = () => {
                         />
                       </WrapItem>
                     ))}
-                    <Popup
-                      trigger={
-                        <Tooltip
-                          shouldWrapChildren
-                          label="Adicionar usuários relacionados"
-                          openDelay={500}
-                          hasArrow
-                          placement="top"
-                        >
-                          <IdBox
-                            id={'+'}
-                            onClick={() => {
-                              setPopupOpened(true)
-                              setSelectedItemIndex(index)
-                            }}
-                          />
-                        </Tooltip>
-                      }
-                      open={popupOpened}
-                      onClose={closePopup}
-                      position="center center"
-                      arrow={false}
-                      closeOnDocumentClick
-                      closeOnEscape
-                      modal={true}
-                      contentStyle={{
-                        width: '300px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        padding: '16px'
-                      }}
-                    >
-                      <Tooltip
-                        shouldWrapChildren
-                        label="Id do usuário"
-                        openDelay={500}
-                        hasArrow
-                        placement="top"
-                      >
-                        <LabelInput
-                          value={newRelated}
-                          minLength={1}
-                          maxLength={2}
-                          onChange={val =>
-                            setNewRelated(val.target.value.trim().toUpperCase())
-                          }
-                          onKeyDown={event => {
-                            if (event.key.valueOf() === 'Enter') addRelated()
-                          }}
-                          isInvalid={!validateNewRelated()}
-                        />
-                      </Tooltip>
-                      <Button
-                        onClick={() => {
-                          addRelated()
-                          closePopup()
-                        }}
-                        isDisabled={!validateNewRelated()}
-                        marginX={'50px'}
-                        marginTop={'8px'}
-                      >
-                        Adicionar
-                      </Button>
-                    </Popup>
+                    <WrapItem>
+                      <Popover placement="right">
+                        <PopoverTrigger>
+                          <IdBox as="button" userId={'+'} />
+                        </PopoverTrigger>
+                        <PopoverContent>
+                          <PopoverHeader>
+                            <Heading
+                              size="sm"
+                              textAlign="center"
+                              color="purple.800"
+                            >
+                              Adicionar usuários relacionados
+                            </Heading>
+                          </PopoverHeader>
+                          <PopoverCloseButton />
+                          <PopoverBody>
+                            <Tooltip
+                              shouldWrapChildren
+                              label="Id do usuário"
+                              openDelay={500}
+                              hasArrow
+                              placement="top"
+                            >
+                              <LabelInput
+                                value={newRelated}
+                                minLength={1}
+                                maxLength={2}
+                                onChange={val =>
+                                  setNewRelated(
+                                    val.target.value.trim().toUpperCase()
+                                  )
+                                }
+                                onKeyDown={event => {
+                                  if (event.key.valueOf() === 'Enter')
+                                    addRelated(index)
+                                }}
+                                isInvalid={!validateNewRelated()}
+                              />
+                            </Tooltip>
+                            <Button
+                              onClick={() => addRelated(index)}
+                              isDisabled={!validateNewRelated()}
+                              marginX={'50px'}
+                              marginTop={'8px'}
+                            >
+                              Adicionar
+                            </Button>
+                          </PopoverBody>
+                        </PopoverContent>
+                      </Popover>
+                    </WrapItem>
                   </Wrap>
                 </Flex>
               </Box>
@@ -421,7 +403,7 @@ const CreateTransaction: React.FC = () => {
           <VStack spacing="4px" align="flex-start">
             {related.map((user, index) => (
               <Flex key={user}>
-                <IdBox id={user} marginRight="8px" marginLeft="16px" />
+                <IdBox userId={user} marginRight="8px" marginLeft="16px" />
                 <AmountInput
                   value={payers[index].amount.toFixed(2)}
                   onChange={val => updatePayer(index, parseFloat(val))}
