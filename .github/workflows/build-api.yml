@@ -5,6 +5,8 @@ on:
     branches: [ production ]
     paths:
       - 'packages/server/**'
+  
+  workflow_dispatch:
 
 jobs:
   build:
