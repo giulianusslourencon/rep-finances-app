@@ -17,10 +17,9 @@ export abstract class MongoRepository implements IRepository {
       ? `${mongoConfig.username}:${mongoConfig.password}@`
       : ''
 
-    const uri =
-      mongoConfig.host.split('://')[0] === 'mongodb'
-        ? mongoConfig.host
-        : `mongodb://${mongoUserPass}${mongoConfig.host}:${mongoConfig.port}/${mongoConfig.database}`
+    const uri = mongoConfig.host.split('://')[0].startsWith('mongodb')
+      ? mongoConfig.host
+      : `mongodb://${mongoUserPass}${mongoConfig.host}:${mongoConfig.port}/${mongoConfig.database}`
 
     mongoose
       .connect(uri, {

@@ -1,3 +1,5 @@
+import 'dotenv/config.js'
+
 interface MongoConfig {
   host: string
   port: number
