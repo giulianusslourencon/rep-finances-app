@@ -20,7 +20,7 @@ const TransactionData: React.FC<Props & StackProps> = ({
       </Text>
       {data.map(user => (
         <Flex key={user.id} align="center">
-          <IdBox id={user.id} marginRight="4px" marginLeft="16px" />
+          <IdBox userId={user.id} marginRight="4px" marginLeft="16px" />
           <Cash amount={user.amount} />
         </Flex>
       ))}
