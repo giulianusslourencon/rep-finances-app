@@ -1,4 +1,4 @@
-import { Box, Flex, StackDivider, Text, VStack } from '@chakra-ui/react'
+import { Box, Flex, Grid, StackDivider, Text, VStack } from '@chakra-ui/react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -116,15 +116,28 @@ const Transaction: React.FC<Props> = ({ error, transaction, balance }) => {
           align="stretch"
         >
           {Object.entries(transaction.items).map(item => (
-            <Flex justify="space-between" align="center" key={item[0]}>
-              <Text color="purple.600" fontSize="16px">
+            <Grid
+              key={item[0]}
+              templateColumns="120px 1fr 110px"
+              templateRows="1fr"
+              templateAreas="
+                'itemName relatedUsers amount'
+              "
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Text gridArea="itemName" color="purple.600" fontSize="16px">
                 {item[0]}
               </Text>
-              <RelatedList related={item[1].related_users} />
-              <Flex flexDir="column" align="flex-end">
+              <RelatedList
+                gridArea="relatedUsers"
+                related={item[1].related_users}
+                justify="center"
+              />
+              <Flex gridArea="amount" flexDir="column" align="end">
                 <Cash amount={item[1].amount} />
                 {item[1].related_users.length > 1 && (
-                  <Flex align="center">
+                  <Flex align="center" justify="end">
                     <Text
                       marginRight="2px"
                       fontWeight="300"
@@ -139,7 +152,7 @@ const Transaction: React.FC<Props> = ({ error, transaction, balance }) => {
                   </Flex>
                 )}
               </Flex>
-            </Flex>
+            </Grid>
           ))}
         </VStack>
       </VStack>
