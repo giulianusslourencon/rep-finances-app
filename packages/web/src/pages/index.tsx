@@ -31,7 +31,7 @@ const Home: React.FC<Props> = ({ error, balance }) => {
       {error && <ErrorPopup error={error} />}
       <VStack
         divider={<StackDivider borderColor="purple.800" />}
-        spacing="8px"
+        spacing={2}
         align="stretch"
       >
         {balance

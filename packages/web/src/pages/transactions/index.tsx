@@ -1,4 +1,4 @@
-import { Box, Flex, Link, StackDivider, VStack } from '@chakra-ui/react'
+import { Flex, Link, StackDivider, VStack } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import NextLink from 'next/link'
 import React from 'react'
@@ -7,6 +7,8 @@ import Cash from '@components/Cash'
 import ErrorPopup from '@components/ErrorPopup'
 import Layout from '@components/Layout'
 import RelatedList from '@components/RelatedList'
+import Time from '@components/Time'
+import Title from '@components/Title'
 
 import API from '@utils/api'
 
@@ -38,7 +40,7 @@ const Historic: NextPage<Props> = ({ error, transactions }) => {
     <Layout buttons={[{ title: 'Voltar', href: '/' }]}>
       <VStack
         divider={<StackDivider borderColor="purple.800" />}
-        spacing="8px"
+        spacing={2}
         align="stretch"
       >
         {error && <ErrorPopup error={error} />}
@@ -49,12 +51,10 @@ const Historic: NextPage<Props> = ({ error, transactions }) => {
           >
             <Flex flexDir="column">
               <Flex justify="space-between" align="flex-start">
-                <Link fontSize="24px" color="purple.800" fontWeight="700">
-                  {transaction.title}
+                <Link>
+                  <Title size="md">{transaction.title}</Title>
                 </Link>
-                <Box fontSize="16px" color="purple.600" fontWeight="600">
-                  {getFormattedDate(transaction.date)}
-                </Box>
+                <Time>{getFormattedDate(transaction.date)}</Time>
               </Flex>
               <Flex justify="space-between" align="flex-end">
                 <Cash amount={transaction.amount} />

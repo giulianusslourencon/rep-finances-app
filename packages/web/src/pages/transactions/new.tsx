@@ -4,7 +4,6 @@ import {
   Flex,
   Wrap,
   StackDivider,
-  Text,
   VStack,
   WrapItem,
   CloseButton,
@@ -30,6 +29,7 @@ import ErrorPopup from '@components/ErrorPopup'
 import IdBox from '@components/IdBox'
 import LabelInput from '@components/LabelInput'
 import Layout from '@components/Layout'
+import Text from '@components/Text'
 
 import API from '@utils/api'
 import {
@@ -199,7 +199,7 @@ const CreateTransaction: React.FC = () => {
     <Layout buttons={[{ title: 'Voltar', href: '/' }]}>
       <VStack
         divider={<StackDivider borderColor="purple.800" />}
-        spacing="8px"
+        spacing={2}
         align="stretch"
       >
         {errors.length > 0 && <ErrorPopup error={errors[0]} />}
@@ -212,11 +212,9 @@ const CreateTransaction: React.FC = () => {
             placement="top"
           >
             <Flex justify="space-between" align="flex-end">
-              <Text fontSize="18px" fontWeight="600" color="purple.800">
-                Título:
-              </Text>
+              <Text fontSize="lg">Título:</Text>
               <LabelInput
-                width="200px"
+                width="12.5rem"
                 placeholder="Título"
                 isRequired={true}
                 isInvalid={!validateLabel(title)}
@@ -233,9 +231,7 @@ const CreateTransaction: React.FC = () => {
             placement="top"
           >
             <Flex justify="space-between" align="flex-end">
-              <Text fontSize="18px" fontWeight="600" color="purple.800">
-                Data/Hora:
-              </Text>
+              <Text fontSize="lg">Data/Hora:</Text>
               <DatePicker
                 dateFormat="DD-MM-YYYY"
                 timeFormat="hh:mm A"
@@ -243,8 +239,8 @@ const CreateTransaction: React.FC = () => {
                   style: {
                     backgroundColor: '#E6FB71',
                     borderBottom: '1px solid #CB60D3',
-                    width: '200px',
-                    fontSize: '16px'
+                    width: '12.5rem',
+                    fontSize: 'lg'
                   }
                 }}
                 locale={'pt-BR'}
@@ -255,17 +251,15 @@ const CreateTransaction: React.FC = () => {
           </Tooltip>
         </Box>
         <Box>
-          <Text fontSize="18px" fontWeight="600" color="purple.800">
-            Itens:
-          </Text>
-          <VStack spacing="4px">
+          <Text fontSize="lg">Itens:</Text>
+          <VStack spacing={1}>
             {items.map((item, index) => (
               <Box
                 key={index}
-                borderRadius="16px"
+                borderRadius="1rem"
                 borderColor="purple.400"
                 borderWidth="1px"
-                padding="16px"
+                padding={4}
               >
                 <Flex justify="space-between" align="center">
                   <Tooltip
@@ -323,7 +317,7 @@ const CreateTransaction: React.FC = () => {
                       isInvalid={!validateAmount(items[index].amount)}
                     />
                   </Tooltip>
-                  <Wrap spacing="4px" justify="flex-end" align="center">
+                  <Wrap spacing={1} justify="flex-end" align="center">
                     {related.map(user => (
                       <WrapItem key={user}>
                         <IdBox
@@ -380,8 +374,8 @@ const CreateTransaction: React.FC = () => {
                             <Button
                               onClick={() => addRelated(index)}
                               isDisabled={!validateNewRelated()}
-                              marginX={'50px'}
-                              marginTop={'8px'}
+                              marginX={12.5}
+                              marginTop={2}
                             >
                               Adicionar
                             </Button>
@@ -397,13 +391,11 @@ const CreateTransaction: React.FC = () => {
           </VStack>
         </Box>
         <Box>
-          <Text fontSize="18px" fontWeight="600" color="purple.800">
-            Pagamento:
-          </Text>
-          <VStack spacing="4px" align="flex-start">
+          <Text fontSize="lg">Pagamento:</Text>
+          <VStack spacing={1} align="flex-start">
             {related.map((user, index) => (
               <Flex key={user}>
-                <IdBox userId={user} marginRight="8px" marginLeft="16px" />
+                <IdBox userId={user} marginRight={2} marginLeft={4} />
                 <AmountInput
                   value={payers[index].amount.toFixed(2)}
                   onChange={val => updatePayer(index, parseFloat(val))}
@@ -412,7 +404,7 @@ const CreateTransaction: React.FC = () => {
             ))}
           </VStack>
         </Box>
-        <HStack justify="center" align="center" spacing="8px">
+        <HStack justify="center" align="center" spacing={2}>
           <Button onClick={handleCreateTransaction} isDisabled={!validated}>
             Criar Transação
           </Button>

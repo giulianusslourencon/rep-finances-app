@@ -4,16 +4,16 @@ export const IdBox = {
   },
   sizes: {
     sm: {
-      borderRadius: '2px',
-      width: '24px',
-      height: '24px',
-      fontSize: '16px'
+      borderRadius: '0.125rem',
+      width: '1.5rem',
+      height: '1.5rem',
+      fontSize: '1rem'
     },
     lg: {
-      borderRadius: '8px',
-      width: '72px',
-      height: '72px',
-      fontSize: '52px'
+      borderRadius: '0.5rem',
+      width: '4.5rem',
+      height: '4.5rem',
+      fontSize: '3.25rem'
     }
   },
   variants: {

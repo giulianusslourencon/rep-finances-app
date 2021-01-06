@@ -25,7 +25,7 @@ const AmountInput: React.FC<AmountInputProps> = ({ fieldProps, ...props }) => {
       min={0}
       {...props}
     >
-      <NumberInputField fontSize="16px" width="100px" {...fieldProps} />
+      <NumberInputField fontSize="1rem" width="6.25rem" {...fieldProps} />
       <NumberInputStepper>
         <NumberIncrementStepper />
         <NumberDecrementStepper />

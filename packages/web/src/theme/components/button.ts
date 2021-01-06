@@ -1,7 +1,7 @@
 export const Button = {
   baseStyle: {
     textTransform: 'uppercase',
-    borderRadius: '16px'
+    borderRadius: '1rem'
   },
   variants: {
     outline: {

@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, StackDivider, Text, VStack } from '@chakra-ui/react'
+import { Flex, Grid, StackDivider, VStack } from '@chakra-ui/react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -7,6 +7,9 @@ import Cash from '@components/Cash'
 import ErrorPopup from '@components/ErrorPopup'
 import Layout from '@components/Layout'
 import RelatedList from '@components/RelatedList'
+import Text from '@components/Text'
+import Time from '@components/Time'
+import Title from '@components/Title'
 import TransactionData from '@components/TransactionData'
 
 import API from '@utils/api'
@@ -75,21 +78,19 @@ const Transaction: React.FC<Props> = ({ error, transaction, balance }) => {
     <Layout buttons={[{ title: 'Voltar', href: '/transactions' }]}>
       <VStack
         divider={<StackDivider borderColor="purple.800" />}
-        spacing="8px"
+        spacing={2}
         align="stretch"
       >
         {error && <ErrorPopup error={error} />}
-        <Flex as="section" flexDir="column" align="center">
-          <Box as="span" fontSize="32px" fontWeight="700" color="purple.800">
+        <Flex as="header" flexDir="column" align="center">
+          <Title as="h1" size="lg" textAlign="center">
             {transaction.title}
-          </Box>
-          <Box as="span" fontSize="16px" color="purple.600" fontWeight="600">
-            {formattedDate}
-          </Box>
+          </Title>
+          <Time>{formattedDate}</Time>
         </Flex>
-        <VStack spacing="6px" align="flex-start">
-          <Flex align="flex-end">
-            <Text color="purple.600" fontSize="18px" marginRight="4px">
+        <VStack spacing={1.5} align="flex-start">
+          <Flex as="section" align="flex-end">
+            <Text fontSize="lg" marginRight={1}>
               Valor Total da Compra:{'  '}
             </Text>
             <Cash amount={transaction.amount} />
@@ -105,20 +106,14 @@ const Transaction: React.FC<Props> = ({ error, transaction, balance }) => {
           </TransactionData>
         </VStack>
         <VStack
-          divider={
-            <StackDivider
-              borderColor="purple.800"
-              marginX="16px"
-              height="0.5px"
-            />
-          }
-          spacing="4px"
+          divider={<StackDivider borderColor="purple.800" marginX={4} />}
+          spacing={1}
           align="stretch"
         >
           {Object.entries(transaction.items).map(item => (
             <Grid
               key={item[0]}
-              templateColumns="120px 1fr 110px"
+              templateColumns="7.5rem 1fr 6.875rem"
               templateRows="1fr"
               templateAreas="
                 'itemName relatedUsers amount'
@@ -126,9 +121,7 @@ const Transaction: React.FC<Props> = ({ error, transaction, balance }) => {
               justifyContent="center"
               alignItems="center"
             >
-              <Text gridArea="itemName" color="purple.600" fontSize="16px">
-                {item[0]}
-              </Text>
+              <Text gridArea="itemName">{item[0]}</Text>
               <RelatedList
                 gridArea="relatedUsers"
                 related={item[1].related_users}
@@ -138,12 +131,7 @@ const Transaction: React.FC<Props> = ({ error, transaction, balance }) => {
                 <Cash amount={item[1].amount} />
                 {item[1].related_users.length > 1 && (
                   <Flex align="center" justify="end">
-                    <Text
-                      marginRight="2px"
-                      fontWeight="300"
-                      color="purple.600"
-                      fontSize="12px"
-                    >
+                    <Text variant="thin" fontSize="xs" marginRight={0.5}>
                       {item[1].related_users.length}x
                     </Text>
                     <Cash

@@ -6,7 +6,7 @@ const LabelInput: React.FC<InputProps> = ({ ...props }) => {
     <Input
       variant="flushed"
       size="sm"
-      fontSize="16px"
+      fontSize="1rem"
       borderColor="purple.400"
       focusBorderColor="purple.600"
       errorBorderColor="red.500"

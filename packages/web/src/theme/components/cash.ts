@@ -4,10 +4,10 @@ export const Cash = {
   },
   sizes: {
     sm: {
-      fontSize: '16px'
+      fontSize: '1rem'
     },
     lg: {
-      fontSize: '32px'
+      fontSize: '2rem'
     }
   },
   variants: {

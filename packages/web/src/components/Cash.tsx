@@ -1,4 +1,9 @@
-import { Box, BoxProps, useStyleConfig } from '@chakra-ui/react'
+import {
+  TextProps,
+  Text,
+  ComponentWithAs,
+  useStyleConfig
+} from '@chakra-ui/react'
 import React from 'react'
 
 type Props = {
@@ -7,7 +12,7 @@ type Props = {
   variant?: string
 }
 
-const Cash: React.FC<Props & BoxProps> = ({
+const Cash: ComponentWithAs<'span', Props & TextProps> = ({
   amount,
   size,
   variant,
@@ -18,9 +23,9 @@ const Cash: React.FC<Props & BoxProps> = ({
   const styles = useStyleConfig('Cash', { size, variant })
 
   return (
-    <Box sx={styles} {...remaining}>
+    <Text as="span" sx={styles} {...remaining}>
       R$ {amount.toFixed(2)}
-    </Box>
+    </Text>
   )
 }
 
