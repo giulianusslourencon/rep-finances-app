@@ -2,7 +2,7 @@ import Router from 'next/router'
 import NProgress from 'nprogress'
 
 let timer: NodeJS.Timeout
-let state: string
+let state: 'loading' | 'stop' = 'stop'
 let activeRequests = 0
 const delay = 250
 

@@ -3,10 +3,10 @@ import { NextPage } from 'next'
 import NextLink from 'next/link'
 import React from 'react'
 
-import Cash from '@components/cash'
-import ErrorPopup from '@components/errorPopup'
-import Layout from '@components/layout'
-import RelatedList from '@components/relatedList'
+import Cash from '@components/Cash'
+import ErrorPopup from '@components/ErrorPopup'
+import Layout from '@components/Layout'
+import RelatedList from '@components/RelatedList'
 
 import API from '@utils/api'
 

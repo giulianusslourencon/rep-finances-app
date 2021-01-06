@@ -2,10 +2,10 @@ import { Flex, StackDivider, VStack } from '@chakra-ui/react'
 import { GetStaticProps } from 'next'
 import React from 'react'
 
-import Cash from '@components/cash'
-import ErrorPopup from '@components/errorPopup'
-import IdBox from '@components/idBox'
-import Layout from '@components/layout'
+import Cash from '@components/Cash'
+import ErrorPopup from '@components/ErrorPopup'
+import IdBox from '@components/IdBox'
+import Layout from '@components/Layout'
 
 import API from '@utils/api'
 

@@ -28,12 +28,12 @@ import React, { useState } from 'react'
 import DatePicker from 'react-datetime'
 import 'react-datetime/css/react-datetime.css'
 
-import AmountInput from '@components/amountInput'
-import Button from '@components/button'
-import ErrorPopup from '@components/errorPopup'
-import IdBox from '@components/idBox'
-import LabelInput from '@components/labelInput'
-import Layout from '@components/layout'
+import AmountInput from '@components/AmountInput'
+import Button from '@components/Button'
+import ErrorPopup from '@components/ErrorPopup'
+import IdBox from '@components/IdBox'
+import LabelInput from '@components/LabelInput'
+import Layout from '@components/Layout'
 
 import API from '@utils/api'
 import {
