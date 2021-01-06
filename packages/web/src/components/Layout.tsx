@@ -82,7 +82,12 @@ const Layout: React.FC<Props & GridProps> = ({
             flexDir="column"
             justify="stretch"
             overflowY="scroll"
-            style={{ scrollbarWidth: 'none' }}
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            css={{
+              '&::-webkit-scrollbar': {
+                display: 'none'
+              }
+            }}
           >
             {children}
           </Flex>
