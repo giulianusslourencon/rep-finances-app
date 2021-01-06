@@ -417,7 +417,7 @@ const CreateTransaction: React.FC = () => {
                 <PopoverBody>
                   <ErrorPopup
                     error={{
-                      name: 'Error!',
+                      name: 'Erro!',
                       message:
                         invalidItemsNamesIndexes.length > 0
                           ? `Itens com índices (${invalidItemsNamesIndexes}) estão com nomes duplicados`
