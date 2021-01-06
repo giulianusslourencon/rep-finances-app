@@ -34,12 +34,18 @@ const Home: React.FC<Props> = ({ error, balance }) => {
         spacing="8px"
         align="stretch"
       >
-        {balance.map(user => (
-          <Flex key={user[0]} justify="space-between" align="center">
-            <IdBox userId={user[0]} size="lg" />
-            <Cash amount={user[1]} size="lg" variant="dark" />
-          </Flex>
-        ))}
+        {balance
+          .sort((a, b) => {
+            if (a[0] < b[0]) return -1
+            if (a[0] > b[0]) return 1
+            return 0
+          })
+          .map(user => (
+            <Flex key={user[0]} justify="space-between" align="center">
+              <IdBox userId={user[0]} size="lg" />
+              <Cash amount={user[1]} size="lg" variant="dark" />
+            </Flex>
+          ))}
       </VStack>
     </Layout>
   )

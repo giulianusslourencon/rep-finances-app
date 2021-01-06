@@ -206,7 +206,7 @@ export const getStaticProps: GetStaticProps<
     const response = await API.get<Props>(`/transactions/${_id}`)
     const { transaction, balance } = response.data
 
-    props.transaction = transaction
+    props.transaction = { ...transaction, related: transaction.related.sort() }
     props.balance = balance
   } catch (error) {
     const errorMessage = error.response?.data || {

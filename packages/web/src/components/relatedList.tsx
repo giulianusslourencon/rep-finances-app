@@ -10,7 +10,7 @@ type Props = {
 const RelatedList: React.FC<Props & WrapProps> = ({ related, ...props }) => {
   return (
     <Wrap spacing="4px" justify="flex-end" align="center" {...props}>
-      {related.map(user => (
+      {related.sort().map(user => (
         <WrapItem key={user}>
           <IdBox userId={user} />
         </WrapItem>
