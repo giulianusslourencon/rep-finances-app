@@ -94,7 +94,8 @@ export class Transaction {
       return acc + cur[1]
     }, 0)
 
-    if (itemsAmount !== totalPaid) return left(new InvalidPaymentError())
+    if (itemsAmount.toFixed(2) !== totalPaid.toFixed(2))
+      return left(new InvalidPaymentError())
 
     const amountOrError = Amount.create(itemsAmount)
     if (amountOrError.isLeft()) return left(amountOrError.value)

@@ -60,7 +60,7 @@ export const validateTransaction = (
     return acc + cur
   }, 0)
 
-  if (itemsValues !== totalPaid) {
+  if (itemsValues.toFixed(2) !== totalPaid.toFixed(2)) {
     return {
       validated: false,
       errorMessage: `Valor total dos itens (R$ ${itemsValues.toFixed(
