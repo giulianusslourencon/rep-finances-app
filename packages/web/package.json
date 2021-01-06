@@ -16,6 +16,7 @@
     "framer-motion": "^2.9.5",
     "moment": "^2.29.1",
     "next": "10.0.3",
+    "nprogress": "^0.2.0",
     "react": "17.0.1",
     "react-datetime": "^3.0.4",
     "react-dom": "17.0.1",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.10",
+    "@types/nprogress": "^0.2.0",
     "@types/react": "^17.0.0"
   }
 }
