@@ -21,7 +21,8 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
-  ButtonGroup
+  ButtonGroup,
+  Button
 } from '@chakra-ui/react'
 import moment from 'moment'
 import Router from 'next/router'
@@ -30,7 +31,6 @@ import DatePicker from 'react-datetime'
 import 'react-datetime/css/react-datetime.css'
 
 import AmountInput from '@components/AmountInput'
-import Button from '@components/Button'
 import ErrorPopup from '@components/ErrorPopup'
 import IdBox from '@components/IdBox'
 import LabelInput from '@components/LabelInput'
@@ -218,7 +218,7 @@ const CreateTransaction: React.FC = () => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <Heading size="sm" textAlign="center" color="purple.800">
+            <Heading size="md" textAlign="center" color="purple.800">
               Adicionar usuários relacionados
             </Heading>
           </ModalHeader>
@@ -246,7 +246,9 @@ const CreateTransaction: React.FC = () => {
               >
                 Adicionar
               </Button>
-              <Button onClick={onModalClose}>Cancelar</Button>
+              <Button variant="outline" onClick={onModalClose}>
+                Cancelar
+              </Button>
             </ButtonGroup>
           </ModalFooter>
         </ModalContent>
@@ -419,6 +421,8 @@ const CreateTransaction: React.FC = () => {
           </Box>
           <HStack justify="center" align="center" spacing={2}>
             <Button
+              isLoading={awaitingRequest}
+              loadingText="Criando..."
               onClick={handleCreateTransaction}
               isDisabled={!validated || awaitingRequest}
             >
