@@ -5,12 +5,14 @@ export const Button = {
   },
   variants: {
     outline: {
-      border: '1px solid purple.400',
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: 'purple.400',
       color: 'purple.400',
       _hover: {
         color: 'purple.600',
-        border: '1px solid purple.600',
-        _disabled: { color: 'red.500', border: '1px solid red.500' }
+        borderColor: 'purple.600',
+        _disabled: { color: 'red.500', borderColor: 'red.500' }
       }
     },
     solid: {

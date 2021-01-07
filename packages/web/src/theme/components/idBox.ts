@@ -1,6 +1,8 @@
 export const IdBox = {
   baseStyle: {
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    cursor: 'default',
+    userSelect: 'none'
   },
   sizes: {
     sm: {
@@ -18,11 +20,20 @@ export const IdBox = {
   },
   variants: {
     outline: {
-      border: '1px solid purple.400',
-      color: 'purple.400'
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: 'purple.400',
+      color: 'purple.400',
+      _hover: {
+        borderColor: 'purple.600',
+        color: 'purple.600'
+      }
     },
     solid: {
-      bg: 'purple.400'
+      bg: 'purple.400',
+      _hover: {
+        bg: 'purple.600'
+      }
     }
   },
   defaultProps: {
