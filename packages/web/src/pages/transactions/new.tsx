@@ -89,6 +89,9 @@ const CreateTransaction: React.FC = () => {
 
   const [awaitingRequest, setAwaitingRequest] = useState(false)
 
+  const formatAmount = (val: number) => (val / 100).toFixed(2)
+  const parseAmount = (val: string) => parseFloat(val.replace(/[.]/, '') || '0')
+
   const verifyInvalidItemsNames = () => {
     const registeredNames: string[] = []
     const duplicatedNames: string[] = []
@@ -172,14 +175,14 @@ const CreateTransaction: React.FC = () => {
     items.map(
       item =>
         (objItems[item.itemName] = {
-          amount: item.amount,
+          amount: item.amount / 100,
           related_users: item.related_users
         })
     )
 
     const objPayers = {} as { [userId: string]: number }
     payers.forEach(payer => {
-      if (payer.amount) objPayers[payer.userId] = payer.amount
+      if (payer.amount) objPayers[payer.userId] = payer.amount / 100
     })
 
     return {
@@ -317,8 +320,9 @@ const CreateTransaction: React.FC = () => {
                   borderColor="purple.400"
                   borderWidth="1px"
                   padding={4}
+                  width="18.125rem"
                 >
-                  <Flex justify="space-between" align="center">
+                  <Flex justify="space-between" align="center" marginBottom={2}>
                     <Tooltip
                       shouldWrapChildren
                       label="Nome do item"
@@ -367,15 +371,14 @@ const CreateTransaction: React.FC = () => {
                       placement="top"
                     >
                       <AmountInput
-                        value={`${items[index].amount}${
-                          items[index].amount % 1 === 0 ? '.0' : ''
-                        }`}
-                        onChange={(_, val) =>
+                        value={formatAmount(items[index].amount)}
+                        onChange={val =>
                           updateItem(index, {
-                            amount: parseFloat(val.toFixed(2))
+                            amount: parseAmount(val)
                           })
                         }
                         isInvalid={!validateAmount(items[index].amount)}
+                        marginRight={2}
                       />
                     </Tooltip>
                     <Wrap spacing={1} justify="flex-end" align="center">
@@ -416,12 +419,8 @@ const CreateTransaction: React.FC = () => {
                 <Flex key={user}>
                   <IdBox userId={user} marginRight={2} marginLeft={4} />
                   <AmountInput
-                    value={`${payers[index].amount}${
-                      payers[index].amount % 1 === 0 ? '.0' : ''
-                    }`}
-                    onChange={(_, val) =>
-                      updatePayer(index, parseFloat(val.toFixed(2)))
-                    }
+                    value={formatAmount(payers[index].amount)}
+                    onChange={val => updatePayer(index, parseAmount(val))}
                   />
                 </Flex>
               ))}

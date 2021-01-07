@@ -1,11 +1,8 @@
 import {
-  NumberDecrementStepper,
-  NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputFieldProps,
-  NumberInputProps,
-  NumberInputStepper
+  NumberInputProps
 } from '@chakra-ui/react'
 import React from 'react'
 
@@ -25,11 +22,7 @@ const AmountInput: React.FC<AmountInputProps> = ({ fieldProps, ...props }) => {
       min={0}
       {...props}
     >
-      <NumberInputField fontSize="1rem" width="6.25rem" {...fieldProps} />
-      <NumberInputStepper>
-        <NumberIncrementStepper />
-        <NumberDecrementStepper />
-      </NumberInputStepper>
+      <NumberInputField fontSize="1rem" width="7rem" {...fieldProps} />
     </NumberInput>
   )
 }
