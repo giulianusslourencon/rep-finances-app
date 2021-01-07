@@ -74,6 +74,8 @@ const CreateTransaction: React.FC = () => {
     [] as { name: string; message: string }[]
   )
 
+  const [awaitingRequest, setAwaitingRequest] = useState(false)
+
   const verifyInvalidItemsNames = () => {
     const registeredNames: string[] = []
     const duplicatedNames: string[] = []
@@ -181,8 +183,9 @@ const CreateTransaction: React.FC = () => {
   validated &&= invalidItemsNamesIndexes.length === 0
 
   const handleCreateTransaction = async () => {
-    if (validated) {
+    if (validated && !awaitingRequest) {
       try {
+        setAwaitingRequest(true)
         const response = await API.post('/transactions', transaction)
         Router.push(`/transactions/item/${response.data._id}`)
       } catch (error) {
@@ -191,6 +194,7 @@ const CreateTransaction: React.FC = () => {
           message: error.message
         }
         setErrors([errorMessage])
+        setAwaitingRequest(false)
       }
     }
   }
@@ -405,7 +409,10 @@ const CreateTransaction: React.FC = () => {
           </VStack>
         </Box>
         <HStack justify="center" align="center" spacing={2}>
-          <Button onClick={handleCreateTransaction} isDisabled={!validated}>
+          <Button
+            onClick={handleCreateTransaction}
+            isDisabled={!validated || awaitingRequest}
+          >
             Criar Transação
           </Button>
           {!validated && (
