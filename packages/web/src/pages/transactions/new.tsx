@@ -439,7 +439,7 @@ const CreateTransaction: React.FC = () => {
             {!validated && (
               <Popover trigger="hover">
                 <PopoverTrigger>
-                  <InfoOutlineIcon color="red.500" />
+                  <InfoOutlineIcon color="red.500" cursor="help" />
                 </PopoverTrigger>
                 <PopoverContent>
                   <PopoverBody>
