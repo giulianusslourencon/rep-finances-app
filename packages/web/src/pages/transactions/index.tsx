@@ -37,7 +37,12 @@ const getFormattedDate = (isoDate: string) => {
 
 const Historic: NextPage<Props> = ({ error, transactions }) => {
   return (
-    <Layout buttons={[{ title: 'Voltar', href: '/' }]}>
+    <Layout
+      buttons={[
+        { title: 'Voltar', href: '/' },
+        { title: 'Adicionar', href: '/transactions/new' }
+      ]}
+    >
       <VStack
         divider={<StackDivider borderColor="purple.800" />}
         spacing={2}
