@@ -367,9 +367,13 @@ const CreateTransaction: React.FC = () => {
                       placement="top"
                     >
                       <AmountInput
-                        value={items[index].amount.toFixed(2)}
-                        onChange={val =>
-                          updateItem(index, { amount: parseFloat(val) })
+                        value={`${items[index].amount}${
+                          items[index].amount % 1 === 0 ? '.0' : ''
+                        }`}
+                        onChange={(_, val) =>
+                          updateItem(index, {
+                            amount: parseFloat(val.toFixed(2))
+                          })
                         }
                         isInvalid={!validateAmount(items[index].amount)}
                       />
@@ -412,8 +416,12 @@ const CreateTransaction: React.FC = () => {
                 <Flex key={user}>
                   <IdBox userId={user} marginRight={2} marginLeft={4} />
                   <AmountInput
-                    value={payers[index].amount.toFixed(2)}
-                    onChange={val => updatePayer(index, parseFloat(val))}
+                    value={`${payers[index].amount}${
+                      payers[index].amount % 1 === 0 ? '.0' : ''
+                    }`}
+                    onChange={(_, val) =>
+                      updatePayer(index, parseFloat(val.toFixed(2)))
+                    }
                   />
                 </Flex>
               ))}
