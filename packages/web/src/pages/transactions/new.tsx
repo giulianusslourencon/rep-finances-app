@@ -12,10 +12,16 @@ import {
   Popover,
   PopoverBody,
   PopoverContent,
-  PopoverHeader,
   PopoverTrigger,
   Heading,
-  PopoverCloseButton
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+  ButtonGroup
 } from '@chakra-ui/react'
 import moment from 'moment'
 import Router from 'next/router'
@@ -69,6 +75,13 @@ const CreateTransaction: React.FC = () => {
 
   const [related, setRelated] = useState([] as string[])
   const [newRelated, setNewRelated] = useState('')
+  const [selectedItemIndex, setSelectedItemIndex] = useState(0)
+
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose
+  } = useDisclosure()
 
   const [errors, setErrors] = useState(
     [] as { name: string; message: string }[]
@@ -200,244 +213,241 @@ const CreateTransaction: React.FC = () => {
   }
 
   return (
-    <Layout buttons={[{ title: 'Voltar', href: '/' }]}>
-      <VStack
-        divider={<StackDivider borderColor="purple.800" />}
-        spacing={2}
-        align="stretch"
-      >
-        {errors.length > 0 && <ErrorPopup error={errors[0]} />}
-        <Box>
-          <Tooltip
-            shouldWrapChildren
-            label="Título da transação"
-            openDelay={500}
-            hasArrow
-            placement="top"
-          >
-            <Flex justify="space-between" align="flex-end">
-              <Text fontSize="lg">Título:</Text>
-              <LabelInput
-                width="12.5rem"
-                placeholder="Título"
-                isRequired={true}
-                isInvalid={!validateLabel(title)}
-                value={title}
-                onChange={val => setTitle(val.target.value)}
-              />
-            </Flex>
-          </Tooltip>
-          <Tooltip
-            shouldWrapChildren
-            label="Momento em que a transação aconteceu"
-            openDelay={500}
-            hasArrow
-            placement="top"
-          >
-            <Flex justify="space-between" align="flex-end">
-              <Text fontSize="lg">Data/Hora:</Text>
-              <DatePicker
-                dateFormat="DD-MM-YYYY"
-                timeFormat="hh:mm A"
-                inputProps={{
-                  style: {
-                    backgroundColor: '#E6FB71',
-                    borderBottom: '1px solid #CB60D3',
-                    width: '12.5rem',
-                    fontSize: 'lg'
-                  }
-                }}
-                locale={'pt-BR'}
-                value={timestamp}
-                onChange={val => setTimestamp(val as typeof timestamp)}
-              />
-            </Flex>
-          </Tooltip>
-        </Box>
-        <Box>
-          <Text fontSize="lg">Itens:</Text>
-          <VStack spacing={1}>
-            {items.map((item, index) => (
-              <Box
-                key={index}
-                borderRadius="1rem"
-                borderColor="purple.400"
-                borderWidth="1px"
-                padding={4}
+    <>
+      <Modal isOpen={isModalOpen} onClose={onModalClose} motionPreset="scale">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            <Heading size="sm" textAlign="center" color="purple.800">
+              Adicionar usuários relacionados
+            </Heading>
+          </ModalHeader>
+          <ModalBody pb={6}>
+            <LabelInput
+              value={newRelated}
+              placeholder="Id do Usuário"
+              minLength={1}
+              maxLength={2}
+              onChange={val =>
+                setNewRelated(val.target.value.trim().toUpperCase())
+              }
+              onKeyDown={event => {
+                if (event.key.valueOf() === 'Enter')
+                  addRelated(selectedItemIndex)
+              }}
+              isInvalid={!validateNewRelated()}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <ButtonGroup>
+              <Button
+                onClick={() => addRelated(selectedItemIndex)}
+                isDisabled={!validateNewRelated()}
               >
-                <Flex justify="space-between" align="center">
-                  <Tooltip
-                    shouldWrapChildren
-                    label="Nome do item"
-                    openDelay={500}
-                    hasArrow
-                    placement="top"
-                  >
-                    <LabelInput
-                      placeholder="Item"
-                      isRequired={true}
-                      isInvalid={
-                        !validateLabel(items[index].itemName) ||
-                        invalidItemsNamesIndexes.includes(index)
-                      }
-                      value={items[index].itemName}
-                      onChange={val =>
-                        updateItem(index, { itemName: val.target.value })
-                      }
-                    />
-                  </Tooltip>
-                  <Tooltip
-                    shouldWrapChildren
-                    label={
-                      items.length <= 1
-                        ? 'Não é possível uma transação com menos de um item'
-                        : 'Excluir item'
-                    }
-                    openDelay={500}
-                    hasArrow
-                    placement="top"
-                  >
-                    <CloseButton
-                      size="sm"
-                      color="red.500"
-                      onClick={() => removeItem(index)}
-                      isDisabled={items.length <= 1}
-                    />
-                  </Tooltip>
-                </Flex>
-                <Flex justify="space-between" align="center">
-                  <Tooltip
-                    shouldWrapChildren
-                    label="Valor do item"
-                    openDelay={500}
-                    hasArrow
-                    placement="top"
-                  >
-                    <AmountInput
-                      value={items[index].amount.toFixed(2)}
-                      onChange={val =>
-                        updateItem(index, { amount: parseFloat(val) })
-                      }
-                      isInvalid={!validateAmount(items[index].amount)}
-                    />
-                  </Tooltip>
-                  <Wrap spacing={1} justify="flex-end" align="center">
-                    {related.map(user => (
-                      <WrapItem key={user}>
-                        <IdBox
-                          userId={user}
-                          onClick={() => changeUserOnItem(index, user)}
-                          variant={
-                            items[index].related_users.includes(user)
-                              ? 'solid'
-                              : 'outline'
-                          }
-                        />
-                      </WrapItem>
-                    ))}
-                    <WrapItem>
-                      <Popover placement="right">
-                        <PopoverTrigger>
-                          <IdBox as="button" userId={'+'} />
-                        </PopoverTrigger>
-                        <PopoverContent>
-                          <PopoverHeader>
-                            <Heading
-                              size="sm"
-                              textAlign="center"
-                              color="purple.800"
-                            >
-                              Adicionar usuários relacionados
-                            </Heading>
-                          </PopoverHeader>
-                          <PopoverCloseButton />
-                          <PopoverBody>
-                            <Tooltip
-                              shouldWrapChildren
-                              label="Id do usuário"
-                              openDelay={500}
-                              hasArrow
-                              placement="top"
-                            >
-                              <LabelInput
-                                value={newRelated}
-                                minLength={1}
-                                maxLength={2}
-                                onChange={val =>
-                                  setNewRelated(
-                                    val.target.value.trim().toUpperCase()
-                                  )
-                                }
-                                onKeyDown={event => {
-                                  if (event.key.valueOf() === 'Enter')
-                                    addRelated(index)
-                                }}
-                                isInvalid={!validateNewRelated()}
-                              />
-                            </Tooltip>
-                            <Button
-                              onClick={() => addRelated(index)}
-                              isDisabled={!validateNewRelated()}
-                              marginX={12.5}
-                              marginTop={2}
-                            >
-                              Adicionar
-                            </Button>
-                          </PopoverBody>
-                        </PopoverContent>
-                      </Popover>
-                    </WrapItem>
-                  </Wrap>
-                </Flex>
-              </Box>
-            ))}
-            <Button onClick={addNewItem}>Adicionar item</Button>
-          </VStack>
-        </Box>
-        <Box>
-          <Text fontSize="lg">Pagamento:</Text>
-          <VStack spacing={1} align="flex-start">
-            {related.map((user, index) => (
-              <Flex key={user}>
-                <IdBox userId={user} marginRight={2} marginLeft={4} />
-                <AmountInput
-                  value={payers[index].amount.toFixed(2)}
-                  onChange={val => updatePayer(index, parseFloat(val))}
+                Adicionar
+              </Button>
+              <Button onClick={onModalClose}>Cancelar</Button>
+            </ButtonGroup>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Layout buttons={[{ title: 'Voltar', href: '/' }]}>
+        <VStack
+          divider={<StackDivider borderColor="purple.800" />}
+          spacing={2}
+          align="stretch"
+        >
+          {errors.length > 0 && <ErrorPopup error={errors[0]} />}
+          <Box>
+            <Tooltip
+              shouldWrapChildren
+              label="Título da transação"
+              openDelay={500}
+              hasArrow
+              placement="top"
+            >
+              <Flex justify="space-between" align="flex-end">
+                <Text fontSize="lg">Título:</Text>
+                <LabelInput
+                  width="12.5rem"
+                  placeholder="Título"
+                  isRequired={true}
+                  isInvalid={!validateLabel(title)}
+                  value={title}
+                  onChange={val => setTitle(val.target.value)}
                 />
               </Flex>
-            ))}
-          </VStack>
-        </Box>
-        <HStack justify="center" align="center" spacing={2}>
-          <Button
-            onClick={handleCreateTransaction}
-            isDisabled={!validated || awaitingRequest}
-          >
-            Criar Transação
-          </Button>
-          {!validated && (
-            <Popover trigger="hover">
-              <PopoverTrigger>
-                <InfoOutlineIcon color="red.500" />
-              </PopoverTrigger>
-              <PopoverContent>
-                <PopoverBody>
-                  <ErrorPopup
-                    error={{
-                      name: 'Erro!',
-                      message:
-                        invalidItemsNamesIndexes.length > 0
-                          ? `Itens com índices (${invalidItemsNamesIndexes}) estão com nomes duplicados`
-                          : errorMessage || ''
-                    }}
+            </Tooltip>
+            <Tooltip
+              shouldWrapChildren
+              label="Momento em que a transação aconteceu"
+              openDelay={500}
+              hasArrow
+              placement="top"
+            >
+              <Flex justify="space-between" align="flex-end">
+                <Text fontSize="lg">Data/Hora:</Text>
+                <DatePicker
+                  dateFormat="DD-MM-YYYY"
+                  timeFormat="hh:mm A"
+                  inputProps={{
+                    style: {
+                      backgroundColor: '#E6FB71',
+                      borderBottom: '1px solid #CB60D3',
+                      width: '12.5rem',
+                      fontSize: 'lg'
+                    }
+                  }}
+                  locale={'pt-BR'}
+                  value={timestamp}
+                  onChange={val => setTimestamp(val as typeof timestamp)}
+                />
+              </Flex>
+            </Tooltip>
+          </Box>
+          <Box>
+            <Text fontSize="lg">Itens:</Text>
+            <VStack spacing={1}>
+              {items.map((item, index) => (
+                <Box
+                  key={index}
+                  borderRadius="1rem"
+                  borderColor="purple.400"
+                  borderWidth="1px"
+                  padding={4}
+                >
+                  <Flex justify="space-between" align="center">
+                    <Tooltip
+                      shouldWrapChildren
+                      label="Nome do item"
+                      openDelay={500}
+                      hasArrow
+                      placement="top"
+                    >
+                      <LabelInput
+                        placeholder="Item"
+                        isRequired={true}
+                        isInvalid={
+                          !validateLabel(items[index].itemName) ||
+                          invalidItemsNamesIndexes.includes(index)
+                        }
+                        value={items[index].itemName}
+                        onChange={val =>
+                          updateItem(index, { itemName: val.target.value })
+                        }
+                      />
+                    </Tooltip>
+                    <Tooltip
+                      shouldWrapChildren
+                      label={
+                        items.length <= 1
+                          ? 'Não é possível uma transação com menos de um item'
+                          : 'Excluir item'
+                      }
+                      openDelay={500}
+                      hasArrow
+                      placement="top"
+                    >
+                      <CloseButton
+                        size="sm"
+                        color="red.500"
+                        onClick={() => removeItem(index)}
+                        isDisabled={items.length <= 1}
+                      />
+                    </Tooltip>
+                  </Flex>
+                  <Flex justify="space-between" align="center">
+                    <Tooltip
+                      shouldWrapChildren
+                      label="Valor do item"
+                      openDelay={500}
+                      hasArrow
+                      placement="top"
+                    >
+                      <AmountInput
+                        value={items[index].amount.toFixed(2)}
+                        onChange={val =>
+                          updateItem(index, { amount: parseFloat(val) })
+                        }
+                        isInvalid={!validateAmount(items[index].amount)}
+                      />
+                    </Tooltip>
+                    <Wrap spacing={1} justify="flex-end" align="center">
+                      {related.map(user => (
+                        <WrapItem key={user}>
+                          <IdBox
+                            userId={user}
+                            onClick={() => changeUserOnItem(index, user)}
+                            variant={
+                              items[index].related_users.includes(user)
+                                ? 'solid'
+                                : 'outline'
+                            }
+                          />
+                        </WrapItem>
+                      ))}
+                      <WrapItem>
+                        <IdBox
+                          as="button"
+                          onClick={() => {
+                            onModalOpen()
+                            setSelectedItemIndex(index)
+                          }}
+                          userId={'+'}
+                        />
+                      </WrapItem>
+                    </Wrap>
+                  </Flex>
+                </Box>
+              ))}
+              <Button onClick={addNewItem}>Adicionar item</Button>
+            </VStack>
+          </Box>
+          <Box>
+            <Text fontSize="lg">Pagamento:</Text>
+            <VStack spacing={1} align="flex-start">
+              {related.map((user, index) => (
+                <Flex key={user}>
+                  <IdBox userId={user} marginRight={2} marginLeft={4} />
+                  <AmountInput
+                    value={payers[index].amount.toFixed(2)}
+                    onChange={val => updatePayer(index, parseFloat(val))}
                   />
-                </PopoverBody>
-              </PopoverContent>
-            </Popover>
-          )}
-        </HStack>
-      </VStack>
-    </Layout>
+                </Flex>
+              ))}
+            </VStack>
+          </Box>
+          <HStack justify="center" align="center" spacing={2}>
+            <Button
+              onClick={handleCreateTransaction}
+              isDisabled={!validated || awaitingRequest}
+            >
+              Criar Transação
+            </Button>
+            {!validated && (
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <InfoOutlineIcon color="red.500" />
+                </PopoverTrigger>
+                <PopoverContent>
+                  <PopoverBody>
+                    <ErrorPopup
+                      error={{
+                        name: 'Erro!',
+                        message:
+                          invalidItemsNamesIndexes.length > 0
+                            ? `Itens com índices (${invalidItemsNamesIndexes}) estão com nomes duplicados`
+                            : errorMessage || ''
+                      }}
+                    />
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            )}
+          </HStack>
+        </VStack>
+      </Layout>
+    </>
   )
 }
 

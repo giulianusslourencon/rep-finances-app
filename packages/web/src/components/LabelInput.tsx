@@ -1,7 +1,7 @@
-import { Input, InputProps } from '@chakra-ui/react'
+import { ComponentWithAs, Input, InputProps } from '@chakra-ui/react'
 import React from 'react'
 
-const LabelInput: React.FC<InputProps> = ({ ...props }) => {
+const LabelInput: ComponentWithAs<'input', InputProps> = ({ ...props }) => {
   return (
     <Input
       variant="flushed"
