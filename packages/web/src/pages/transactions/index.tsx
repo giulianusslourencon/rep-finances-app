@@ -52,7 +52,7 @@ const Historic: NextPage<Props> = ({ error, transactions }) => {
             <Flex flexDir="column">
               <Flex justify="space-between" align="flex-start">
                 <Link>
-                  <Title size="md">{transaction.title}</Title>
+                  <Title size="lg">{transaction.title}</Title>
                 </Link>
                 <Time>{getFormattedDate(transaction.date)}</Time>
               </Flex>

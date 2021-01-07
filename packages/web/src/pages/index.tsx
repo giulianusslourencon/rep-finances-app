@@ -43,7 +43,7 @@ const Home: React.FC<Props> = ({ error, balance }) => {
           .map(user => (
             <Flex key={user[0]} justify="space-between" align="center">
               <IdBox userId={user[0]} size="lg" />
-              <Cash amount={user[1]} size="lg" variant="dark" />
+              <Cash amount={user[1]} fontSize="3xl" variant="dark" />
             </Flex>
           ))}
       </VStack>

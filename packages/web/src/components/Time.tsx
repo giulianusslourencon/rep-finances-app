@@ -1,18 +1,11 @@
-import {
-  Box,
-  ComponentWithAs,
-  BoxProps,
-  useStyleConfig
-} from '@chakra-ui/react'
+import { Text, TextProps } from '@chakra-ui/react'
 import React from 'react'
 
-const Time: ComponentWithAs<'time', BoxProps> = ({ children, ...props }) => {
-  const styles = useStyleConfig('Text')
-
+const Time: React.FC<TextProps> = ({ children, ...props }) => {
   return (
-    <Box as="time" sx={styles} {...props}>
+    <Text as="time" {...props}>
       {children}
-    </Box>
+    </Text>
   )
 }
 

@@ -2,14 +2,6 @@ export const Cash = {
   baseStyle: {
     fontWeight: '300'
   },
-  sizes: {
-    sm: {
-      fontSize: '1rem'
-    },
-    lg: {
-      fontSize: '2rem'
-    }
-  },
   variants: {
     normal: {
       color: 'purple.600'
@@ -22,7 +14,6 @@ export const Cash = {
     }
   },
   defaultProps: {
-    size: 'sm',
     variant: 'normal'
   }
 }

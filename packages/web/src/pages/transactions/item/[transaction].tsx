@@ -83,7 +83,7 @@ const Transaction: React.FC<Props> = ({ error, transaction, balance }) => {
       >
         {error && <ErrorPopup error={error} />}
         <Flex as="header" flexDir="column" align="center">
-          <Title as="h1" size="lg" textAlign="center">
+          <Title as="h1" size="xl" textAlign="center">
             {transaction.title}
           </Title>
           <Time>{formattedDate}</Time>
