@@ -22,8 +22,8 @@ const Layout: React.FC<Props & GridProps> = ({
     <Grid
       as="main"
       height="100vh"
-      templateColumns="1fr 22rem 1fr"
-      templateRows="1fr 1fr 1fr"
+      templateColumns={{ base: '0 100vw 0', md: '1fr 22rem 1fr' }}
+      templateRows={{ base: '0 1fr 0', md: '1fr 45rem 1fr' }}
       templateAreas="
         '. . .'
         '. content .'
@@ -33,14 +33,19 @@ const Layout: React.FC<Props & GridProps> = ({
       alignItems="center"
       {...props}
     >
-      <Flex gridArea="content" flexDir="column" justify="stretch">
+      <Flex
+        gridArea="content"
+        flexDir="column"
+        justify="stretch"
+        alignSelf="start"
+      >
         {buttons.length > 0 && (
           <VStack
             divider={<StackDivider borderColor="white" />}
             spacing={1}
             align="stretch"
             bgColor="purple.800"
-            borderTopRadius="2rem"
+            borderTopRadius={{ base: '0', md: '2rem' }}
             paddingX={4}
             paddingY={2}
           >
@@ -70,18 +75,17 @@ const Layout: React.FC<Props & GridProps> = ({
         <Flex
           justify="stretch"
           bgColor="yellow.200"
-          borderBottomRadius="2rem"
-          borderTopRadius={buttons.length > 0 ? '0' : '2rem'}
+          borderBottomRadius={{ base: '0', md: '2rem' }}
+          borderTopRadius={{ base: '0', md: buttons.length > 0 ? '0' : '2rem' }}
           padding={4}
-          minH="25rem"
-          maxH="43.75rem"
         >
           <Flex
             flexGrow={1}
             width="fit-content"
+            height={{ base: 'auto', md: `${45 - 3 * buttons.length}rem` }}
             flexDir="column"
             justify="stretch"
-            overflowY="scroll"
+            overflowY={{ base: 'unset', md: 'scroll' }}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             css={{
               '&::-webkit-scrollbar': {
