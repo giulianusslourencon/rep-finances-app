@@ -155,7 +155,13 @@ const CreateTransaction: React.FC = () => {
     changeUserOnItem(selectedItemIndex, newRelated)
     setNewRelated('')
     setRelated(currentRelated.sort())
-    setPayers(currentPayers)
+    setPayers(
+      currentPayers.sort((a, b) => {
+        if (a.userId < b.userId) return -1
+        if (a.userId > b.userId) return 1
+        return 0
+      })
+    )
   }
 
   const addNewItem = () => {
