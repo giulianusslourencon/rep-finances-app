@@ -2,6 +2,7 @@ import { extendTheme } from '@chakra-ui/react'
 
 import { Button } from './components/button'
 import { Cash } from './components/cash'
+import { FormLabel } from './components/formLabel'
 import { Heading } from './components/heading'
 import { IdBox } from './components/idBox'
 import { Text } from './components/text'
@@ -18,7 +19,8 @@ const customTheme = extendTheme({
     Cash,
     Button,
     Heading,
-    Text
+    Text,
+    FormLabel
   }
 })
 

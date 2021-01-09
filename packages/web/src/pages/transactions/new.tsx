@@ -22,7 +22,10 @@ import {
   ModalFooter,
   useDisclosure,
   ButtonGroup,
-  Button
+  Button,
+  Text,
+  FormControl,
+  FormLabel
 } from '@chakra-ui/react'
 import moment from 'moment'
 import Router from 'next/router'
@@ -35,7 +38,6 @@ import ErrorPopup from '@components/ErrorPopup'
 import IdBox from '@components/IdBox'
 import LabelInput from '@components/LabelInput'
 import Layout from '@components/Layout'
-import Text from '@components/Text'
 
 import API from '@utils/api'
 import {
@@ -256,6 +258,7 @@ const CreateTransaction: React.FC = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
       <Layout buttons={[{ title: 'Voltar', href: '/' }]}>
         <VStack
           divider={<StackDivider borderColor="purple.800" />}
@@ -271,17 +274,21 @@ const CreateTransaction: React.FC = () => {
               hasArrow
               placement="top"
             >
-              <Flex justify="space-between" align="flex-end">
-                <Text fontSize="lg">Título:</Text>
+              <FormControl
+                id="transactionTitle"
+                isRequired={true}
+                isInvalid={!validateLabel(title)}
+                display="flex"
+              >
+                <FormLabel width="7.5rem" fontSize="lg">
+                  Título:
+                </FormLabel>
                 <LabelInput
-                  width="12.5rem"
                   placeholder="Título"
-                  isRequired={true}
-                  isInvalid={!validateLabel(title)}
                   value={title}
                   onChange={val => setTitle(val.target.value)}
                 />
-              </Flex>
+              </FormControl>
             </Tooltip>
             <Tooltip
               shouldWrapChildren
@@ -290,8 +297,15 @@ const CreateTransaction: React.FC = () => {
               hasArrow
               placement="top"
             >
-              <Flex justify="space-between" align="flex-end">
-                <Text fontSize="lg">Data/Hora:</Text>
+              <FormControl
+                id="transactionDate"
+                isRequired={true}
+                display="flex"
+                justifyContent="stretch"
+              >
+                <FormLabel width="7.5rem" fontSize="lg">
+                  Data/Hora:
+                </FormLabel>
                 <DatePicker
                   dateFormat="DD-MM-YYYY"
                   timeFormat="hh:mm A"
@@ -299,15 +313,15 @@ const CreateTransaction: React.FC = () => {
                     style: {
                       backgroundColor: '#E6FB71',
                       borderBottom: '1px solid #CB60D3',
-                      width: '12.5rem',
-                      fontSize: 'lg'
+                      width: '100%',
+                      fontSize: '1rem'
                     }
                   }}
                   locale={'pt-BR'}
                   value={timestamp}
                   onChange={val => setTimestamp(val as typeof timestamp)}
                 />
-              </Flex>
+              </FormControl>
             </Tooltip>
           </Box>
           <Box>
