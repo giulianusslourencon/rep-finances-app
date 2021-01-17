@@ -12,6 +12,7 @@ export const Button = {
       _hover: {
         color: 'purple.600',
         borderColor: 'purple.600',
+        bg: 'transparent',
         _disabled: { color: 'red.500', borderColor: 'red.500' }
       }
     },

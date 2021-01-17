@@ -240,6 +240,11 @@ const CreateTransaction: React.FC = () => {
     }
   }
 
+  const itemsValues = +items
+    .reduce((acc, cur) => acc + cur.amount, 0)
+    .toFixed(2)
+  const totalPaid = +payers.reduce((acc, cur) => acc + cur.amount, 0).toFixed(2)
+
   const transaction = getTransactionObject()
   let { validated, errorMessage } = validateTransaction(transaction)
 
@@ -539,6 +544,7 @@ const CreateTransaction: React.FC = () => {
                   readOnly
                   value={formatDate(timestamp)}
                   onClick={onDateModalOpen}
+                  cursor="pointer"
                 />
               </FormControl>
             </Tooltip>
@@ -655,6 +661,20 @@ const CreateTransaction: React.FC = () => {
                     value={formatAmount(payers[index].amount)}
                     onChange={val => updatePayer(index, parseAmount(val))}
                   />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    marginLeft={4}
+                    onClick={() =>
+                      updatePayer(
+                        index,
+                        payers[index].amount + itemsValues - totalPaid
+                      )
+                    }
+                    isDisabled={itemsValues === totalPaid}
+                  >
+                    Completar
+                  </Button>
                 </Flex>
               ))}
             </VStack>
