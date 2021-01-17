@@ -16,40 +16,16 @@ type TransactionPayers = {
   [userId: string]: number
 }
 
-type ValidationResult = {
-  validated: boolean
-  errorMessage?: string
-}
-
-export const validateTransaction = (
-  transaction: Transaction
-): ValidationResult => {
-  if (!validateLabel(transaction.title))
-    return {
-      validated: false,
-      errorMessage: 'O título da transação deve ter entre 2 e 255 caracteres'
-    }
+export const validateTransaction = (transaction: Transaction): boolean => {
+  if (!validateLabel(transaction.title)) return false
 
   for (const [itemName, { related_users, amount }] of Object.entries(
     transaction.items
   )) {
-    if (!validateLabel(itemName))
-      return {
-        validated: false,
-        errorMessage:
-          'Os títulos de todos os itens devem ter entre 2 e 255 caracteres'
-      }
-    if (!validateAmount(amount))
-      return {
-        validated: false,
-        errorMessage: 'Todos os valores devem ser maiores do que 0'
-      }
+    if (!validateLabel(itemName)) return false
+    if (!validateAmount(amount)) return false
 
-    if (related_users.length === 0)
-      return {
-        validated: false,
-        errorMessage: 'Todos os itens devem ter ao menos uma pessoa relacionada'
-      }
+    if (related_users.length === 0) return false
   }
 
   const itemsValues = Object.values(transaction.items).reduce((acc, cur) => {
@@ -61,15 +37,10 @@ export const validateTransaction = (
   }, 0)
 
   if (itemsValues.toFixed(2) !== totalPaid.toFixed(2)) {
-    return {
-      validated: false,
-      errorMessage: `Valor total dos itens (R$ ${itemsValues.toFixed(
-        2
-      )}) não corresponde ao total pago (R$ ${totalPaid.toFixed(2)})`
-    }
+    return false
   }
 
-  return { validated: true }
+  return true
 }
 
 export const validateLabel = (label: string) => {

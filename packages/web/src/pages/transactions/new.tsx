@@ -1,18 +1,13 @@
-import { InfoOutlineIcon } from '@chakra-ui/icons'
 import {
   Box,
   Flex,
   Wrap,
   StackDivider,
   VStack,
+  HStack,
   WrapItem,
   CloseButton,
   Tooltip,
-  HStack,
-  Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
   Heading,
   Modal,
   ModalOverlay,
@@ -31,7 +26,8 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  Select
+  Select,
+  FormErrorMessage
 } from '@chakra-ui/react'
 import Router from 'next/router'
 import React, { useState } from 'react'
@@ -246,7 +242,7 @@ const CreateTransaction: React.FC = () => {
   const totalPaid = +payers.reduce((acc, cur) => acc + cur.amount, 0).toFixed(2)
 
   const transaction = getTransactionObject()
-  let { validated, errorMessage } = validateTransaction(transaction)
+  let validated = validateTransaction(transaction)
 
   validated &&= invalidItemsNamesIndexes.length === 0
 
@@ -300,12 +296,19 @@ const CreateTransaction: React.FC = () => {
                     addRelated(selectedItemIndex)
                 }}
               />
+              <FormErrorMessage color="red.500">
+                Campo deve conter ao menos um caracter, não pode conter
+                caracteres especiais e não pode iniciar com um número
+              </FormErrorMessage>
             </FormControl>
           </ModalBody>
           <ModalFooter>
             <ButtonGroup>
               <Button
-                onClick={() => addRelated(selectedItemIndex)}
+                onClick={() => {
+                  addRelated(selectedItemIndex)
+                  onRelatedModalClose()
+                }}
                 isDisabled={!validateNewRelated()}
               >
                 Adicionar
@@ -331,7 +334,7 @@ const CreateTransaction: React.FC = () => {
             </Heading>
           </ModalHeader>
           <ModalBody pb={6}>
-            <FormControl id="transactionDay" isRequired={true} display="flex">
+            <FormControl id="transactionDay" display="flex">
               <FormLabel width="7.5rem" fontSize="lg">
                 Dia:
               </FormLabel>
@@ -354,7 +357,7 @@ const CreateTransaction: React.FC = () => {
                 </NumberInputStepper>
               </NumberInput>
             </FormControl>
-            <FormControl id="transactionMonth" isRequired={true} display="flex">
+            <FormControl id="transactionMonth" display="flex">
               <FormLabel width="7.5rem" fontSize="lg">
                 Mês:
               </FormLabel>
@@ -381,7 +384,7 @@ const CreateTransaction: React.FC = () => {
                 <option value="11">Dezembro</option>
               </Select>
             </FormControl>
-            <FormControl id="transactionYear" isRequired={true} display="flex">
+            <FormControl id="transactionYear" display="flex">
               <FormLabel width="7.5rem" fontSize="lg">
                 Ano:
               </FormLabel>
@@ -402,7 +405,7 @@ const CreateTransaction: React.FC = () => {
                 </NumberInputStepper>
               </NumberInput>
             </FormControl>
-            <FormControl id="transactionHour" isRequired={true} display="flex">
+            <FormControl id="transactionHour" display="flex">
               <FormLabel width="7.5rem" fontSize="lg">
                 Hora:
               </FormLabel>
@@ -425,11 +428,7 @@ const CreateTransaction: React.FC = () => {
                 </NumberInputStepper>
               </NumberInput>
             </FormControl>
-            <FormControl
-              id="transactionMinute"
-              isRequired={true}
-              display="flex"
-            >
+            <FormControl id="transactionMinute" display="flex">
               <FormLabel width="7.5rem" fontSize="lg">
                 Minutos:
               </FormLabel>
@@ -512,7 +511,7 @@ const CreateTransaction: React.FC = () => {
                 id="transactionTitle"
                 isRequired={true}
                 isInvalid={!validateLabel(title)}
-                display="flex"
+                mb={4}
               >
                 <FormLabel width="7.5rem" fontSize="lg">
                   Título:
@@ -522,6 +521,9 @@ const CreateTransaction: React.FC = () => {
                   value={title}
                   onChange={val => setTitle(val.target.value)}
                 />
+                <FormErrorMessage color="red.500">
+                  Título deve conter entre 2 e 255 caracteres
+                </FormErrorMessage>
               </FormControl>
             </Tooltip>
             <Tooltip
@@ -534,7 +536,6 @@ const CreateTransaction: React.FC = () => {
               <FormControl
                 id="transactionDate"
                 isRequired={true}
-                display="flex"
                 justifyContent="stretch"
               >
                 <FormLabel width="7.5rem" fontSize="lg">
@@ -569,18 +570,29 @@ const CreateTransaction: React.FC = () => {
                       hasArrow
                       placement="top"
                     >
-                      <LabelInput
-                        placeholder="Item"
+                      <FormControl
+                        id={`itemName ${index}`}
                         isRequired={true}
                         isInvalid={
-                          !validateLabel(items[index].itemName) ||
+                          !validateLabel(item.itemName) ||
                           invalidItemsNamesIndexes.includes(index)
                         }
-                        value={items[index].itemName}
-                        onChange={val =>
-                          updateItem(index, { itemName: val.target.value })
-                        }
-                      />
+                        justifyContent="stretch"
+                        mr={4}
+                      >
+                        <LabelInput
+                          placeholder="Item"
+                          value={item.itemName}
+                          onChange={val =>
+                            updateItem(index, { itemName: val.target.value })
+                          }
+                        />
+                        <FormErrorMessage color="red.500">
+                          {invalidItemsNamesIndexes.includes(index)
+                            ? 'Nome duplicado'
+                            : 'Nome do item deve conter entre 2 e 255 caracteres'}
+                        </FormErrorMessage>
+                      </FormControl>
                     </Tooltip>
                     <Tooltip
                       shouldWrapChildren
@@ -609,16 +621,24 @@ const CreateTransaction: React.FC = () => {
                       hasArrow
                       placement="top"
                     >
-                      <AmountInput
-                        value={formatAmount(items[index].amount)}
-                        onChange={val =>
-                          updateItem(index, {
-                            amount: parseAmount(val)
-                          })
-                        }
-                        isInvalid={!validateAmount(items[index].amount)}
-                        marginRight={2}
-                      />
+                      <FormControl
+                        id={`itemAmount ${index}`}
+                        isRequired={true}
+                        isInvalid={!validateAmount(item.amount)}
+                      >
+                        <AmountInput
+                          value={formatAmount(item.amount)}
+                          onChange={val =>
+                            updateItem(index, {
+                              amount: parseAmount(val)
+                            })
+                          }
+                          marginRight={2}
+                        />
+                        <FormErrorMessage color="red.500">
+                          Valor do item deve ser maior do que 0
+                        </FormErrorMessage>
+                      </FormControl>
                     </Tooltip>
                     <Wrap spacing={1} justify="flex-end" align="center">
                       {related.map(user => (
@@ -627,7 +647,7 @@ const CreateTransaction: React.FC = () => {
                             userId={user}
                             onClick={() => changeUserOnItem(index, user)}
                             variant={
-                              items[index].related_users.includes(user)
+                              item.related_users.includes(user)
                                 ? 'solid'
                                 : 'outline'
                             }
@@ -653,62 +673,44 @@ const CreateTransaction: React.FC = () => {
           </Box>
           <Box>
             <Text fontSize="lg">Pagamento:</Text>
-            <VStack spacing={1} align="flex-start">
-              {related.map((user, index) => (
-                <Flex key={user}>
-                  <IdBox userId={user} marginRight={2} marginLeft={4} />
-                  <AmountInput
-                    value={formatAmount(payers[index].amount)}
-                    onChange={val => updatePayer(index, parseAmount(val))}
-                  />
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    marginLeft={4}
-                    onClick={() =>
-                      updatePayer(
-                        index,
-                        payers[index].amount + itemsValues - totalPaid
-                      )
-                    }
-                    isDisabled={itemsValues === totalPaid}
-                  >
-                    Completar
-                  </Button>
-                </Flex>
-              ))}
-            </VStack>
-          </Box>
-          <HStack justify="center" align="center" spacing={2}>
-            <Button
-              isLoading={awaitingRequest}
-              loadingText="Criando..."
-              onClick={handleCreateTransaction}
-              isDisabled={!validated || awaitingRequest}
-            >
-              Criar Transação
-            </Button>
-            {!validated && (
-              <Popover trigger="hover">
-                <PopoverTrigger>
-                  <InfoOutlineIcon color="red.500" cursor="help" />
-                </PopoverTrigger>
-                <PopoverContent>
-                  <PopoverBody>
-                    <ErrorPopup
-                      error={{
-                        name: 'Erro!',
-                        message:
-                          invalidItemsNamesIndexes.length > 0
-                            ? `Itens com índices (${invalidItemsNamesIndexes}) estão com nomes duplicados`
-                            : errorMessage || ''
-                      }}
+            <FormControl isInvalid={itemsValues !== totalPaid}>
+              <VStack spacing={1} ml={4} align="flex-start">
+                {related.map((user, index) => (
+                  <HStack key={user} spacing={4}>
+                    <IdBox userId={user} />
+                    <AmountInput
+                      value={formatAmount(payers[index].amount)}
+                      onChange={val => updatePayer(index, parseAmount(val))}
                     />
-                  </PopoverBody>
-                </PopoverContent>
-              </Popover>
-            )}
-          </HStack>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        updatePayer(
+                          index,
+                          payers[index].amount + itemsValues - totalPaid
+                        )
+                      }
+                      isDisabled={itemsValues === totalPaid}
+                    >
+                      Completar
+                    </Button>
+                  </HStack>
+                ))}
+              </VStack>
+              <FormErrorMessage>
+                Valor dos itens deve ser o mesmo que o total pago
+              </FormErrorMessage>
+            </FormControl>
+          </Box>
+          <Button
+            isLoading={awaitingRequest}
+            loadingText="Criando..."
+            onClick={handleCreateTransaction}
+            isDisabled={!validated || awaitingRequest}
+          >
+            Criar Transação
+          </Button>
         </VStack>
       </Layout>
     </>
