@@ -1,6 +1,6 @@
 type Transaction = {
   title: string
-  timestamp: number
+  timestamp: number | string | Date
   items: TransactionItems
   payers: TransactionPayers
 }

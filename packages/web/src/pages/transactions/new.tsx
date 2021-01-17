@@ -25,13 +25,16 @@ import {
   Button,
   Text,
   FormControl,
-  FormLabel
+  FormLabel,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Select
 } from '@chakra-ui/react'
-import moment from 'moment'
 import Router from 'next/router'
 import React, { useState } from 'react'
-import DatePicker from 'react-datetime'
-import 'react-datetime/css/react-datetime.css'
 
 import AmountInput from '@components/AmountInput'
 import ErrorPopup from '@components/ErrorPopup'
@@ -65,8 +68,18 @@ const CreateTransaction: React.FC = () => {
     amount: 0
   }
 
+  const formatDate = (val: number | Date) =>
+    new Intl.DateTimeFormat('pt-BR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      formatMatcher: 'best fit'
+    }).format(val)
+
   const [title, setTitle] = useState('')
-  const [timestamp, setTimestamp] = useState(moment())
+  const [timestamp, setTimestamp] = useState(Date.now())
 
   const [items, setItems] = useState([{ ...baseItem }])
   const [invalidItemsNamesIndexes, setInvalidItemsNamesIndexes] = useState(
@@ -79,10 +92,36 @@ const CreateTransaction: React.FC = () => {
   const [newRelated, setNewRelated] = useState('')
   const [selectedItemIndex, setSelectedItemIndex] = useState(0)
 
+  const [transactionDay, setTransactionDay] = useState(
+    new Date(timestamp).getDate()
+  )
+
+  const [transactionMonth, setTransactionMonth] = useState(
+    new Date(timestamp).getMonth()
+  )
+
+  const [transactionYear, setTransactionYear] = useState(
+    new Date(timestamp).getFullYear()
+  )
+
+  const [transactionHour, setTransactionHour] = useState(
+    new Date(timestamp).getHours()
+  )
+
+  const [transactionMinute, setTransactionMinute] = useState(
+    new Date(timestamp).getMinutes()
+  )
+
   const {
-    isOpen: isModalOpen,
-    onOpen: onModalOpen,
-    onClose: onModalClose
+    isOpen: isRelatedModalOpen,
+    onOpen: onRelatedModalOpen,
+    onClose: onRelatedModalClose
+  } = useDisclosure()
+
+  const {
+    isOpen: isDateModalOpen,
+    onOpen: onDateModalOpen,
+    onClose: onDateModalClose
   } = useDisclosure()
 
   const [errors, setErrors] = useState(
@@ -225,7 +264,11 @@ const CreateTransaction: React.FC = () => {
 
   return (
     <>
-      <Modal isOpen={isModalOpen} onClose={onModalClose} motionPreset="scale">
+      <Modal
+        isOpen={isRelatedModalOpen}
+        onClose={onRelatedModalClose}
+        motionPreset="scale"
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
@@ -234,20 +277,25 @@ const CreateTransaction: React.FC = () => {
             </Heading>
           </ModalHeader>
           <ModalBody pb={6}>
-            <LabelInput
-              value={newRelated}
-              placeholder="Id do Usuário"
-              minLength={1}
-              maxLength={2}
-              onChange={val =>
-                setNewRelated(val.target.value.trim().toUpperCase())
-              }
-              onKeyDown={event => {
-                if (event.key.valueOf() === 'Enter')
-                  addRelated(selectedItemIndex)
-              }}
+            <FormControl
+              id="newRelated"
+              isRequired={true}
               isInvalid={!validateNewRelated()}
-            />
+            >
+              <LabelInput
+                value={newRelated}
+                placeholder="Id do Usuário"
+                minLength={1}
+                maxLength={2}
+                onChange={val =>
+                  setNewRelated(val.target.value.trim().toUpperCase())
+                }
+                onKeyDown={event => {
+                  if (event.key.valueOf() === 'Enter')
+                    addRelated(selectedItemIndex)
+                }}
+              />
+            </FormControl>
           </ModalBody>
           <ModalFooter>
             <ButtonGroup>
@@ -257,7 +305,168 @@ const CreateTransaction: React.FC = () => {
               >
                 Adicionar
               </Button>
-              <Button variant="outline" onClick={onModalClose}>
+              <Button variant="outline" onClick={onRelatedModalClose}>
+                Cancelar
+              </Button>
+            </ButtonGroup>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={isDateModalOpen}
+        onClose={onDateModalClose}
+        motionPreset="scale"
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            <Heading size="md" textAlign="center" color="purple.800">
+              Data e Horário da Transação
+            </Heading>
+          </ModalHeader>
+          <ModalBody pb={6}>
+            <FormControl id="transactionDay" isRequired={true} display="flex">
+              <FormLabel width="7.5rem" fontSize="lg">
+                Dia:
+              </FormLabel>
+              <NumberInput
+                defaultValue={transactionDay}
+                onChange={(_, val) => setTransactionDay(val)}
+                min={1}
+                max={31}
+                allowMouseWheel
+                variant="flushed"
+                borderColor="purple.400"
+                focusBorderColor="purple.600"
+                size="sm"
+                width="100%"
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </FormControl>
+            <FormControl id="transactionMonth" isRequired={true} display="flex">
+              <FormLabel width="7.5rem" fontSize="lg">
+                Mês:
+              </FormLabel>
+              <Select
+                defaultValue={transactionMonth}
+                onChange={e => setTransactionMonth(parseInt(e.target.value))}
+                allowMouseWheel
+                variant="flushed"
+                borderColor="purple.400"
+                focusBorderColor="purple.600"
+                size="sm"
+              >
+                <option value="0">Janeiro</option>
+                <option value="1">Fevereiro</option>
+                <option value="2">Março</option>
+                <option value="3">Abril</option>
+                <option value="4">Maio</option>
+                <option value="5">Junho</option>
+                <option value="6">Julho</option>
+                <option value="7">Agosto</option>
+                <option value="8">Setembro</option>
+                <option value="9">Outubro</option>
+                <option value="10">Novembro</option>
+                <option value="11">Dezembro</option>
+              </Select>
+            </FormControl>
+            <FormControl id="transactionYear" isRequired={true} display="flex">
+              <FormLabel width="7.5rem" fontSize="lg">
+                Ano:
+              </FormLabel>
+              <NumberInput
+                defaultValue={transactionYear}
+                onChange={(_, val) => setTransactionYear(val)}
+                allowMouseWheel
+                variant="flushed"
+                borderColor="purple.400"
+                focusBorderColor="purple.600"
+                size="sm"
+                width="100%"
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </FormControl>
+            <FormControl id="transactionHour" isRequired={true} display="flex">
+              <FormLabel width="7.5rem" fontSize="lg">
+                Hora:
+              </FormLabel>
+              <NumberInput
+                defaultValue={transactionHour}
+                onChange={(_, val) => setTransactionHour(val)}
+                min={0}
+                max={23}
+                allowMouseWheel
+                variant="flushed"
+                borderColor="purple.400"
+                focusBorderColor="purple.600"
+                size="sm"
+                width="100%"
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </FormControl>
+            <FormControl
+              id="transactionMinute"
+              isRequired={true}
+              display="flex"
+            >
+              <FormLabel width="7.5rem" fontSize="lg">
+                Minutos:
+              </FormLabel>
+              <NumberInput
+                defaultValue={transactionMinute}
+                onChange={(_, val) => setTransactionMinute(val)}
+                min={0}
+                max={59}
+                allowMouseWheel
+                variant="flushed"
+                borderColor="purple.400"
+                focusBorderColor="purple.600"
+                size="sm"
+                width="100%"
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <ButtonGroup>
+              <Button
+                onClick={() => {
+                  setTimestamp(
+                    new Date(
+                      transactionYear,
+                      transactionMonth,
+                      transactionDay,
+                      transactionHour,
+                      transactionMinute
+                    ).valueOf()
+                  )
+                  onDateModalClose()
+                }}
+              >
+                Atualizar
+              </Button>
+              <Button variant="outline" onClick={onDateModalClose}>
                 Cancelar
               </Button>
             </ButtonGroup>
@@ -312,20 +521,10 @@ const CreateTransaction: React.FC = () => {
                 <FormLabel width="7.5rem" fontSize="lg">
                   Data/Hora:
                 </FormLabel>
-                <DatePicker
-                  dateFormat="DD-MM-YYYY"
-                  timeFormat="hh:mm A"
-                  inputProps={{
-                    style: {
-                      backgroundColor: '#E6FB71',
-                      borderBottom: '1px solid #CB60D3',
-                      width: '100%',
-                      fontSize: '1rem'
-                    }
-                  }}
-                  locale={'pt-BR'}
-                  value={timestamp}
-                  onChange={val => setTimestamp(val as typeof timestamp)}
+                <LabelInput
+                  readOnly
+                  value={formatDate(timestamp)}
+                  onClick={onDateModalOpen}
                 />
               </FormControl>
             </Tooltip>
@@ -419,7 +618,7 @@ const CreateTransaction: React.FC = () => {
                         <IdBox
                           as="button"
                           onClick={() => {
-                            onModalOpen()
+                            onRelatedModalOpen()
                             setSelectedItemIndex(index)
                           }}
                           userId={'+'}
