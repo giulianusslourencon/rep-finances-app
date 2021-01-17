@@ -331,7 +331,7 @@ const CreateTransaction: React.FC = () => {
                 Dia:
               </FormLabel>
               <NumberInput
-                defaultValue={transactionDay}
+                value={transactionDay}
                 onChange={(_, val) => setTransactionDay(val)}
                 min={1}
                 max={31}
@@ -354,7 +354,7 @@ const CreateTransaction: React.FC = () => {
                 Mês:
               </FormLabel>
               <Select
-                defaultValue={transactionMonth}
+                value={transactionMonth}
                 onChange={e => setTransactionMonth(parseInt(e.target.value))}
                 allowMouseWheel
                 variant="flushed"
@@ -381,7 +381,7 @@ const CreateTransaction: React.FC = () => {
                 Ano:
               </FormLabel>
               <NumberInput
-                defaultValue={transactionYear}
+                value={transactionYear}
                 onChange={(_, val) => setTransactionYear(val)}
                 allowMouseWheel
                 variant="flushed"
@@ -402,7 +402,7 @@ const CreateTransaction: React.FC = () => {
                 Hora:
               </FormLabel>
               <NumberInput
-                defaultValue={transactionHour}
+                value={transactionHour}
                 onChange={(_, val) => setTransactionHour(val)}
                 min={0}
                 max={23}
@@ -429,7 +429,7 @@ const CreateTransaction: React.FC = () => {
                 Minutos:
               </FormLabel>
               <NumberInput
-                defaultValue={transactionMinute}
+                value={transactionMinute}
                 onChange={(_, val) => setTransactionMinute(val)}
                 min={0}
                 max={59}
@@ -449,7 +449,21 @@ const CreateTransaction: React.FC = () => {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <ButtonGroup>
+            <ButtonGroup alignItems="center">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const date = new Date()
+                  setTransactionDay(date.getDate())
+                  setTransactionMonth(date.getMonth())
+                  setTransactionYear(date.getFullYear())
+                  setTransactionHour(date.getHours())
+                  setTransactionMinute(date.getMinutes())
+                }}
+              >
+                Agora
+              </Button>
               <Button
                 onClick={() => {
                   setTimestamp(
