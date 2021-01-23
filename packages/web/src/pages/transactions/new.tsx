@@ -49,7 +49,7 @@ import {
 type TransactionItem = {
   itemName: string
   related_users: string[]
-  amount: number
+  amount: [number, number]
 }
 
 type TransactionPayer = {
@@ -61,7 +61,7 @@ const CreateTransaction: React.FC = () => {
   const baseItem: TransactionItem = {
     itemName: '',
     related_users: [],
-    amount: 0
+    amount: [1, 0]
   }
 
   const formatDate = (val: number | Date) =>
@@ -213,12 +213,15 @@ const CreateTransaction: React.FC = () => {
 
   const getTransactionObject = () => {
     const objItems = {} as {
-      [itemName: string]: Omit<TransactionItem, 'itemName'>
+      [itemName: string]: {
+        related_users: string[]
+        amount: number
+      }
     }
     items.map(
       item =>
         (objItems[item.itemName] = {
-          amount: item.amount / 100,
+          amount: (item.amount[0] * item.amount[1]) / 100,
           related_users: item.related_users
         })
     )
@@ -237,7 +240,7 @@ const CreateTransaction: React.FC = () => {
   }
 
   const itemsValues = +items
-    .reduce((acc, cur) => acc + cur.amount, 0)
+    .reduce((acc, cur) => acc + cur.amount[0] * cur.amount[1], 0)
     .toFixed(2)
   const totalPaid = +payers.reduce((acc, cur) => acc + cur.amount, 0).toFixed(2)
 
@@ -624,17 +627,35 @@ const CreateTransaction: React.FC = () => {
                       <FormControl
                         id={`itemAmount ${index}`}
                         isRequired={true}
-                        isInvalid={!validateAmount(item.amount)}
+                        isInvalid={
+                          !validateAmount(item.amount[0] * item.amount[1])
+                        }
                       >
-                        <AmountInput
-                          value={formatAmount(item.amount)}
-                          onChange={val =>
-                            updateItem(index, {
-                              amount: parseAmount(val)
-                            })
-                          }
-                          marginRight={2}
-                        />
+                        <HStack>
+                          <AmountInput
+                            value={item.amount[0]}
+                            onChange={(_, val) =>
+                              updateItem(index, {
+                                amount: [val || 0, item.amount[1]]
+                              })
+                            }
+                            min={1}
+                            precision={0}
+                            fieldProps={{ width: 8, textAlign: 'center' }}
+                          />
+                          <Text variant="thin" fontSize="sm" marginRight={0.5}>
+                            x
+                          </Text>
+                          <AmountInput
+                            value={formatAmount(item.amount[1])}
+                            onChange={val =>
+                              updateItem(index, {
+                                amount: [item.amount[0], parseAmount(val)]
+                              })
+                            }
+                            marginRight={2}
+                          />
+                        </HStack>
                         <FormErrorMessage color="red.500">
                           Valor do item deve ser maior do que 0
                         </FormErrorMessage>
