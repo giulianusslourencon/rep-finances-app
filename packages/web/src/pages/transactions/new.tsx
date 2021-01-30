@@ -624,14 +624,12 @@ const CreateTransaction: React.FC = () => {
                       hasArrow
                       placement="top"
                     >
-                      <FormControl
-                        id={`itemAmount ${index}`}
-                        isRequired={true}
-                        isInvalid={
-                          !validateAmount(item.amount[0] * item.amount[1])
-                        }
-                      >
-                        <HStack>
+                      <HStack>
+                        <FormControl
+                          id={`itemQuantity ${index}`}
+                          isRequired={true}
+                          isInvalid={!validateAmount(item.amount[0])}
+                        >
                           <AmountInput
                             value={item.amount[0]}
                             onChange={(_, val) =>
@@ -643,9 +641,18 @@ const CreateTransaction: React.FC = () => {
                             precision={0}
                             fieldProps={{ width: 8, textAlign: 'center' }}
                           />
-                          <Text variant="thin" fontSize="sm" marginRight={0.5}>
-                            x
-                          </Text>
+                          <FormErrorMessage color="red.500">
+                            Quantidade do item deve ser um inteiro positivo
+                          </FormErrorMessage>
+                        </FormControl>
+                        <Text variant="thin" fontSize="sm" marginRight={0.5}>
+                          x
+                        </Text>
+                        <FormControl
+                          id={`itemAmount ${index}`}
+                          isRequired={true}
+                          isInvalid={!validateAmount(item.amount[1])}
+                        >
                           <AmountInput
                             value={formatAmount(item.amount[1])}
                             onChange={val =>
@@ -655,11 +662,11 @@ const CreateTransaction: React.FC = () => {
                             }
                             marginRight={2}
                           />
-                        </HStack>
-                        <FormErrorMessage color="red.500">
-                          Valor do item deve ser maior do que 0
-                        </FormErrorMessage>
-                      </FormControl>
+                          <FormErrorMessage color="red.500">
+                            Valor do item deve ser maior do que 0
+                          </FormErrorMessage>
+                        </FormControl>
+                      </HStack>
                     </Tooltip>
                     <Wrap spacing={1} justify="flex-end" align="center">
                       {related.map(user => (
