@@ -6,7 +6,7 @@ import {
   TransactionViewModel
 } from '@presentation/viewModels'
 
-import { CreateTransaction } from '@useCases/ports/Transactions'
+import { CreateTransaction } from '@useCases/Transactions/ports'
 
 export class CreateTransactionController {
   constructor(private createTransaction: CreateTransaction) {}

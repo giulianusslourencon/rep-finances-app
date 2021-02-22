@@ -4,7 +4,7 @@ import { GetCurrentBalanceController } from '@presentation/controllers/Balance'
 import {
   GetCurrentBalanceUseCase,
   UpdateRegisteredBalanceUseCase
-} from '@useCases/implementations/Balance'
+} from '@useCases/Balance/implementations'
 
 export const makeGetCurrentBalance = () => {
   const updateBalance = new UpdateRegisteredBalanceUseCase(

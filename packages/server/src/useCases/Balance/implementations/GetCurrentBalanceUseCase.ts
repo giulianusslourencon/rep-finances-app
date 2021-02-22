@@ -1,14 +1,14 @@
-import { IBalanceRepository } from '@repositories/ports'
-
 import {
   GetCurrentBalance,
-  GetCurrentBalanceResponse,
-  UpdateRegisteredBalance
-} from '@useCases/ports/Balance'
+  GetCurrentBalanceBalanceRepository,
+  GetCurrentBalanceResponse
+} from '@useCases/Balance/ports/GetCurrentBalance'
+
+import { UpdateRegisteredBalance } from '../ports/UpdateRegisteredBalance'
 
 export class GetCurrentBalanceUseCase implements GetCurrentBalance {
   constructor(
-    private readonly balanceRepository: IBalanceRepository,
+    private readonly balanceRepository: GetCurrentBalanceBalanceRepository,
     private readonly updateRegisteredBalance: UpdateRegisteredBalance
   ) {}
 

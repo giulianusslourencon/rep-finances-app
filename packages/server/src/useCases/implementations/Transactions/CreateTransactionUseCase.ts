@@ -11,7 +11,7 @@ import {
   CreateTransaction,
   CreateTransactionProps,
   CreateTransactionResponse
-} from '@useCases/ports/Transactions'
+} from '@useCases/Transactions/ports'
 
 export class CreateTransactionUseCase implements CreateTransaction {
   constructor(

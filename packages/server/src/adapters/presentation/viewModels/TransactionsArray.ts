@@ -1,4 +1,4 @@
-import { ListTransactionsResponse } from '@useCases/ports/Transactions'
+import { ListTransactionsResponse } from '@useCases/Transactions/ports'
 
 export type TransactionsArrayViewModel = TransactionResume[]
 export class TransactionResume {

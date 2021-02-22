@@ -2,8 +2,8 @@ import { HttpRequest, HttpResponse } from '@presentation/contracts'
 import { error, serverError, success } from '@presentation/controllers/helpers'
 import { TransactionDetailsViewModel } from '@presentation/viewModels'
 
-import { GetTransactionBalance } from '@useCases/ports/Balance'
-import { FindTransaction } from '@useCases/ports/Transactions'
+import { GetTransactionBalance } from '@useCases/Balance/ports'
+import { FindTransaction } from '@useCases/Transactions/ports'
 
 export class FindTransactionController {
   constructor(

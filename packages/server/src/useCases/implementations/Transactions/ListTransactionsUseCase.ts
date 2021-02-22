@@ -4,7 +4,7 @@ import {
   ListTransactions,
   ListTransactionsProps,
   ListTransactionsResponse
-} from '@useCases/ports/Transactions'
+} from '@useCases/Transactions/ports'
 
 export class ListTransactionsUseCase implements ListTransactions {
   constructor(

@@ -5,17 +5,17 @@ import { TransactionProps } from '@entities/Transaction'
 
 import { left, right } from '@shared/Either'
 
-import { TransactionNotFoundError } from '@useCases/errors'
 import {
   GetTransactionBalance,
   GetTransactionBalanceProps,
   GetTransactionBalanceResponse
-} from '@useCases/ports/Balance'
+} from '@useCases/Balance/ports'
+import { TransactionNotFoundError } from '@useCases/errors'
 import {
   FindTransaction,
   FindTransactionProps,
   FindTransactionResponse
-} from '@useCases/ports/Transactions'
+} from '@useCases/Transactions/ports'
 
 interface ISutType {
   sut: FindTransactionController

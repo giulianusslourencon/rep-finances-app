@@ -4,25 +4,18 @@ import {
 } from '@repositories/mongodb/implementations'
 import { BalanceModel } from '@repositories/mongodb/schemas'
 
-import { GetCurrentBalanceUseCase } from '@useCases/implementations/Balance'
+import { UpdateRegisteredBalanceUseCase } from '@useCases/Balance/implementations'
 
-import { UpdateRegisteredBalanceUseCase } from '../UpdateRegisteredBalanceUseCase'
 import { balances, transactions, updatedBalances } from './testData'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const MongoBalance = new MongoBalanceRepository()
-
 const updateRegisteredBalanceUseCase = new UpdateRegisteredBalanceUseCase(
   MongoTransactions,
   MongoBalance
 )
 
-const getCurrentBalanceUseCase = new GetCurrentBalanceUseCase(
-  MongoBalance,
-  updateRegisteredBalanceUseCase
-)
-
-describe('Get current balance use case', () => {
+describe('Update registered balance use case', () => {
   beforeAll(async () => {
     await MongoTransactions.connect()
     await MongoBalance.connect()
@@ -46,14 +39,11 @@ describe('Get current balance use case', () => {
     )
   })
 
-  it('Should update all the month balances in collection and return the current balance', async () => {
-    const currentBalance = await getCurrentBalanceUseCase.execute()
+  it('Should update all the month balances in collection', async () => {
+    await updateRegisteredBalanceUseCase.execute()
 
     const balances = await BalanceModel.find({}, { __v: 0 }).lean()
 
     expect(balances).toStrictEqual(updatedBalances)
-    expect(currentBalance).toStrictEqual({
-      individual_balance: updatedBalances[2].individual_balance
-    })
   })
 })

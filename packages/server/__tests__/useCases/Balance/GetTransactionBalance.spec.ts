@@ -1,6 +1,6 @@
 import { right } from '@shared/Either'
 
-import { GetTransactionBalanceUseCase } from '@useCases/implementations/Balance'
+import { GetTransactionBalanceUseCase } from '@useCases/Balance/implementations'
 
 import { transactionToSave } from './testData'
 

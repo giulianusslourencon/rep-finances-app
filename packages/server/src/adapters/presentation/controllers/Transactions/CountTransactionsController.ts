@@ -2,7 +2,7 @@ import { HttpRequest, HttpResponse } from '@presentation/contracts'
 import { serverError, success } from '@presentation/controllers/helpers'
 import { TransactionsCountViewModel } from '@presentation/viewModels'
 
-import { CountTransactions } from '@useCases/ports/Transactions'
+import { CountTransactions } from '@useCases/Transactions/ports'
 
 export class CountTransactionsController {
   constructor(private countTransactions: CountTransactions) {}

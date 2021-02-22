@@ -1,7 +1,7 @@
 import { MongoTransactions } from '@main/factories'
 import { FindTransactionController } from '@presentation/controllers/Transactions'
 
-import { GetTransactionBalanceUseCase } from '@useCases/implementations/Balance'
+import { GetTransactionBalanceUseCase } from '@useCases/Balance/implementations'
 import { FindTransactionUseCase } from '@useCases/implementations/Transactions'
 
 export const makeFindTransaction = () => {

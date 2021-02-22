@@ -7,7 +7,7 @@ import {
   FindTransaction,
   FindTransactionProps,
   FindTransactionResponse
-} from '@useCases/ports/Transactions'
+} from '@useCases/Transactions/ports'
 
 export class FindTransactionUseCase implements FindTransaction {
   constructor(

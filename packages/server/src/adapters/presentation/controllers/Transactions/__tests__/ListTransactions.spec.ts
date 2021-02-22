@@ -5,7 +5,7 @@ import {
   ListTransactions,
   ListTransactionsProps,
   ListTransactionsResponse
-} from '@useCases/ports/Transactions'
+} from '@useCases/Transactions/ports'
 
 interface ISutType {
   sut: ListTransactionsController

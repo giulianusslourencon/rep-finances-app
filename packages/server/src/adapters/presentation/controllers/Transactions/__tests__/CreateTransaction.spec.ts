@@ -9,7 +9,7 @@ import {
   CreateTransaction,
   CreateTransactionProps,
   CreateTransactionResponse
-} from '@useCases/ports/Transactions'
+} from '@useCases/Transactions/ports'
 
 interface ISutType {
   sut: CreateTransactionController

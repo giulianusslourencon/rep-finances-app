@@ -5,7 +5,7 @@ import {
   IBalanceRepository
 } from '@repositories/ports'
 
-import { UpdateRegisteredBalance } from '@useCases/ports/Balance'
+import { UpdateRegisteredBalance } from '@useCases/Balance/ports'
 
 export class UpdateRegisteredBalanceUseCase implements UpdateRegisteredBalance {
   constructor(

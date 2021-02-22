@@ -2,7 +2,7 @@ import { Controller, HttpRequest, HttpResponse } from '@presentation/contracts'
 import { serverError, success } from '@presentation/controllers/helpers'
 import { CurrentBalanceViewModel } from '@presentation/viewModels'
 
-import { GetCurrentBalance } from '@useCases/ports/Balance'
+import { GetCurrentBalance } from '@useCases/Balance/ports'
 
 export class GetCurrentBalanceController implements Controller {
   constructor(private getCurrentBalance: GetCurrentBalance) {}

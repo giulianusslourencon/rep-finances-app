@@ -4,7 +4,7 @@ import {
   CountTransactions,
   CountTransactionsProps,
   CountTransactionsResponse
-} from '@useCases/ports/Transactions'
+} from '@useCases/Transactions/ports'
 
 export class CountTransactionsUseCase implements CountTransactions {
   constructor(

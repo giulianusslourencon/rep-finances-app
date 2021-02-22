@@ -5,7 +5,7 @@ import {
   TransactionsArrayViewModel
 } from '@presentation/viewModels'
 
-import { ListTransactions } from '@useCases/ports/Transactions'
+import { ListTransactions } from '@useCases/Transactions/ports'
 
 export class ListTransactionsController implements Controller {
   constructor(private listTransactions: ListTransactions) {}

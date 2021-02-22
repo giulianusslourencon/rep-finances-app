@@ -3,7 +3,7 @@ import {
   TransactionAttributes
 } from '@repositories/attributes'
 
-import { CreateTransactionProps } from '@useCases/ports/Transactions'
+import { CreateTransactionProps } from '@useCases/Transactions/ports'
 
 export const transactions: TransactionAttributes[] = [
   {
