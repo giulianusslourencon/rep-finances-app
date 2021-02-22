@@ -15,8 +15,8 @@ module.exports = {
     ['module-resolver', {
       alias: {
         '@presentation': './src/adapters/presentation',
+        '@repositories': './src/adapters/repositories',
         '@entities': './src/entities',
-        '@repositories': './src/external/repositories',
         '@main': './src/main',
         '@shared': './src/shared',
         '@useCases': './src/useCases'

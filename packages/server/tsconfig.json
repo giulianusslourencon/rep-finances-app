@@ -4,22 +4,22 @@
     "baseUrl": ".",
     "paths": {
       "@presentation/*": [
-        "./src/adapters/presentation/*"
+        "src/adapters/presentation/*"
       ],
       "@entities/*": [
-        "./src/entities/*"
+        "src/entities/*"
       ],
       "@repositories/*": [
-        "src/external/repositories/*"
+        "src/adapters/repositories/*"
       ],
       "@main/*": [
-        "./src/main/*"
+        "src/main/*"
       ],
       "@shared/*": [
-        "./src/shared/*"
+        "src/shared/*"
       ],
       "@useCases/*": [
-        "./src/useCases/*"
+        "src/useCases/*"
       ]
     }
   },
