@@ -30,76 +30,80 @@ const makeSut = (): ISutType => {
   return { sut, countTransactionsStub }
 }
 
-describe('Count transactions controller', () => {
-  it('Should return the number of all registered transactions', async () => {
-    const { sut, countTransactionsStub } = makeSut()
-    const httpRequest: HttpRequest = {
-      query: {},
-      body: {},
-      params: {}
-    }
-    const countTransactionsSpy = jest.spyOn(countTransactionsStub, 'execute')
+describe('Count Transactions Controller', () => {
+  describe('Success Cases', () => {
+    it('Should return the number of all registered transactions', async () => {
+      const { sut, countTransactionsStub } = makeSut()
+      const httpRequest: HttpRequest = {
+        query: {},
+        body: {},
+        params: {}
+      }
+      const countTransactionsSpy = jest.spyOn(countTransactionsStub, 'execute')
 
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(200)
-    expect(countTransactionsSpy).toBeCalledWith<[CountTransactionsProps]>({})
-    expect(httpResponse.body).toEqual({ count: 2 })
-  })
-
-  it('Should return the number of all registered transactions by month', async () => {
-    const { sut, countTransactionsStub } = makeSut()
-    const httpRequest: HttpRequest = {
-      query: { month: '202012' },
-      body: {},
-      params: {}
-    }
-    const countTransactionsSpy = jest.spyOn(countTransactionsStub, 'execute')
-
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(200)
-    expect(countTransactionsSpy).toBeCalledWith<[CountTransactionsProps]>({
-      month: '202012'
-    })
-    expect(httpResponse.body).toEqual({ count: 1 })
-  })
-
-  it('Should return 500 if use case throws', async () => {
-    const { sut, countTransactionsStub } = makeSut()
-    jest.spyOn(countTransactionsStub, 'execute').mockImplementation(() => {
-      throw new Error()
+      const httpResponse = await sut.handle(httpRequest)
+      expect(httpResponse.statusCode).toBe(200)
+      expect(countTransactionsSpy).toBeCalledWith<[CountTransactionsProps]>({})
+      expect(httpResponse.body).toEqual({ count: 2 })
     })
 
-    const httpRequest: HttpRequest = {
-      query: {},
-      body: {},
-      params: {}
-    }
+    it('Should return the number of all registered transactions by month', async () => {
+      const { sut, countTransactionsStub } = makeSut()
+      const httpRequest: HttpRequest = {
+        query: { month: '202012' },
+        body: {},
+        params: {}
+      }
+      const countTransactionsSpy = jest.spyOn(countTransactionsStub, 'execute')
 
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual({
-      name: 'ServerError',
-      message: 'Server error: Unexpected error.'
+      const httpResponse = await sut.handle(httpRequest)
+      expect(httpResponse.statusCode).toBe(200)
+      expect(countTransactionsSpy).toBeCalledWith<[CountTransactionsProps]>({
+        month: '202012'
+      })
+      expect(httpResponse.body).toEqual({ count: 1 })
     })
   })
 
-  it('Should return 500 if use case throws with custom reason', async () => {
-    const { sut, countTransactionsStub } = makeSut()
-    jest.spyOn(countTransactionsStub, 'execute').mockImplementation(() => {
-      throw new Error('Error')
+  describe('Server Error Cases', () => {
+    it('Should return 500 if use case throws', async () => {
+      const { sut, countTransactionsStub } = makeSut()
+      jest.spyOn(countTransactionsStub, 'execute').mockImplementation(() => {
+        throw new Error()
+      })
+
+      const httpRequest: HttpRequest = {
+        query: {},
+        body: {},
+        params: {}
+      }
+
+      const httpResponse = await sut.handle(httpRequest)
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body).toEqual({
+        name: 'ServerError',
+        message: 'Server error: Unexpected error.'
+      })
     })
 
-    const httpRequest: HttpRequest = {
-      query: {},
-      body: {},
-      params: {}
-    }
+    it('Should return 500 if use case throws with custom reason', async () => {
+      const { sut, countTransactionsStub } = makeSut()
+      jest.spyOn(countTransactionsStub, 'execute').mockImplementation(() => {
+        throw new Error('Error')
+      })
 
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual({
-      name: 'ServerError',
-      message: 'Server error: Error.'
+      const httpRequest: HttpRequest = {
+        query: {},
+        body: {},
+        params: {}
+      }
+
+      const httpResponse = await sut.handle(httpRequest)
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body).toEqual({
+        name: 'ServerError',
+        message: 'Server error: Error.'
+      })
     })
   })
 })

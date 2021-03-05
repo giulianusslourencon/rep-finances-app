@@ -22,7 +22,7 @@ const getCurrentBalanceUseCase = new GetCurrentBalanceUseCase(
   updateRegisteredBalanceUseCase
 )
 
-describe('Get current balance use case', () => {
+describe('Get Current Balance Use Case', () => {
   beforeAll(async () => {
     await MongoTransactions.connect()
     await MongoBalance.connect()
@@ -46,14 +46,16 @@ describe('Get current balance use case', () => {
     )
   })
 
-  it('Should update all the month balances in collection and return the current balance', async () => {
-    const currentBalance = await getCurrentBalanceUseCase.execute()
+  describe('Success Cases', () => {
+    it('Should update all the month balances in collection and return the current balance', async () => {
+      const currentBalance = await getCurrentBalanceUseCase.execute()
 
-    const balances = await BalanceModel.find({}, { __v: 0 }).lean()
+      const balances = await BalanceModel.find({}, { __v: 0 }).lean()
 
-    expect(balances).toStrictEqual(updatedBalances)
-    expect(currentBalance).toStrictEqual({
-      individual_balance: updatedBalances[2].individual_balance
+      expect(balances).toStrictEqual(updatedBalances)
+      expect(currentBalance).toStrictEqual({
+        individual_balance: updatedBalances[2].individual_balance
+      })
     })
   })
 })

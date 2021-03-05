@@ -15,7 +15,7 @@ const updateRegisteredBalanceUseCase = new UpdateRegisteredBalanceUseCase(
   MongoBalance
 )
 
-describe('Update registered balance use case', () => {
+describe('Update Registered Balance Use Case', () => {
   beforeAll(async () => {
     await MongoTransactions.connect()
     await MongoBalance.connect()
@@ -39,11 +39,13 @@ describe('Update registered balance use case', () => {
     )
   })
 
-  it('Should update all the month balances in collection', async () => {
-    await updateRegisteredBalanceUseCase.execute()
+  describe('Success Cases', () => {
+    it('Should update all the month balances in collection', async () => {
+      await updateRegisteredBalanceUseCase.execute()
 
-    const balances = await BalanceModel.find({}, { __v: 0 }).lean()
+      const balances = await BalanceModel.find({}, { __v: 0 }).lean()
 
-    expect(balances).toStrictEqual(updatedBalances)
+      expect(balances).toStrictEqual(updatedBalances)
+    })
   })
 })

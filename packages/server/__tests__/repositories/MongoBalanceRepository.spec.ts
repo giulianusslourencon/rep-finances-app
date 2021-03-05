@@ -6,7 +6,7 @@ import { balances } from './testData'
 
 const MongoBalance = new MongoBalanceRepository()
 
-describe('Mongo balance repository', () => {
+describe('Mongo Balance Repository', () => {
   beforeAll(async () => {
     await MongoBalance.connect()
   })
@@ -23,96 +23,108 @@ describe('Mongo balance repository', () => {
     )
   })
 
-  it('Should update month with new balance and set it to updated', async () => {
-    const updatedBalance: MonthBalance = {
-      individual_balance: {
-        P: -10,
-        M: 30,
-        G: -50,
-        F: 30
+  describe('Update Month', () => {
+    it('Should update month with new balance and set it to updated', async () => {
+      const updatedBalance: MonthBalance = {
+        individual_balance: {
+          P: -10,
+          M: 30,
+          G: -50,
+          F: 30
+        }
       }
-    }
 
-    await MongoBalance.updateMonth('202012', updatedBalance)
+      await MongoBalance.updateMonth('202012', updatedBalance)
 
-    const updatedMonth = await BalanceModel.findById('202012').lean()
+      const updatedMonth = await BalanceModel.findById('202012').lean()
 
-    expect((<BalanceAttributes>updatedMonth).individual_balance).toStrictEqual(
-      updatedBalance.individual_balance
-    )
-    expect((<BalanceAttributes>updatedMonth).updated).toBeTruthy()
-  })
+      expect(
+        (<BalanceAttributes>updatedMonth).individual_balance
+      ).toStrictEqual(updatedBalance.individual_balance)
+      expect((<BalanceAttributes>updatedMonth).updated).toBeTruthy()
+    })
 
-  it('Should create a new month if not exists', async () => {
-    const updatedBalance: MonthBalance = {
-      individual_balance: {
-        P: -10,
-        M: 60,
-        G: -10,
-        F: -40
+    it('Should create a new month if not exists', async () => {
+      const updatedBalance: MonthBalance = {
+        individual_balance: {
+          P: -10,
+          M: 60,
+          G: -10,
+          F: -40
+        }
       }
-    }
 
-    await MongoBalance.updateMonth('202101', updatedBalance)
+      await MongoBalance.updateMonth('202101', updatedBalance)
 
-    const updatedMonth = await BalanceModel.findById('202101').lean()
+      const updatedMonth = await BalanceModel.findById('202101').lean()
 
-    expect(updatedMonth).toBeTruthy()
-    expect((<BalanceAttributes>updatedMonth).individual_balance).toStrictEqual(
-      updatedBalance.individual_balance
-    )
-    expect((<BalanceAttributes>updatedMonth).updated).toBeTruthy()
-  })
-
-  it('Should return all not updated months', async () => {
-    const notUpdatedMonths = await MongoBalance.getNotUpdatedMonths()
-
-    expect(notUpdatedMonths).toStrictEqual(['202012'])
-  })
-
-  it('Should return the month balance if registered', async () => {
-    const monthBalance = await MongoBalance.getMonthBalance('202011')
-
-    expect(monthBalance).toBeTruthy()
-    expect(monthBalance).toStrictEqual({
-      individual_balance: balances[0].individual_balance
+      expect(updatedMonth).toBeTruthy()
+      expect(
+        (<BalanceAttributes>updatedMonth).individual_balance
+      ).toStrictEqual(updatedBalance.individual_balance)
+      expect((<BalanceAttributes>updatedMonth).updated).toBeTruthy()
     })
   })
 
-  it('Should return a falsy value if the month is nor registered', async () => {
-    const monthBalance = await MongoBalance.getMonthBalance('202101')
+  describe('Get Not Updated Months', () => {
+    it('Should return all not updated months', async () => {
+      const notUpdatedMonths = await MongoBalance.getNotUpdatedMonths()
 
-    expect(monthBalance).toBeFalsy()
+      expect(notUpdatedMonths).toStrictEqual(['202012'])
+    })
   })
 
-  it('Should set updated flag to false from given month', async () => {
-    const updatedBalance: MonthBalance = {
-      individual_balance: {
-        P: -10,
-        M: 30,
-        G: -50,
-        F: 30
+  describe('Get Month Balance', () => {
+    it('Should return the month balance if registered', async () => {
+      const monthBalance = await MongoBalance.getMonthBalance('202011')
+
+      expect(monthBalance).toBeTruthy()
+      expect(monthBalance).toStrictEqual({
+        individual_balance: balances[0].individual_balance
+      })
+    })
+
+    it('Should return a falsy value if the month is nor registered', async () => {
+      const monthBalance = await MongoBalance.getMonthBalance('202101')
+
+      expect(monthBalance).toBeFalsy()
+    })
+  })
+
+  describe('Set Not Updated From Month', () => {
+    it('Should set updated flag to false from given month', async () => {
+      const updatedBalance: MonthBalance = {
+        individual_balance: {
+          P: -10,
+          M: 30,
+          G: -50,
+          F: 30
+        }
       }
-    }
 
-    await MongoBalance.updateMonth('202012', updatedBalance)
+      await MongoBalance.updateMonth('202012', updatedBalance)
 
-    await MongoBalance.setNotUpdatedFromMonth('202011')
+      await MongoBalance.setNotUpdatedFromMonth('202011')
 
-    const notUpdatedMonths = await MongoBalance.getNotUpdatedMonths()
+      const notUpdatedMonths = await MongoBalance.getNotUpdatedMonths()
 
-    expect(notUpdatedMonths).toStrictEqual(['202011', '202012'])
+      expect(notUpdatedMonths).toStrictEqual(['202011', '202012'])
+    })
   })
 
-  it('Should return the last updated month if exists', async () => {
-    const lastUpdatedMonth = await MongoBalance.getLastUpdatedMonth()
+  describe('Get Last Updated Month', () => {
+    it('Should return the last updated month if exists', async () => {
+      const lastUpdatedMonth = await MongoBalance.getLastUpdatedMonth()
 
-    expect(lastUpdatedMonth).toBe('202011')
+      expect(lastUpdatedMonth).toBe('202011')
+    })
   })
 
-  it('Should return the last registered month if exists', async () => {
-    const lastRegisteredMonth = await MongoBalance.getLastRegisteredMonth()
+  describe('Get Last Registered Month', () => {
+    it('Should return the last registered month if exists', async () => {
+      const lastRegisteredMonth = await MongoBalance.getLastRegisteredMonth()
 
-    expect(lastRegisteredMonth).toBe('202012')
+      expect(lastRegisteredMonth).toBe('202012')
+    })
   })
 })

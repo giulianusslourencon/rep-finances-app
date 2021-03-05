@@ -3,42 +3,46 @@ import { InvalidUserIdError } from '@entities/atomics/errors'
 
 import { left } from '@shared/Either'
 
-describe('UserId', () => {
-  it('Should allow single character string', () => {
-    const userIdOrError = UserId.create('P')
+describe('User Id Entity', () => {
+  describe('Success Cases', () => {
+    it('Should allow single character string', () => {
+      const userIdOrError = UserId.create('P')
 
-    expect(userIdOrError.isRight()).toBeTruthy()
-    expect((<UserId>userIdOrError.value).value).toBe('P')
+      expect(userIdOrError.isRight()).toBeTruthy()
+      expect((<UserId>userIdOrError.value).value).toBe('P')
+    })
+
+    it('Should allow double character string, trim and uppercase it', () => {
+      const userIdOrError = UserId.create('dp   ')
+
+      expect(userIdOrError.isRight()).toBeTruthy()
+      expect((<UserId>userIdOrError.value).value).toBe('DP')
+    })
   })
 
-  it('Should allow double character string, trim and uppercase it', () => {
-    const userIdOrError = UserId.create('dp   ')
+  describe('Error Cases', () => {
+    it('Should not allow more than 2 characteres string', () => {
+      const userIdOrError = UserId.create('aaaaa')
 
-    expect(userIdOrError.isRight()).toBeTruthy()
-    expect((<UserId>userIdOrError.value).value).toBe('DP')
-  })
+      expect(userIdOrError).toEqual(left(new InvalidUserIdError('aaaaa')))
+    })
 
-  it('Should not allow more than 2 characteres string', () => {
-    const userIdOrError = UserId.create('aaaaa')
+    it('Should not allow null trimmed string', () => {
+      const userIdOrError = UserId.create(' ')
 
-    expect(userIdOrError).toEqual(left(new InvalidUserIdError('aaaaa')))
-  })
+      expect(userIdOrError).toEqual(left(new InvalidUserIdError(' ')))
+    })
 
-  it('Should not allow null trimmed string', () => {
-    const userIdOrError = UserId.create(' ')
+    it('Should not allow special characteres', () => {
+      const userIdOrError = UserId.create('@2')
 
-    expect(userIdOrError).toEqual(left(new InvalidUserIdError(' ')))
-  })
+      expect(userIdOrError).toEqual(left(new InvalidUserIdError('@2')))
+    })
 
-  it('Should not allow special characteres', () => {
-    const userIdOrError = UserId.create('@2')
+    it('Should not allow strings started in numbers', () => {
+      const userIdOrError = UserId.create('2a')
 
-    expect(userIdOrError).toEqual(left(new InvalidUserIdError('@2')))
-  })
-
-  it('Should not allow strings started in numbers', () => {
-    const userIdOrError = UserId.create('2a')
-
-    expect(userIdOrError).toEqual(left(new InvalidUserIdError('2a')))
+      expect(userIdOrError).toEqual(left(new InvalidUserIdError('2a')))
+    })
   })
 })

@@ -7,7 +7,7 @@ import { transactions } from './testData'
 const MongoTransactions = new MongoTransactionsRepository()
 const listTransactionsUseCase = new ListTransactionsUseCase(MongoTransactions)
 
-describe('List transactions use case', () => {
+describe('List Transactions Use Case', () => {
   beforeAll(async () => {
     await MongoTransactions.connect()
   })
@@ -24,18 +24,20 @@ describe('List transactions use case', () => {
     )
   })
 
-  it('Should return a list of all registered transactions', async () => {
-    const transactionsList = await listTransactionsUseCase.execute({})
+  describe('Success Cases', () => {
+    it('Should return a list of all registered transactions', async () => {
+      const transactionsList = await listTransactionsUseCase.execute({})
 
-    expect(transactionsList).toHaveLength(4)
-  })
-
-  it('Should return a list of registered transactions in a month', async () => {
-    const transactionsList = await listTransactionsUseCase.execute({
-      month: '202011'
+      expect(transactionsList).toHaveLength(4)
     })
 
-    expect(transactionsList).toHaveLength(1)
-    expect(transactionsList[0]._id).toBe('20201117')
+    it('Should return a list of registered transactions in a month', async () => {
+      const transactionsList = await listTransactionsUseCase.execute({
+        month: '202011'
+      })
+
+      expect(transactionsList).toHaveLength(1)
+      expect(transactionsList[0]._id).toBe('20201117')
+    })
   })
 })

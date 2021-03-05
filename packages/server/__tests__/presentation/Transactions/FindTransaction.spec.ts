@@ -85,115 +85,125 @@ const makeSut = (): ISutType => {
   return { sut, findTransactionStub, getTransactionBalanceStub }
 }
 
-describe('Find transaction controller', () => {
-  it('Should return the transaction and its balance if found', async () => {
-    const { sut } = makeSut()
-    const httpRequest: HttpRequest = {
-      body: {},
-      query: {},
-      params: { id: 'id' }
-    }
+describe('Find Transaction Controller', () => {
+  describe('Success Cases', () => {
+    it('Should return the transaction and its balance if found', async () => {
+      const { sut } = makeSut()
+      const httpRequest: HttpRequest = {
+        body: {},
+        query: {},
+        params: { id: 'id' }
+      }
 
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(200)
-    expect(httpResponse.body).toHaveProperty('transaction')
-    expect(httpResponse.body).toHaveProperty('balance')
-    expect(httpResponse.body.transaction._id).toBe('id')
-  })
-
-  it('Should return a 404 status code if the transaction was not found', async () => {
-    const { sut } = makeSut()
-    const httpRequest: HttpRequest = {
-      body: {},
-      query: {},
-      params: { id: 'id2' }
-    }
-
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(404)
-    expect(httpResponse.body).toEqual({
-      name: 'TransactionNotFoundError',
-      message: 'Transaction with id "id2" not found'
+      const httpResponse = await sut.handle(httpRequest)
+      expect(httpResponse.statusCode).toBe(200)
+      expect(httpResponse.body).toHaveProperty('transaction')
+      expect(httpResponse.body).toHaveProperty('balance')
+      expect(httpResponse.body.transaction._id).toBe('id')
     })
   })
 
-  it('Should return 500 if find transaction use case throws', async () => {
-    const { sut, findTransactionStub } = makeSut()
-    jest.spyOn(findTransactionStub, 'execute').mockImplementation(() => {
-      throw new Error()
-    })
+  describe('Error Cases', () => {
+    it('Should return a 404 status code if the transaction was not found', async () => {
+      const { sut } = makeSut()
+      const httpRequest: HttpRequest = {
+        body: {},
+        query: {},
+        params: { id: 'id2' }
+      }
 
-    const httpRequest: HttpRequest = {
-      query: {},
-      body: {},
-      params: { id: 'id' }
-    }
-
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual({
-      name: 'ServerError',
-      message: 'Server error: Unexpected error.'
+      const httpResponse = await sut.handle(httpRequest)
+      expect(httpResponse.statusCode).toBe(404)
+      expect(httpResponse.body).toEqual({
+        name: 'TransactionNotFoundError',
+        message: 'Transaction with id "id2" not found'
+      })
     })
   })
 
-  it('Should return 500 if find transaction use case throws with custom reason', async () => {
-    const { sut, findTransactionStub } = makeSut()
-    jest.spyOn(findTransactionStub, 'execute').mockImplementation(() => {
-      throw new Error('Error')
+  describe('Server Error Cases', () => {
+    it('Should return 500 if find transaction use case throws', async () => {
+      const { sut, findTransactionStub } = makeSut()
+      jest.spyOn(findTransactionStub, 'execute').mockImplementation(() => {
+        throw new Error()
+      })
+
+      const httpRequest: HttpRequest = {
+        query: {},
+        body: {},
+        params: { id: 'id' }
+      }
+
+      const httpResponse = await sut.handle(httpRequest)
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body).toEqual({
+        name: 'ServerError',
+        message: 'Server error: Unexpected error.'
+      })
     })
 
-    const httpRequest: HttpRequest = {
-      query: {},
-      body: {},
-      params: { id: 'id' }
-    }
+    it('Should return 500 if find transaction use case throws with custom reason', async () => {
+      const { sut, findTransactionStub } = makeSut()
+      jest.spyOn(findTransactionStub, 'execute').mockImplementation(() => {
+        throw new Error('Error')
+      })
 
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual({
-      name: 'ServerError',
-      message: 'Server error: Error.'
-    })
-  })
+      const httpRequest: HttpRequest = {
+        query: {},
+        body: {},
+        params: { id: 'id' }
+      }
 
-  it('Should return 500 if get transaction balance use case throws', async () => {
-    const { sut, getTransactionBalanceStub } = makeSut()
-    jest.spyOn(getTransactionBalanceStub, 'execute').mockImplementation(() => {
-      throw new Error()
-    })
-
-    const httpRequest: HttpRequest = {
-      query: {},
-      body: {},
-      params: { id: 'id' }
-    }
-
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual({
-      name: 'ServerError',
-      message: 'Server error: Unexpected error.'
-    })
-  })
-
-  it('Should return 500 if get transaction balance use case throws with custom reason', async () => {
-    const { sut, getTransactionBalanceStub } = makeSut()
-    jest.spyOn(getTransactionBalanceStub, 'execute').mockImplementation(() => {
-      throw new Error('Error')
+      const httpResponse = await sut.handle(httpRequest)
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body).toEqual({
+        name: 'ServerError',
+        message: 'Server error: Error.'
+      })
     })
 
-    const httpRequest: HttpRequest = {
-      query: {},
-      body: {},
-      params: { id: 'id' }
-    }
+    it('Should return 500 if get transaction balance use case throws', async () => {
+      const { sut, getTransactionBalanceStub } = makeSut()
+      jest
+        .spyOn(getTransactionBalanceStub, 'execute')
+        .mockImplementation(() => {
+          throw new Error()
+        })
 
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual({
-      name: 'ServerError',
-      message: 'Server error: Error.'
+      const httpRequest: HttpRequest = {
+        query: {},
+        body: {},
+        params: { id: 'id' }
+      }
+
+      const httpResponse = await sut.handle(httpRequest)
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body).toEqual({
+        name: 'ServerError',
+        message: 'Server error: Unexpected error.'
+      })
+    })
+
+    it('Should return 500 if get transaction balance use case throws with custom reason', async () => {
+      const { sut, getTransactionBalanceStub } = makeSut()
+      jest
+        .spyOn(getTransactionBalanceStub, 'execute')
+        .mockImplementation(() => {
+          throw new Error('Error')
+        })
+
+      const httpRequest: HttpRequest = {
+        query: {},
+        body: {},
+        params: { id: 'id' }
+      }
+
+      const httpResponse = await sut.handle(httpRequest)
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body).toEqual({
+        name: 'ServerError',
+        message: 'Server error: Error.'
+      })
     })
   })
 })
