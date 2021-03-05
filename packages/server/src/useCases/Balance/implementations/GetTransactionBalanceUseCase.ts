@@ -6,7 +6,7 @@ import {
   GetTransactionBalance,
   GetTransactionBalanceProps,
   GetTransactionBalanceResponse
-} from '@useCases/Balance/ports'
+} from '@useCases/Balance/ports/GetTransactionBalance'
 
 export class GetTransactionBalanceUseCase implements GetTransactionBalance {
   async execute(

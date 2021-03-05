@@ -1,11 +1,17 @@
 import { MonthBalance } from '@repositories/attributes'
 import { MongoRepository } from '@repositories/mongodb/implementations'
 import { BalanceModel } from '@repositories/mongodb/schemas'
-import { IBalanceRepository } from '@repositories/ports'
+
+import { GetCurrentBalanceBalanceRepository } from '@useCases/Balance/ports/GetCurrentBalance'
+import { UpdateRegisteredBalanceBalanceRepository } from '@useCases/Balance/ports/UpdateRegisteredBalance'
+import { CreateTransactionBalanceRepository } from '@useCases/Transactions/ports/CreateTransaction'
 
 export class MongoBalanceRepository
   extends MongoRepository
-  implements IBalanceRepository {
+  implements
+    GetCurrentBalanceBalanceRepository,
+    UpdateRegisteredBalanceBalanceRepository,
+    CreateTransactionBalanceRepository {
   collection = BalanceModel.collection.name
 
   async clearCollection(): Promise<void> {

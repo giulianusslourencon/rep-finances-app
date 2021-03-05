@@ -1,16 +1,15 @@
 import { Balance, BalanceFromArray } from '@entities/Balance'
 
 import {
-  ITransactionsRepository,
-  IBalanceRepository
-} from '@repositories/ports'
-
-import { UpdateRegisteredBalance } from '@useCases/Balance/ports'
+  UpdateRegisteredBalance,
+  UpdateRegisteredBalanceBalanceRepository,
+  UpdateRegisteredBalanceTransactionsRepository
+} from '@useCases/Balance/ports/UpdateRegisteredBalance'
 
 export class UpdateRegisteredBalanceUseCase implements UpdateRegisteredBalance {
   constructor(
-    private readonly transactionsRepository: ITransactionsRepository,
-    private readonly balanceRepository: IBalanceRepository
+    private readonly transactionsRepository: UpdateRegisteredBalanceTransactionsRepository,
+    private readonly balanceRepository: UpdateRegisteredBalanceBalanceRepository
   ) {}
 
   async execute(): Promise<void> {

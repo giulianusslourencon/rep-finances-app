@@ -3,8 +3,7 @@ import {
   GetCurrentBalanceBalanceRepository,
   GetCurrentBalanceResponse
 } from '@useCases/Balance/ports/GetCurrentBalance'
-
-import { UpdateRegisteredBalance } from '../ports/UpdateRegisteredBalance'
+import { UpdateRegisteredBalance } from '@useCases/Balance/ports/UpdateRegisteredBalance'
 
 export class GetCurrentBalanceUseCase implements GetCurrentBalance {
   constructor(
