@@ -1,6 +1,9 @@
 import { HttpRequest, HttpResponse } from '@presentation/contracts'
 import { error, serverError, success } from '@presentation/controllers/helpers'
-import { TransactionDetailsViewModel } from '@presentation/viewModels'
+import {
+  ErrorViewModel,
+  TransactionDetailsViewModel
+} from '@presentation/viewModels'
 
 import { GetTransactionBalance } from '@useCases/Balance/ports/GetTransactionBalance'
 import { FindTransaction } from '@useCases/Transactions/ports/FindTransaction'
@@ -12,8 +15,12 @@ export class FindTransactionController {
   ) {}
 
   async handle(
-    request: HttpRequest<unknown, unknown, { id: string }>
-  ): Promise<HttpResponse<TransactionDetailsViewModel>> {
+    request: HttpRequest<
+      Record<string, never>,
+      Record<string, never>,
+      { id: string }
+    >
+  ): Promise<HttpResponse<TransactionDetailsViewModel | ErrorViewModel>> {
     const { id } = request.params
 
     try {

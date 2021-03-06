@@ -1,5 +1,6 @@
 import { HttpRequest } from '@presentation/contracts'
 import { FindTransactionController } from '@presentation/controllers/Transactions'
+import { TransactionDetailsViewModel } from '@presentation/viewModels'
 
 import { TransactionProps } from '@entities/Transaction'
 
@@ -99,7 +100,9 @@ describe('Find Transaction Controller', () => {
       expect(httpResponse.statusCode).toBe(200)
       expect(httpResponse.body).toHaveProperty('transaction')
       expect(httpResponse.body).toHaveProperty('balance')
-      expect(httpResponse.body.transaction._id).toBe('id')
+      expect(
+        (<TransactionDetailsViewModel>httpResponse.body).transaction._id
+      ).toBe('id')
     })
   })
 

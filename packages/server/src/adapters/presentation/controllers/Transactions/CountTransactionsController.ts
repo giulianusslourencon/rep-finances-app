@@ -1,6 +1,9 @@
 import { HttpRequest, HttpResponse } from '@presentation/contracts'
 import { serverError, success } from '@presentation/controllers/helpers'
-import { TransactionsCountViewModel } from '@presentation/viewModels'
+import {
+  ErrorViewModel,
+  TransactionsCountViewModel
+} from '@presentation/viewModels'
 
 import { CountTransactions } from '@useCases/Transactions/ports/CountTransactions'
 
@@ -8,8 +11,12 @@ export class CountTransactionsController {
   constructor(private countTransactions: CountTransactions) {}
 
   async handle(
-    request: HttpRequest<unknown, { month?: string }>
-  ): Promise<HttpResponse<TransactionsCountViewModel>> {
+    request: HttpRequest<
+      Record<string, never>,
+      { month?: string },
+      Record<string, never>
+    >
+  ): Promise<HttpResponse<TransactionsCountViewModel | ErrorViewModel>> {
     const { month } = request.query
 
     try {

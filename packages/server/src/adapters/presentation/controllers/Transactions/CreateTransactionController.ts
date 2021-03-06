@@ -3,6 +3,7 @@ import { error, serverError, success } from '@presentation/controllers/helpers'
 import { CreateTransactionValidation } from '@presentation/validators'
 import {
   CreateTransactionViewModel,
+  ErrorViewModel,
   TransactionViewModel
 } from '@presentation/viewModels'
 
@@ -12,8 +13,12 @@ export class CreateTransactionController {
   constructor(private createTransaction: CreateTransaction) {}
 
   async handle(
-    request: HttpRequest<CreateTransactionViewModel>
-  ): Promise<HttpResponse<TransactionViewModel>> {
+    request: HttpRequest<
+      CreateTransactionViewModel,
+      Record<string, never>,
+      Record<string, never>
+    >
+  ): Promise<HttpResponse<TransactionViewModel | ErrorViewModel>> {
     try {
       const validatedInputOrError = CreateTransactionValidation.validate(
         request

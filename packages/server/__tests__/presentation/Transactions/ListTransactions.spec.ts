@@ -42,7 +42,7 @@ const makeSut = (): ISutType => {
 
 describe('List Transactions Controller', () => {
   describe('Success Cases', () => {
-    it('Should return all transactions registered', async () => {
+    it('Should return a list with default items number per page and page 1', async () => {
       const { sut, listTransactionsStub } = makeSut()
       const httpRequest: HttpRequest = {
         query: {},
@@ -53,13 +53,15 @@ describe('List Transactions Controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(200)
-      expect(listTransactionsSpy).toBeCalledWith<[ListTransactionsProps]>({})
+      expect(listTransactionsSpy).toBeCalledWith<[ListTransactionsProps]>({
+        skipLimit: { limit: 15, skip: 0 }
+      })
     })
 
-    it('Should return all transactions registered with skip and limit', async () => {
+    it('Should return a list with default items number per page and given page', async () => {
       const { sut, listTransactionsStub } = makeSut()
       const httpRequest: HttpRequest = {
-        query: { skip: 0, limit: 2 },
+        query: { page: 3 },
         body: {},
         params: {}
       }
@@ -68,14 +70,14 @@ describe('List Transactions Controller', () => {
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(200)
       expect(listTransactionsSpy).toBeCalledWith<[ListTransactionsProps]>({
-        skipLimit: { limit: 2, skip: 0 }
+        skipLimit: { limit: 15, skip: 30 }
       })
     })
 
-    it('Should return all transactions registered if just skip is passed without limit', async () => {
+    it('Should return a list with given items number per page and page 1', async () => {
       const { sut, listTransactionsStub } = makeSut()
       const httpRequest: HttpRequest = {
-        query: { skip: 0 },
+        query: { nItems: 20 },
         body: {},
         params: {}
       }
@@ -83,13 +85,15 @@ describe('List Transactions Controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(200)
-      expect(listTransactionsSpy).toBeCalledWith<[ListTransactionsProps]>({})
+      expect(listTransactionsSpy).toBeCalledWith<[ListTransactionsProps]>({
+        skipLimit: { limit: 20, skip: 0 }
+      })
     })
 
-    it('Should return all transactions registered if just limit is passed without skip', async () => {
+    it('Should return a list with given items number per page and given page', async () => {
       const { sut, listTransactionsStub } = makeSut()
       const httpRequest: HttpRequest = {
-        query: { limit: 2 },
+        query: { nItems: 20, page: 3 },
         body: {},
         params: {}
       }
@@ -97,10 +101,12 @@ describe('List Transactions Controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(200)
-      expect(listTransactionsSpy).toBeCalledWith<[ListTransactionsProps]>({})
+      expect(listTransactionsSpy).toBeCalledWith<[ListTransactionsProps]>({
+        skipLimit: { limit: 20, skip: 40 }
+      })
     })
 
-    it('Should return all transactions registered by month', async () => {
+    it('Should return a list with transactions registered by month', async () => {
       const { sut, listTransactionsStub } = makeSut()
       const httpRequest: HttpRequest = {
         query: { month: '202012' },
@@ -112,24 +118,94 @@ describe('List Transactions Controller', () => {
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(200)
       expect(listTransactionsSpy).toBeCalledWith<[ListTransactionsProps]>({
-        month: '202012'
+        month: '202012',
+        skipLimit: { limit: 15, skip: 0 }
       })
     })
+  })
 
-    it('Should return all transactions registered by month with skip and limit', async () => {
-      const { sut, listTransactionsStub } = makeSut()
-      const httpRequest: HttpRequest = {
-        query: { month: '202012', skip: 0, limit: 2 },
-        body: {},
-        params: {}
-      }
-      const listTransactionsSpy = jest.spyOn(listTransactionsStub, 'execute')
+  describe('Error Cases', () => {
+    describe('Params Error Cases', () => {
+      it('Should return 406 if page is not a number', async () => {
+        const { sut } = makeSut()
+        const httpRequest: HttpRequest = {
+          query: { page: 'a' },
+          body: {},
+          params: {}
+        }
 
-      const httpResponse = await sut.handle(httpRequest)
-      expect(httpResponse.statusCode).toBe(200)
-      expect(listTransactionsSpy).toBeCalledWith<[ListTransactionsProps]>({
-        month: '202012',
-        skipLimit: { skip: 0, limit: 2 }
+        const httpResponse = await sut.handle(httpRequest)
+        expect(httpResponse.statusCode).toBe(406)
+        expect(httpResponse.body).toEqual({
+          name: 'MissingParamError',
+          message:
+            'Missing param: page must be a `number` type, but the final value was: `NaN` (cast from the value `"a"`).'
+        })
+      })
+
+      it('Should return 406 if nItems is not a number', async () => {
+        const { sut } = makeSut()
+        const httpRequest: HttpRequest = {
+          query: { nItems: 'a' },
+          body: {},
+          params: {}
+        }
+
+        const httpResponse = await sut.handle(httpRequest)
+        expect(httpResponse.statusCode).toBe(406)
+        expect(httpResponse.body).toEqual({
+          name: 'MissingParamError',
+          message:
+            'Missing param: nItems must be a `number` type, but the final value was: `NaN` (cast from the value `"a"`).'
+        })
+      })
+
+      it('Should return 406 if page is non-positive', async () => {
+        const { sut } = makeSut()
+        const httpRequest: HttpRequest = {
+          query: { page: 0 },
+          body: {},
+          params: {}
+        }
+
+        const httpResponse = await sut.handle(httpRequest)
+        expect(httpResponse.statusCode).toBe(406)
+        expect(httpResponse.body).toEqual({
+          name: 'MissingParamError',
+          message: 'Missing param: page must be a positive number'
+        })
+      })
+
+      it('Should return 406 if nItems is non-positive', async () => {
+        const { sut } = makeSut()
+        const httpRequest: HttpRequest = {
+          query: { nItems: -2 },
+          body: {},
+          params: {}
+        }
+
+        const httpResponse = await sut.handle(httpRequest)
+        expect(httpResponse.statusCode).toBe(406)
+        expect(httpResponse.body).toEqual({
+          name: 'MissingParamError',
+          message: 'Missing param: nItems must be a positive number'
+        })
+      })
+
+      it('Should return 406 if month doesnt have length 6', async () => {
+        const { sut } = makeSut()
+        const httpRequest: HttpRequest = {
+          query: { month: '1234' },
+          body: {},
+          params: {}
+        }
+
+        const httpResponse = await sut.handle(httpRequest)
+        expect(httpResponse.statusCode).toBe(406)
+        expect(httpResponse.body).toEqual({
+          name: 'MissingParamError',
+          message: 'Missing param: month must be exactly 6 characters'
+        })
       })
     })
   })
