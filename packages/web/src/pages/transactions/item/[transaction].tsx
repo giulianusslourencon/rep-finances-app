@@ -150,12 +150,7 @@ const Transaction: React.FC<Props> = ({ error, transaction, balance }) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   let paths: { params: { transaction: string } }[] = []
   try {
-    const response = await API.get<Transaction[]>('/transactions', {
-      params: {
-        skip: 0,
-        limit: 5
-      }
-    })
+    const response = await API.listTransactions(1)
     const transactions = response.data
 
     paths = transactions.map(transaction => {
@@ -190,7 +185,7 @@ export const getStaticProps: GetStaticProps<
   }
 
   try {
-    const response = await API.get<Props>(`/transactions/${_id}`)
+    const response = await API.getTransaction(_id)
     const { transaction, balance } = response.data
 
     props.transaction = { ...transaction, related: transaction.related.sort() }

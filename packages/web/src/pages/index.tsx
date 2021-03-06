@@ -1,5 +1,5 @@
 import { Flex, StackDivider, VStack } from '@chakra-ui/react'
-import { GetStaticProps } from 'next'
+import { GetServerSideProps } from 'next'
 import React from 'react'
 
 import Cash from '@components/Cash'
@@ -8,12 +8,6 @@ import IdBox from '@components/IdBox'
 import Layout from '@components/Layout'
 
 import API from '@utils/api'
-
-type Balance = {
-  balance: {
-    [userId: string]: number
-  }
-}
 
 type Props = {
   error?: { name: string; message: string }
@@ -51,13 +45,13 @@ const Home: React.FC<Props> = ({ error, balance }) => {
   )
 }
 
-export const getStaticProps: GetStaticProps<Props> = async () => {
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const props: Props = {
     balance: []
   }
 
   try {
-    const response = await API.get<Balance>('/balance')
+    const response = await API.getCurrentBalance()
     const balance = response.data.balance
 
     props.balance = Object.entries(balance)
@@ -70,8 +64,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   }
 
   return {
-    props,
-    revalidate: 10
+    props
   }
 }
 

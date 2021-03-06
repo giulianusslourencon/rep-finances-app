@@ -253,7 +253,7 @@ const CreateTransaction: React.FC = () => {
     if (validated && !awaitingRequest) {
       try {
         setAwaitingRequest(true)
-        const response = await API.post('/transactions', transaction)
+        const response = await API.createTransaction(transaction)
         Router.push(`/transactions/item/${response.data._id}`)
       } catch (error) {
         const errorMessage = error.response?.data || {

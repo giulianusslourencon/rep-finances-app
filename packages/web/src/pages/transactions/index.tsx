@@ -11,18 +11,11 @@ import Time from '@components/Time'
 import Title from '@components/Title'
 
 import API from '@utils/api'
-
-type Transaction = {
-  _id: string
-  title: string
-  date: string
-  amount: number
-  related: string[]
-}
+import { TransactionList } from '@utils/types'
 
 type Props = {
   error?: { name: string; message: string }
-  transactions: Transaction[]
+  transactions: TransactionList
 }
 
 const getFormattedDate = (isoDate: string) => {
@@ -81,7 +74,7 @@ Historic.getInitialProps = async () => {
   }
 
   try {
-    const response = await API.get<Transaction[]>('/transactions')
+    const response = await API.listTransactions(1)
     props.transactions = response.data
   } catch (error) {
     const errorMessage = error.response?.data || {
