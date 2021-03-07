@@ -66,15 +66,15 @@ const Historic: NextPage<Props> = ({ error, transactions }) => {
   )
 }
 
-Historic.getInitialProps = async () => {
-  // const page = parseInt(query.page?.toString() || '0')
+Historic.getInitialProps = async ({ query }) => {
+  const page = parseInt(query.page?.toString() || '1')
 
   const props: Props = {
     transactions: []
   }
 
   try {
-    const response = await API.listTransactions(1)
+    const response = await API.listTransactions(page)
     props.transactions = response.data
   } catch (error) {
     const errorMessage = error.response?.data || {
