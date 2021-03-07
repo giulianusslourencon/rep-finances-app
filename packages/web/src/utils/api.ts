@@ -3,6 +3,7 @@ import { api_url } from 'src/config/env'
 
 import {
   Balance,
+  Count,
   Transaction,
   TransactionDetails,
   TransactionList
@@ -20,6 +21,10 @@ class Api {
 
   getCurrentBalance() {
     return this.axios.get<Balance>('/balance')
+  }
+
+  countTransactions() {
+    return this.axios.get<Count>('/transactions/count')
   }
 
   listTransactions(page = 1) {

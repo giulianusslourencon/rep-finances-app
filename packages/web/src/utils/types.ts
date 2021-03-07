@@ -31,3 +31,7 @@ export type Balance = {
 export type TransactionDetails = Balance & {
   transaction: Transaction & TransactionListItem & { month: string }
 }
+
+export type Count = {
+  count: number
+}
