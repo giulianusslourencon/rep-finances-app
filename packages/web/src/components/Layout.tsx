@@ -11,11 +11,13 @@ import React from 'react'
 
 type Props = {
   buttons: { title: string; href: string }[]
+  footer?: React.ReactNode
 }
 
 const Layout: React.FC<Props & GridProps> = ({
   buttons = [],
   children,
+  footer,
   ...props
 }) => {
   return (
@@ -23,7 +25,7 @@ const Layout: React.FC<Props & GridProps> = ({
       as="main"
       height="100vh"
       templateColumns={{ base: '0 100vw 0', md: '1fr 22rem 1fr' }}
-      templateRows={{ base: '0 1fr 0', md: '1fr 45rem 1fr' }}
+      templateRows={{ base: '0 1fr 0', md: '.5fr 45rem 1fr' }}
       templateAreas="
         '. . .'
         '. content .'
@@ -75,7 +77,7 @@ const Layout: React.FC<Props & GridProps> = ({
         <Flex
           justify="stretch"
           bgColor="yellow.200"
-          borderBottomRadius={{ base: '0', md: '2rem' }}
+          borderBottomRadius={{ base: '0', md: footer ? '0' : '2rem' }}
           borderTopRadius={{ base: '0', md: buttons.length > 0 ? '0' : '2rem' }}
           padding={4}
         >
@@ -96,6 +98,16 @@ const Layout: React.FC<Props & GridProps> = ({
             {children}
           </Flex>
         </Flex>
+        {footer && (
+          <Flex
+            bgColor="purple.800"
+            borderBottomRadius={{ base: '0', md: '2rem' }}
+            padding={4}
+            justify="stretch"
+          >
+            {footer}
+          </Flex>
+        )}
       </Flex>
     </Grid>
   )

@@ -1,4 +1,4 @@
-import { Flex, Link, StackDivider, VStack } from '@chakra-ui/react'
+import { Box, Flex, Link, StackDivider, VStack } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import NextLink from 'next/link'
 import React from 'react'
@@ -35,6 +35,7 @@ const Historic: NextPage<Props> = ({ error, transactions }) => {
         { title: 'Voltar', href: '/' },
         { title: 'Adicionar', href: '/transactions/new' }
       ]}
+      footer={<Box>Teste</Box>}
     >
       <VStack
         divider={<StackDivider borderColor="purple.800" />}
