@@ -1,4 +1,4 @@
-export default class DateParser {
+export class DateParser {
   public static parseDate = (
     timestamp: number | string,
     timeZone = 'America/Sao_Paulo'

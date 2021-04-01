@@ -1,1 +1,2 @@
-export * from './DomainError'
+export * from './IErrorReason'
+export * from './InvalidError'
