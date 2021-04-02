@@ -1,4 +1,4 @@
-import DateParser from '@shared/utils/DateParser'
+import { DateParser } from '@shared/utils'
 
 describe('Date Parser', () => {
   it('Should return the date parsed on default timeZone.', () => {

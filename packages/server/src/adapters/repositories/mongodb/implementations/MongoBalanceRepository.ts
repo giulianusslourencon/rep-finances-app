@@ -2,9 +2,9 @@ import { MonthBalance } from '@repositories/attributes'
 import { MongoRepository } from '@repositories/mongodb/implementations'
 import { BalanceModel } from '@repositories/mongodb/schemas'
 
-import { GetCurrentBalanceBalanceRepository } from '@useCases/Balance/ports/GetCurrentBalance'
-import { UpdateRegisteredBalanceBalanceRepository } from '@useCases/Balance/ports/UpdateRegisteredBalance'
-import { CreateTransactionBalanceRepository } from '@useCases/Transactions/ports/CreateTransaction'
+import { CreateTransactionBalanceRepository } from '@useCases/Finances/ports/CreateTransaction'
+import { GetCurrentBalanceBalanceRepository } from '@useCases/Finances/ports/GetCurrentBalance'
+import { UpdateRegisteredBalanceBalanceRepository } from '@useCases/Finances/ports/UpdateRegisteredBalance'
 
 export class MongoBalanceRepository
   extends MongoRepository

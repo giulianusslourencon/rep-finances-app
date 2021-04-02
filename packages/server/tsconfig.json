@@ -3,6 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@tests/*": [
+        "__tests__/*"
+      ],
       "@presentation/*": [
         "src/adapters/presentation/*"
       ],

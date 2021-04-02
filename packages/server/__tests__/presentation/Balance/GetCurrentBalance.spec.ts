@@ -4,7 +4,7 @@ import { GetCurrentBalanceController } from '@presentation/controllers/Balance'
 import {
   GetCurrentBalance,
   GetCurrentBalanceResponse
-} from '@useCases/Balance/ports/GetCurrentBalance'
+} from '@useCases/Finances/ports/GetCurrentBalance'
 
 interface ISutType {
   sut: GetCurrentBalanceController

@@ -2,17 +2,17 @@ import { TransactionAttributes } from '@repositories/attributes'
 import { MongoRepository } from '@repositories/mongodb/implementations'
 import { TransactionModel } from '@repositories/mongodb/schemas'
 
-import {
-  ItemsAndPayersList,
-  UpdateRegisteredBalanceTransactionsRepository
-} from '@useCases/Balance/ports/UpdateRegisteredBalance'
-import { CountTransactionsTransactionsRepository } from '@useCases/Transactions/ports/CountTransactions'
-import { CreateTransactionTransactionsRepository } from '@useCases/Transactions/ports/CreateTransaction'
-import { FindTransactionTransactionsRepository } from '@useCases/Transactions/ports/FindTransaction'
+import { CountTransactionsTransactionsRepository } from '@useCases/Finances/ports/CountTransactions'
+import { CreateTransactionTransactionsRepository } from '@useCases/Finances/ports/CreateTransaction'
+import { FindTransactionTransactionsRepository } from '@useCases/Finances/ports/FindTransaction'
 import {
   ListTransactionsTransactionsRepository,
   TransactionList
-} from '@useCases/Transactions/ports/ListTransactions'
+} from '@useCases/Finances/ports/ListTransactions'
+import {
+  ItemsAndPayersList,
+  UpdateRegisteredBalanceTransactionsRepository
+} from '@useCases/Finances/ports/UpdateRegisteredBalance'
 
 export class MongoTransactionsRepository
   extends MongoRepository

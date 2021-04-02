@@ -5,7 +5,7 @@ import {
   ErrorViewModel
 } from '@presentation/viewModels'
 
-import { GetCurrentBalance } from '@useCases/Balance/ports/GetCurrentBalance'
+import { GetCurrentBalance } from '@useCases/Finances/ports/GetCurrentBalance'
 
 export class GetCurrentBalanceController implements Controller {
   constructor(private getCurrentBalance: GetCurrentBalance) {}

@@ -1,4 +1,4 @@
-import { IndividualBalanceProps } from '@entities/Balance'
+import { IndividualBalanceProps } from '@entities/Finances'
 
 export type MonthBalance = {
   individual_balance: IndividualBalanceProps

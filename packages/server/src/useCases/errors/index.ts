@@ -1,2 +1,2 @@
+export * from './NotFoundError'
 export * from './UseCaseError'
-export * from './TransactionNotFound'
