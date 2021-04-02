@@ -1,27 +1,14 @@
 import { TransactionAttributes } from '@repositories/attributes'
 import { MongoRepository } from '@repositories/mongodb/implementations'
 import { TransactionModel } from '@repositories/mongodb/schemas'
+import { ITransactionsRepository } from '@repositories/ports'
 
-import { CountTransactionsTransactionsRepository } from '@useCases/Finances/ports/CountTransactions'
-import { CreateTransactionTransactionsRepository } from '@useCases/Finances/ports/CreateTransaction'
-import { FindTransactionTransactionsRepository } from '@useCases/Finances/ports/FindTransaction'
-import {
-  ListTransactionsTransactionsRepository,
-  TransactionList
-} from '@useCases/Finances/ports/ListTransactions'
-import {
-  ItemsAndPayersList,
-  UpdateRegisteredBalanceTransactionsRepository
-} from '@useCases/Finances/ports/UpdateRegisteredBalance'
+import { TransactionList } from '@useCases/Finances/ports/ListTransactions'
+import { ItemsAndPayersList } from '@useCases/Finances/ports/UpdateRegisteredBalance'
 
 export class MongoTransactionsRepository
   extends MongoRepository
-  implements
-    CountTransactionsTransactionsRepository,
-    CreateTransactionTransactionsRepository,
-    FindTransactionTransactionsRepository,
-    ListTransactionsTransactionsRepository,
-    UpdateRegisteredBalanceTransactionsRepository {
+  implements ITransactionsRepository {
   collection = TransactionModel.collection.name
 
   async clearCollection(): Promise<void> {

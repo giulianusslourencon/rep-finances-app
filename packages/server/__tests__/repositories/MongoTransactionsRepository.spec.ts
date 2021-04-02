@@ -1,10 +1,14 @@
-import { TransactionProps } from '@entities/Transaction'
+import { TransactionBuilder } from '@tests/builders'
+import { SetupTransactionsDatabase } from '@tests/mongodb'
+import { transactions } from '@tests/mongodb/data'
+
+import { TransactionProps } from '@entities/Finances'
 
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations'
-
-import { transactions, transactionToSave } from './testData'
+import { TransactionModel } from '@repositories/mongodb/schemas'
 
 const MongoTransactions = new MongoTransactionsRepository()
+const TransactionsSetup = new SetupTransactionsDatabase(TransactionModel)
 
 describe('Mongo Transactions Repository', () => {
   beforeAll(async () => {
@@ -16,11 +20,7 @@ describe('Mongo Transactions Repository', () => {
   })
 
   beforeEach(async () => {
-    await MongoTransactions.clearCollection()
-
-    await Promise.all(
-      transactions.map(transaction => MongoTransactions.save(transaction))
-    )
+    await TransactionsSetup.setupDB()
   })
 
   describe('List', () => {
@@ -101,6 +101,7 @@ describe('Mongo Transactions Repository', () => {
 
   describe('Save', () => {
     it('Should add a new transaction to database', async () => {
+      const transactionToSave = TransactionBuilder.aTransaction().build()
       await MongoTransactions.save(transactionToSave)
 
       const createdTransaction = await MongoTransactions.findById(
@@ -123,7 +124,7 @@ describe('Mongo Transactions Repository', () => {
 
     it('Should return a falsy value if a transaction does not exist', async () => {
       const foundTransaction = await MongoTransactions.findById(
-        transactionToSave._id
+        'idquenaoexiste'
       )
 
       expect(foundTransaction).toBeFalsy()

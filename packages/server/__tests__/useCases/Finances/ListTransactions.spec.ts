@@ -1,14 +1,14 @@
+import { SetupTransactionsDatabase } from '@tests/mongodb'
+
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations'
-import { TransactionModel, BalanceModel } from '@repositories/mongodb/schemas'
+import { TransactionModel } from '@repositories/mongodb/schemas'
 
 import { ListTransactionsUseCase } from '@useCases/Finances/implementations'
-
-import { SetupFinancesDatabase } from './database'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const listTransactionsUseCase = new ListTransactionsUseCase(MongoTransactions)
 
-const DBSetup = new SetupFinancesDatabase(TransactionModel, BalanceModel)
+const TransactionsSetup = new SetupTransactionsDatabase(TransactionModel)
 
 describe('List Transactions Use Case', () => {
   beforeAll(async () => {
@@ -20,7 +20,7 @@ describe('List Transactions Use Case', () => {
   })
 
   beforeEach(async () => {
-    await DBSetup.setupDB()
+    await TransactionsSetup.setupDB()
   })
 
   describe('Success Cases', () => {

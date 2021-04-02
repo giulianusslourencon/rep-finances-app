@@ -1,3 +1,6 @@
+import { SetupBalanceDatabase, SetupTransactionsDatabase } from '@tests/mongodb'
+import { updatedBalance } from '@tests/mongodb/data'
+
 import {
   MongoBalanceRepository,
   MongoTransactionsRepository
@@ -8,8 +11,6 @@ import {
   GetCurrentBalanceUseCase,
   UpdateRegisteredBalanceUseCase
 } from '@useCases/Finances/implementations'
-
-import { SetupFinancesDatabase, updatedBalances } from './database'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const MongoBalance = new MongoBalanceRepository()
@@ -24,7 +25,8 @@ const getCurrentBalanceUseCase = new GetCurrentBalanceUseCase(
   updateRegisteredBalanceUseCase
 )
 
-const DBSetup = new SetupFinancesDatabase(TransactionModel, BalanceModel)
+const TransactionsSetup = new SetupTransactionsDatabase(TransactionModel)
+const BalanceSetup = new SetupBalanceDatabase(BalanceModel)
 
 describe('Get Current Balance Use Case', () => {
   beforeAll(async () => {
@@ -38,7 +40,8 @@ describe('Get Current Balance Use Case', () => {
   })
 
   beforeEach(async () => {
-    await DBSetup.setupDB()
+    await TransactionsSetup.setupDB()
+    await BalanceSetup.setupDB()
   })
 
   describe('Success Cases', () => {
@@ -47,9 +50,9 @@ describe('Get Current Balance Use Case', () => {
 
       const balances = await BalanceModel.find({}, { __v: 0 }).lean()
 
-      expect(balances).toStrictEqual(updatedBalances)
+      expect(balances).toStrictEqual(updatedBalance)
       expect(currentBalance).toStrictEqual({
-        individual_balance: updatedBalances[2].individual_balance
+        individual_balance: updatedBalance[2].individual_balance
       })
     })
   })

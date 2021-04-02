@@ -1,17 +1,17 @@
+import { SetupTransactionsDatabase } from '@tests/mongodb'
+
 import { TransactionProps } from '@entities/Finances'
 
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations'
-import { BalanceModel, TransactionModel } from '@repositories/mongodb/schemas'
+import { TransactionModel } from '@repositories/mongodb/schemas'
 
 import { UseCaseError } from '@useCases/errors'
 import { FindTransactionUseCase } from '@useCases/Finances/implementations'
 
-import { SetupFinancesDatabase } from './database'
-
 const MongoTransactions = new MongoTransactionsRepository()
 const findTransactionUseCase = new FindTransactionUseCase(MongoTransactions)
 
-const DBSetup = new SetupFinancesDatabase(TransactionModel, BalanceModel)
+const TransactionsSetup = new SetupTransactionsDatabase(TransactionModel)
 
 describe('Find Transaction Use Case', () => {
   beforeAll(async () => {
@@ -23,7 +23,7 @@ describe('Find Transaction Use Case', () => {
   })
 
   beforeEach(async () => {
-    await DBSetup.setupDB()
+    await TransactionsSetup.setupDB()
   })
 
   describe('Success Cases', () => {

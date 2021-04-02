@@ -1,4 +1,5 @@
 import { TransactionInitialPropsBuilder } from '@tests/builders'
+import { SetupBalanceDatabase, SetupTransactionsDatabase } from '@tests/mongodb'
 
 import { InvalidFields } from '@entities/errors'
 import { TransactionProps } from '@entities/Finances'
@@ -11,8 +12,6 @@ import { BalanceModel, TransactionModel } from '@repositories/mongodb/schemas'
 
 import { CreateTransactionUseCase } from '@useCases/Finances/implementations'
 
-import { SetupFinancesDatabase } from './database'
-
 const MongoTransactions = new MongoTransactionsRepository()
 const MongoBalance = new MongoBalanceRepository()
 const createTransactionUseCase = new CreateTransactionUseCase(
@@ -20,7 +19,8 @@ const createTransactionUseCase = new CreateTransactionUseCase(
   MongoBalance
 )
 
-const DBSetup = new SetupFinancesDatabase(TransactionModel, BalanceModel)
+const TransactionsSetup = new SetupTransactionsDatabase(TransactionModel)
+const BalanceSetup = new SetupBalanceDatabase(BalanceModel)
 
 describe('Create Transaction Use Case', () => {
   beforeAll(async () => {
@@ -34,7 +34,8 @@ describe('Create Transaction Use Case', () => {
   })
 
   beforeEach(async () => {
-    await DBSetup.setupDBUpdated()
+    await TransactionsSetup.setupDB()
+    await BalanceSetup.setupDBUpdated()
   })
 
   describe('Success Cases', () => {

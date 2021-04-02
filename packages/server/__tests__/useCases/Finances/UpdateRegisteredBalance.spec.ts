@@ -1,12 +1,13 @@
+import { SetupBalanceDatabase, SetupTransactionsDatabase } from '@tests/mongodb'
+import { updatedBalance } from '@tests/mongodb/data'
+
 import {
-  MongoTransactionsRepository,
-  MongoBalanceRepository
+  MongoBalanceRepository,
+  MongoTransactionsRepository
 } from '@repositories/mongodb/implementations'
 import { BalanceModel, TransactionModel } from '@repositories/mongodb/schemas'
 
 import { UpdateRegisteredBalanceUseCase } from '@useCases/Finances/implementations'
-
-import { SetupFinancesDatabase, updatedBalances } from './database'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const MongoBalance = new MongoBalanceRepository()
@@ -15,7 +16,8 @@ const updateRegisteredBalanceUseCase = new UpdateRegisteredBalanceUseCase(
   MongoBalance
 )
 
-const DBSetup = new SetupFinancesDatabase(TransactionModel, BalanceModel)
+const TransactionsSetup = new SetupTransactionsDatabase(TransactionModel)
+const BalanceSetup = new SetupBalanceDatabase(BalanceModel)
 
 describe('Update Registered Balance Use Case', () => {
   beforeAll(async () => {
@@ -29,7 +31,8 @@ describe('Update Registered Balance Use Case', () => {
   })
 
   beforeEach(async () => {
-    await DBSetup.setupDB()
+    await TransactionsSetup.setupDB()
+    await BalanceSetup.setupDB()
   })
 
   describe('Success Cases', () => {
@@ -38,7 +41,7 @@ describe('Update Registered Balance Use Case', () => {
 
       const balances = await BalanceModel.find({}, { __v: 0 }).lean()
 
-      expect(balances).toStrictEqual(updatedBalances)
+      expect(balances).toStrictEqual(updatedBalance)
     })
   })
 })

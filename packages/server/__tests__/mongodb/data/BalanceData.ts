@@ -1,6 +1,6 @@
 import { BalanceAttributes } from '@repositories/attributes'
 
-export const balances: BalanceAttributes[] = [
+export const balance: BalanceAttributes[] = [
   {
     _id: '202011',
     individual_balance: {
@@ -20,7 +20,7 @@ export const balances: BalanceAttributes[] = [
   }
 ]
 
-export const updatedBalances: BalanceAttributes[] = [
+export const updatedBalance: BalanceAttributes[] = [
   {
     _id: '202011',
     individual_balance: {

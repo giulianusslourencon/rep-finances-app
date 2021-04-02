@@ -1,10 +1,12 @@
+import { SetupBalanceDatabase } from '@tests/mongodb'
+import { balance } from '@tests/mongodb/data'
+
 import { MonthBalance, BalanceAttributes } from '@repositories/attributes'
 import { MongoBalanceRepository } from '@repositories/mongodb/implementations'
 import { BalanceModel } from '@repositories/mongodb/schemas'
 
-import { balances } from './testData'
-
 const MongoBalance = new MongoBalanceRepository()
+const BalanceSetup = new SetupBalanceDatabase(BalanceModel)
 
 describe('Mongo Balance Repository', () => {
   beforeAll(async () => {
@@ -16,11 +18,7 @@ describe('Mongo Balance Repository', () => {
   })
 
   beforeEach(async () => {
-    await MongoBalance.clearCollection()
-
-    await Promise.all(
-      balances.map(monthBalance => BalanceModel.create(monthBalance))
-    )
+    await BalanceSetup.setupDB()
   })
 
   describe('Update Month', () => {
@@ -80,7 +78,7 @@ describe('Mongo Balance Repository', () => {
 
       expect(monthBalance).toBeTruthy()
       expect(monthBalance).toStrictEqual({
-        individual_balance: balances[0].individual_balance
+        individual_balance: balance[0].individual_balance
       })
     })
 
