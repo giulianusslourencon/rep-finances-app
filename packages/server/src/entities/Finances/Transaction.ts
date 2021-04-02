@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
 
 import { Amount, Name } from '@entities/components'
-import { InvalidError } from '@entities/errors'
+import { FieldKeys, InvalidError, InvalidFields } from '@entities/errors'
 import { CustomReason, FormattingReason } from '@entities/errors/reasons'
 import {
   RelatedList,
@@ -69,51 +69,60 @@ export class Transaction {
   static create(
     props: TransactionInitProps,
     id?: string
-  ): Either<InvalidError, Transaction> {
+  ): Either<InvalidFields, Transaction> {
+    const errors: InvalidFields = []
+
     const titleOrError = Name.create(props.title)
     const itemsOrError = TransactionItems.create(props.items)
     const payersOrError = TransactionPayers.create(props.payers)
 
-    if (titleOrError.isLeft()) return left(titleOrError.value)
-    if (itemsOrError.isLeft()) return left(itemsOrError.value)
-    if (payersOrError.isLeft()) return left(payersOrError.value)
+    if (titleOrError.isLeft())
+      errors.push({ field: 'title', error: titleOrError.value })
+    if (itemsOrError.isLeft())
+      errors.concat(FieldKeys.addKeyOnErrorFields('items', itemsOrError.value))
+    if (payersOrError.isLeft())
+      errors.concat(
+        FieldKeys.addKeyOnErrorFields('payers', payersOrError.value)
+      )
 
-    const title = titleOrError.value
+    const title = titleOrError.value as Name
+    const items = itemsOrError.value as TransactionItems
+    const payers = payersOrError.value as TransactionPayers
 
     const date = new Date(props.timestamp)
     if (isNaN(date.getTime()))
-      return left(
-        new InvalidError(
+      errors.push({
+        field: 'date',
+        error: new InvalidError(
           'Date',
           props.timestamp.toString(),
           new FormattingReason()
         )
-      )
+      })
+
     const month = DateParser.parseDate(props.timestamp)
 
-    const items = itemsOrError.value
-    const payers = payersOrError.value
-
-    const itemsAmount = Object.entries(items.value).reduce((acc, cur) => {
+    const itemsAmount = Object.entries(props.items).reduce((acc, cur) => {
       return acc + cur[1].amount
     }, 0)
 
-    const totalPaid = Object.entries(payers.value).reduce((acc, cur) => {
+    const totalPaid = Object.entries(props.payers).reduce((acc, cur) => {
       return acc + cur[1]
     }, 0)
 
     if (itemsAmount.toFixed(2) !== totalPaid.toFixed(2))
-      return left(
-        new InvalidError(
+      errors.push({
+        error: new InvalidError(
           'Payment',
           '',
           new CustomReason('Items values are distinct from total paid.')
         )
-      )
+      })
 
     const amountOrError = Amount.create(itemsAmount)
-    if (amountOrError.isLeft()) return left(amountOrError.value)
-    const amount = amountOrError.value
+    if (amountOrError.isLeft())
+      errors.push({ field: 'amount', error: amountOrError.value })
+    const amount = amountOrError.value as Amount
 
     let related = Object.keys(payers.value)
     for (const item of Object.values(items.value)) {
@@ -122,9 +131,14 @@ export class Transaction {
     related = [...new Set(related)]
 
     const relatedUsersOrError = RelatedList.create(related)
-    if (relatedUsersOrError.isLeft()) return left(relatedUsersOrError.value)
+    if (relatedUsersOrError.isLeft())
+      errors.concat(
+        FieldKeys.addKeyOnErrorFields('related', relatedUsersOrError.value)
+      )
 
-    const relatedUsers = relatedUsersOrError.value
+    const relatedUsers = relatedUsersOrError.value as RelatedList
+
+    if (errors.length > 0) return left(errors)
 
     return right(
       new Transaction(

@@ -1,9 +1,9 @@
 import { Amount, Name } from '@entities/components'
-import { InvalidError } from '@entities/errors'
+import { FieldKeys, InvalidError, InvalidFields } from '@entities/errors'
 import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
 import { RelatedList } from '@entities/Finances'
 
-import { Either, left, right } from '@shared/types'
+import { Either, right } from '@shared/types'
 
 type ValidatedItems = [Name, { amount: Amount; related_users: RelatedList }][]
 
@@ -24,40 +24,59 @@ export class TransactionItems {
 
   static create(
     items: TransactionItemsProps
-  ): Either<InvalidError, TransactionItems> {
+  ): Either<InvalidFields, TransactionItems> {
     const finalList: ValidatedItems = []
+    const errors: InvalidFields = []
     for (const [name, { amount, related_users }] of Object.entries(items)) {
       const nameOrError = Name.create(name)
       const amountOrError = Amount.create(amount)
       const relatedUsersOrError = RelatedList.create(related_users)
 
-      if (nameOrError.isLeft()) return left(nameOrError.value)
-      if (amountOrError.isLeft()) return left(amountOrError.value)
-      if (relatedUsersOrError.isLeft()) return left(relatedUsersOrError.value)
+      if (nameOrError.isLeft())
+        errors.push({
+          field: `${name}.name`,
+          error: nameOrError.value
+        })
+      if (amountOrError.isLeft())
+        errors.push({
+          field: `${name}.amount`,
+          error: amountOrError.value
+        })
+      if (relatedUsersOrError.isLeft())
+        errors.concat(
+          FieldKeys.addKeyOnErrorFields(
+            'related_users',
+            relatedUsersOrError.value
+          )
+        )
 
       const duplicated = finalList.filter(
         item => item[0].value === nameOrError.value.value
       )
       if (duplicated.length > 0)
-        return left(
-          new InvalidError(
+        errors.push({
+          field: name,
+          error: new InvalidError(
             'Transaction Items',
             nameOrError.value.value,
             new DuplicateReason('name')
           )
-        )
+        })
 
-      finalList.push([
-        nameOrError.value,
-        {
-          amount: amountOrError.value,
-          related_users: relatedUsersOrError.value
-        }
-      ])
+      if (errors.length === 0)
+        finalList.push([
+          nameOrError.value as Name,
+          {
+            amount: amountOrError.value as Amount,
+            related_users: relatedUsersOrError.value as RelatedList
+          }
+        ])
     }
 
     if (!TransactionItems.validate(finalList))
-      return left(new InvalidError('Transaction Items', '', new EmptyReason()))
+      errors.push({
+        error: new InvalidError('Transaction Items', '', new EmptyReason())
+      })
 
     return right(new TransactionItems(finalList))
   }

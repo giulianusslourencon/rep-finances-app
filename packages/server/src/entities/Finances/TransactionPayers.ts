@@ -1,5 +1,5 @@
 import { Amount, UserId } from '@entities/components'
-import { InvalidError } from '@entities/errors'
+import { InvalidError, InvalidFields } from '@entities/errors'
 import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
 
 import { Either, left, right } from '@shared/types'
@@ -20,32 +20,50 @@ export class TransactionPayers {
 
   static create(
     payers: TransactionPayersProps
-  ): Either<InvalidError, TransactionPayers> {
+  ): Either<InvalidFields, TransactionPayers> {
     const finalList: ValidatedPayers = []
+    const errors: InvalidFields = []
     for (const [userId, amount] of Object.entries(payers)) {
       const userIdOrError = UserId.create(userId)
       const amountOrError = Amount.create(amount)
 
-      if (userIdOrError.isLeft()) return left(userIdOrError.value)
-      if (amountOrError.isLeft()) return left(amountOrError.value)
+      if (userIdOrError.isLeft())
+        errors.push({
+          field: `${userId}.userId`,
+          error: userIdOrError.value
+        })
+      if (amountOrError.isLeft())
+        errors.push({
+          field: `${userId}.amount`,
+          error: amountOrError.value
+        })
 
       const duplicated = finalList.filter(
         item => item[0].value === userIdOrError.value.value
       )
       if (duplicated.length > 0)
-        return left(
-          new InvalidError(
+        errors.push({
+          field: userId,
+          error: new InvalidError(
             'Transaction Payers',
             userIdOrError.value.value,
             new DuplicateReason('id')
           )
-        )
+        })
 
-      finalList.push([userIdOrError.value, amountOrError.value])
+      if (errors.length === 0)
+        finalList.push([
+          userIdOrError.value as UserId,
+          amountOrError.value as Amount
+        ])
     }
 
     if (!TransactionPayers.validate(finalList))
-      return left(new InvalidError('Transaction Payers', '', new EmptyReason()))
+      errors.push({
+        error: new InvalidError('Transaction Payers', '', new EmptyReason())
+      })
+
+    if (errors.length > 0) return left(errors)
 
     return right(new TransactionPayers(finalList))
   }

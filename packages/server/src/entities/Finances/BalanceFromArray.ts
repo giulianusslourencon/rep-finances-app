@@ -1,9 +1,9 @@
-import { InvalidError } from '@entities/errors'
+import { InvalidFields } from '@entities/errors'
 import {
   Balance,
+  BalanceFromTransactionCore,
   BalanceProps,
-  TransactionCoreProps,
-  BalanceFromTransactionCore
+  TransactionCoreProps
 } from '@entities/Finances'
 
 import { Either, left, right } from '@shared/types'
@@ -11,9 +11,9 @@ import { Either, left, right } from '@shared/types'
 export class BalanceFromArray {
   static create(
     transactionsOrBalances: (TransactionCoreProps | BalanceProps)[]
-  ): Either<InvalidError, Balance> {
+  ): Either<InvalidFields, Balance> {
     const balancesOrError: Either<
-      InvalidError,
+      InvalidFields,
       BalanceProps
     >[] = transactionsOrBalances.map(transactionOrBalance => {
       if ((<BalanceProps>transactionOrBalance).individual_balance)
@@ -25,9 +25,14 @@ export class BalanceFromArray {
       return right(balanceOrError.value.value)
     })
 
-    for (const balanceOrError of balancesOrError) {
-      if (balanceOrError.isLeft()) return left(balanceOrError.value)
-    }
+    const balancesErrors = balancesOrError.filter(balanceOrError =>
+      balanceOrError.isLeft()
+    )
+    const errors = balancesErrors
+      .map(balanceError => balanceError.value as InvalidFields)
+      .reduce((acc, cur) => acc.concat(cur), [])
+
+    if (errors.length > 0) return left(errors)
 
     const balances = balancesOrError.map(
       balanceOrError => <BalanceProps>balanceOrError.value

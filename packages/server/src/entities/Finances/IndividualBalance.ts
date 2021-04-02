@@ -1,5 +1,5 @@
 import { UserId } from '@entities/components'
-import { InvalidError } from '@entities/errors'
+import { InvalidFields } from '@entities/errors'
 
 import { Either, left, right } from '@shared/types'
 
@@ -19,15 +19,20 @@ export class IndividualBalance {
 
   static create(
     balance: IndividualBalanceProps
-  ): Either<InvalidError, IndividualBalance> {
+  ): Either<InvalidFields, IndividualBalance> {
     const finalList: ValidatedBalance = []
+    const errors: InvalidFields = []
     for (const [userId, amount] of Object.entries(balance)) {
       const userIdOrError = UserId.create(userId)
 
-      if (userIdOrError.isLeft()) return left(userIdOrError.value)
-
-      finalList.push([userIdOrError.value, amount])
+      if (userIdOrError.isLeft())
+        errors.push({
+          field: userId,
+          error: userIdOrError.value
+        })
+      else finalList.push([userIdOrError.value, amount])
     }
+    if (errors.length > 0) return left(errors)
     return right(new IndividualBalance(finalList))
   }
 

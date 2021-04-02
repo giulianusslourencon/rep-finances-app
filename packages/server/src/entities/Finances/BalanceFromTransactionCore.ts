@@ -1,4 +1,4 @@
-import { InvalidError } from '@entities/errors'
+import { InvalidFields } from '@entities/errors'
 import { Balance, BalanceProps, TransactionCoreProps } from '@entities/Finances'
 
 import { Either } from '@shared/types'
@@ -6,7 +6,7 @@ import { Either } from '@shared/types'
 export class BalanceFromTransactionCore {
   static create(
     transaction: TransactionCoreProps
-  ): Either<InvalidError, Balance> {
+  ): Either<InvalidFields, Balance> {
     const usersBalance: BalanceProps = {
       individual_balance: { ...transaction.payers }
     }

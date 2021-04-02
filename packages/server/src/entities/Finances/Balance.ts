@@ -1,4 +1,4 @@
-import { InvalidError } from '@entities/errors'
+import { FieldKeys, InvalidFields } from '@entities/errors'
 import { IndividualBalance, IndividualBalanceProps } from '@entities/Finances'
 
 import { Either, left, right } from '@shared/types'
@@ -15,7 +15,7 @@ export class Balance {
     Object.freeze(this)
   }
 
-  static create(balance: BalanceProps): Either<InvalidError, Balance> {
+  static create(balance: BalanceProps): Either<InvalidFields, Balance> {
     Object.keys(balance.individual_balance).forEach(userId => {
       if (!balance.individual_balance[userId])
         delete balance.individual_balance[userId]
@@ -26,7 +26,12 @@ export class Balance {
     )
 
     if (individualBalanceOrError.isLeft())
-      return left(individualBalanceOrError.value)
+      return left(
+        FieldKeys.addKeyOnErrorFields(
+          'individual_balance',
+          individualBalanceOrError.value
+        )
+      )
 
     return right(new Balance(individualBalanceOrError.value))
   }
