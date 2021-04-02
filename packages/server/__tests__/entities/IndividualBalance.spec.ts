@@ -1,7 +1,5 @@
-import { InvalidUserIdError } from '@entities/atomics/errors'
-import { IndividualBalance } from '@entities/Balance'
-
-import { left } from '@shared/Either'
+import { InvalidFields } from '@entities/errors'
+import { IndividualBalance } from '@entities/Finances'
 
 describe('Individual Balance Entity', () => {
   describe('Success Cases', () => {
@@ -30,9 +28,17 @@ describe('Individual Balance Entity', () => {
         individualBalance
       )
 
-      expect(individualBalanceOrError).toEqual(
-        left(new InvalidUserIdError('AAAAA'))
-      )
+      expect(individualBalanceOrError.isLeft()).toBeTruthy()
+      expect(individualBalanceOrError.value).toEqual<InvalidFields>([
+        {
+          field: 'AAAAA',
+          error: {
+            name: 'InvalidUserIdError',
+            value: 'AAAAA',
+            reason: 'The user id must contain between 1 and 2 characteres.'
+          }
+        }
+      ])
     })
   })
 })

@@ -1,13 +1,5 @@
-import {
-  InvalidAmountError,
-  InvalidUserIdError,
-  InvalidDateError,
-  InvalidLabelError
-} from '@entities/atomics/errors'
-import { Transaction, TransactionInitProps } from '@entities/Transaction'
-import { InvalidPaymentError } from '@entities/Transaction/errors'
-
-import { left } from '@shared/Either'
+import { InvalidFields } from '@entities/errors'
+import { Transaction, TransactionInitProps } from '@entities/Finances'
 
 describe('Transaction Entity', () => {
   describe('Success Cases', () => {
@@ -55,7 +47,17 @@ describe('Transaction Entity', () => {
       }
       const transactionOrError = Transaction.create(transactionInit)
 
-      expect(transactionOrError).toEqual(left(new InvalidLabelError('X')))
+      expect(transactionOrError.isLeft()).toBeTruthy()
+      expect(transactionOrError.value).toEqual<InvalidFields>([
+        {
+          field: 'title',
+          error: {
+            name: 'InvalidNameError',
+            value: 'X',
+            reason: 'The name must contain between 2 and 64 characteres.'
+          }
+        }
+      ])
     })
 
     it('Should not allow a transaction with invalid timestamp', () => {
@@ -74,9 +76,17 @@ describe('Transaction Entity', () => {
       }
       const transactionOrError = Transaction.create(transactionInit)
 
-      expect(transactionOrError).toEqual(
-        left(new InvalidDateError(NaN.toString()))
-      )
+      expect(transactionOrError.isLeft()).toBeTruthy()
+      expect(transactionOrError.value).toEqual<InvalidFields>([
+        {
+          field: 'date',
+          error: {
+            name: 'InvalidDateError',
+            value: 'NaN',
+            reason: 'The date may be poorly formatted.'
+          }
+        }
+      ])
     })
 
     it('Should not allow a transaction with invalid items', () => {
@@ -95,7 +105,18 @@ describe('Transaction Entity', () => {
       }
       const transactionOrError = Transaction.create(transactionInit)
 
-      expect(transactionOrError).toEqual(left(new InvalidUserIdError('__')))
+      expect(transactionOrError.isLeft()).toBeTruthy()
+      expect(transactionOrError.value).toEqual<InvalidFields>([
+        {
+          field: 'items.item1.related_users.__',
+          error: {
+            name: 'InvalidUserIdError',
+            value: '__',
+            reason:
+              'The id cannot contain special characters, nor can it contain a number in the first position.'
+          }
+        }
+      ])
     })
 
     it('Should not allow a transaction with invalid payers', () => {
@@ -114,7 +135,24 @@ describe('Transaction Entity', () => {
       }
       const transactionOrError = Transaction.create(transactionInit)
 
-      expect(transactionOrError).toEqual(left(new InvalidAmountError('-20')))
+      expect(transactionOrError.isLeft()).toBeTruthy()
+      expect(transactionOrError.value).toEqual<InvalidFields>([
+        {
+          field: 'payers.P.amount',
+          error: {
+            name: 'InvalidAmountError',
+            value: '-20',
+            reason: 'The amount must be a positive number.'
+          }
+        },
+        {
+          error: {
+            name: 'InvalidPaymentError',
+            value: '',
+            reason: 'Items values are distinct from total paid.'
+          }
+        }
+      ])
     })
 
     it('Should not allow a transaction with items value distinct from total paid', () => {
@@ -133,7 +171,16 @@ describe('Transaction Entity', () => {
       }
       const transactionOrError = Transaction.create(transactionInit)
 
-      expect(transactionOrError).toEqual(left(new InvalidPaymentError()))
+      expect(transactionOrError.isLeft()).toBeTruthy()
+      expect(transactionOrError.value).toEqual<InvalidFields>([
+        {
+          error: {
+            name: 'InvalidPaymentError',
+            value: '',
+            reason: 'Items values are distinct from total paid.'
+          }
+        }
+      ])
     })
   })
 })

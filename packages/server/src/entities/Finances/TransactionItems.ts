@@ -3,7 +3,7 @@ import { FieldKeys, InvalidError, InvalidFields } from '@entities/errors'
 import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
 import { RelatedList } from '@entities/Finances'
 
-import { Either, right } from '@shared/types'
+import { Either, left, right } from '@shared/types'
 
 type ValidatedItems = [Name, { amount: Amount; related_users: RelatedList }][]
 
@@ -43,9 +43,9 @@ export class TransactionItems {
           error: amountOrError.value
         })
       if (relatedUsersOrError.isLeft())
-        errors.concat(
-          FieldKeys.addKeyOnErrorFields(
-            'related_users',
+        errors.push(
+          ...FieldKeys.addKeyOnErrorFields(
+            `${name}.related_users`,
             relatedUsersOrError.value
           )
         )
@@ -73,10 +73,12 @@ export class TransactionItems {
         ])
     }
 
-    if (!TransactionItems.validate(finalList))
+    if (errors.length === 0 && !TransactionItems.validate(finalList))
       errors.push({
         error: new InvalidError('Transaction Items', '', new EmptyReason())
       })
+
+    if (errors.length > 0) return left(errors)
 
     return right(new TransactionItems(finalList))
   }

@@ -79,10 +79,10 @@ export class Transaction {
     if (titleOrError.isLeft())
       errors.push({ field: 'title', error: titleOrError.value })
     if (itemsOrError.isLeft())
-      errors.concat(FieldKeys.addKeyOnErrorFields('items', itemsOrError.value))
+      errors.push(...FieldKeys.addKeyOnErrorFields('items', itemsOrError.value))
     if (payersOrError.isLeft())
-      errors.concat(
-        FieldKeys.addKeyOnErrorFields('payers', payersOrError.value)
+      errors.push(
+        ...FieldKeys.addKeyOnErrorFields('payers', payersOrError.value)
       )
 
     const title = titleOrError.value as Name
@@ -124,18 +124,13 @@ export class Transaction {
       errors.push({ field: 'amount', error: amountOrError.value })
     const amount = amountOrError.value as Amount
 
-    let related = Object.keys(payers.value)
-    for (const item of Object.values(items.value)) {
+    let related = Object.keys(props.payers)
+    for (const item of Object.values(props.items)) {
       related = related.concat(item.related_users)
     }
     related = [...new Set(related)]
 
     const relatedUsersOrError = RelatedList.create(related)
-    if (relatedUsersOrError.isLeft())
-      errors.concat(
-        FieldKeys.addKeyOnErrorFields('related', relatedUsersOrError.value)
-      )
-
     const relatedUsers = relatedUsersOrError.value as RelatedList
 
     if (errors.length > 0) return left(errors)

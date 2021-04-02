@@ -1,7 +1,5 @@
-import { UserId } from '@entities/atomics'
-import { InvalidUserIdError } from '@entities/atomics/errors'
-
-import { left } from '@shared/Either'
+import { UserId } from '@entities/components'
+import { InvalidError } from '@entities/errors'
 
 describe('User Id Entity', () => {
   describe('Success Cases', () => {
@@ -24,25 +22,47 @@ describe('User Id Entity', () => {
     it('Should not allow more than 2 characteres string', () => {
       const userIdOrError = UserId.create('aaaaa')
 
-      expect(userIdOrError).toEqual(left(new InvalidUserIdError('aaaaa')))
+      expect(userIdOrError.isLeft()).toBeTruthy()
+      expect(userIdOrError.value).toEqual<InvalidError>({
+        name: 'InvalidUserIdError',
+        value: 'aaaaa',
+        reason: 'The user id must contain between 1 and 2 characteres.'
+      })
     })
 
     it('Should not allow null trimmed string', () => {
       const userIdOrError = UserId.create(' ')
 
-      expect(userIdOrError).toEqual(left(new InvalidUserIdError(' ')))
+      expect(userIdOrError.isLeft()).toBeTruthy()
+      expect(userIdOrError.value).toEqual<InvalidError>({
+        name: 'InvalidUserIdError',
+        value: ' ',
+        reason: 'The user id must contain between 1 and 2 characteres.'
+      })
     })
 
     it('Should not allow special characteres', () => {
       const userIdOrError = UserId.create('@2')
 
-      expect(userIdOrError).toEqual(left(new InvalidUserIdError('@2')))
+      expect(userIdOrError.isLeft()).toBeTruthy()
+      expect(userIdOrError.value).toEqual<InvalidError>({
+        name: 'InvalidUserIdError',
+        value: '@2',
+        reason:
+          'The id cannot contain special characters, nor can it contain a number in the first position.'
+      })
     })
 
     it('Should not allow strings started in numbers', () => {
       const userIdOrError = UserId.create('2a')
 
-      expect(userIdOrError).toEqual(left(new InvalidUserIdError('2a')))
+      expect(userIdOrError.isLeft()).toBeTruthy()
+      expect(userIdOrError.value).toEqual<InvalidError>({
+        name: 'InvalidUserIdError',
+        value: '2a',
+        reason:
+          'The id cannot contain special characters, nor can it contain a number in the first position.'
+      })
     })
   })
 })

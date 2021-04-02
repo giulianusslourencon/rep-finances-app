@@ -1,7 +1,5 @@
-import { Amount } from '@entities/atomics'
-import { InvalidAmountError } from '@entities/atomics/errors'
-
-import { left } from '@shared/Either'
+import { Amount } from '@entities/components'
+import { InvalidError } from '@entities/errors'
 
 describe('Amount Entity', () => {
   describe('Success Cases', () => {
@@ -17,19 +15,34 @@ describe('Amount Entity', () => {
     it('Should not allow negative values', () => {
       const amountOrError = Amount.create(-5)
 
-      expect(amountOrError).toEqual(left(new InvalidAmountError('-5')))
+      expect(amountOrError.isLeft()).toBeTruthy()
+      expect(amountOrError.value).toEqual<InvalidError>({
+        name: 'InvalidAmountError',
+        value: '-5',
+        reason: 'The amount must be a positive number.'
+      })
     })
 
     it('Should not allow zero', () => {
       const amountOrError = Amount.create(0)
 
-      expect(amountOrError).toEqual(left(new InvalidAmountError('0')))
+      expect(amountOrError.isLeft()).toBeTruthy()
+      expect(amountOrError.value).toEqual<InvalidError>({
+        name: 'InvalidAmountError',
+        value: '0',
+        reason: 'The amount must be a positive number.'
+      })
     })
 
     it('Should not allow NaN', () => {
       const amountOrError = Amount.create(NaN)
 
-      expect(amountOrError).toEqual(left(new InvalidAmountError('NaN')))
+      expect(amountOrError.isLeft()).toBeTruthy()
+      expect(amountOrError.value).toEqual<InvalidError>({
+        name: 'InvalidAmountError',
+        value: 'NaN',
+        reason: 'The amount must be a positive number.'
+      })
     })
   })
 })

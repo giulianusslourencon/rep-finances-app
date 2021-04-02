@@ -20,7 +20,7 @@ export class UserId {
               'The id cannot contain special characters, nor can it contain a number in the first position.'
             )
           : new SizeReason(1, 2)
-      return left(new InvalidError('Id', userId, errorReason))
+      return left(new InvalidError('User Id', userId, errorReason))
     }
     return right(new UserId(userId.toUpperCase().trim()))
   }

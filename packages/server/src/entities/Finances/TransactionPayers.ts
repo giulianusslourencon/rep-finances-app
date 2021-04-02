@@ -58,7 +58,7 @@ export class TransactionPayers {
         ])
     }
 
-    if (!TransactionPayers.validate(finalList))
+    if (errors.length === 0 && !TransactionPayers.validate(finalList))
       errors.push({
         error: new InvalidError('Transaction Payers', '', new EmptyReason())
       })

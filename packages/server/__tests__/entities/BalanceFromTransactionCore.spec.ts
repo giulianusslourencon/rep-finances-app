@@ -2,7 +2,7 @@ import {
   Balance,
   BalanceFromTransactionCore,
   TransactionCoreProps
-} from '@entities/Balance'
+} from '@entities/Finances'
 
 describe('Balance From Transaction Core Entity', () => {
   describe('Success Cases', () => {

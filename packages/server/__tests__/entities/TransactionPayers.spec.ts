@@ -1,17 +1,5 @@
-import {
-  InvalidAmountError,
-  InvalidUserIdError
-} from '@entities/atomics/errors'
-import {
-  TransactionPayersProps,
-  TransactionPayers
-} from '@entities/Transaction'
-import {
-  DuplicatedUserIdOnListError,
-  EmptyListError
-} from '@entities/Transaction/errors'
-
-import { left } from '@shared/Either'
+import { InvalidFields } from '@entities/errors'
+import { TransactionPayersProps, TransactionPayers } from '@entities/Finances'
 
 describe('Transaction Payers Entity', () => {
   describe('Success Cases', () => {
@@ -32,13 +20,21 @@ describe('Transaction Payers Entity', () => {
   describe('Error Cases', () => {
     it('Should not allow a list with invalid user id', () => {
       const items: TransactionPayersProps = {
-        AAAA: 30
+        AAAAA: 30
       }
       const transactionPayersOrError = TransactionPayers.create(items)
 
-      expect(transactionPayersOrError).toEqual(
-        left(new InvalidUserIdError('AAAA'))
-      )
+      expect(transactionPayersOrError.isLeft()).toBeTruthy()
+      expect(transactionPayersOrError.value).toEqual<InvalidFields>([
+        {
+          field: 'AAAAA.userId',
+          error: {
+            name: 'InvalidUserIdError',
+            value: 'AAAAA',
+            reason: 'The user id must contain between 1 and 2 characteres.'
+          }
+        }
+      ])
     })
 
     it('Should not allow a list with invalid value', () => {
@@ -48,16 +44,33 @@ describe('Transaction Payers Entity', () => {
       }
       const transactionPayersOrError = TransactionPayers.create(items)
 
-      expect(transactionPayersOrError).toEqual(
-        left(new InvalidAmountError('-2'))
-      )
+      expect(transactionPayersOrError.isLeft()).toBeTruthy()
+      expect(transactionPayersOrError.value).toEqual<InvalidFields>([
+        {
+          field: 'G.amount',
+          error: {
+            name: 'InvalidAmountError',
+            value: '-2',
+            reason: 'The amount must be a positive number.'
+          }
+        }
+      ])
     })
 
     it('Should not allow an empty list', () => {
       const items: TransactionPayersProps = {}
       const transactionPayersOrError = TransactionPayers.create(items)
 
-      expect(transactionPayersOrError).toEqual(left(new EmptyListError()))
+      expect(transactionPayersOrError.isLeft()).toBeTruthy()
+      expect(transactionPayersOrError.value).toEqual<InvalidFields>([
+        {
+          error: {
+            name: 'InvalidTransactionPayersError',
+            value: '',
+            reason: 'There must be at least one item in the transaction payers.'
+          }
+        }
+      ])
     })
 
     it('Should not allow a list with duplicated user ids', () => {
@@ -67,9 +80,18 @@ describe('Transaction Payers Entity', () => {
       }
       const transactionPayersOrError = TransactionPayers.create(items)
 
-      expect(transactionPayersOrError).toEqual(
-        left(new DuplicatedUserIdOnListError('P'))
-      )
+      expect(transactionPayersOrError.isLeft()).toBeTruthy()
+      expect(transactionPayersOrError.value).toEqual<InvalidFields>([
+        {
+          field: 'p',
+          error: {
+            name: 'InvalidTransactionPayersError',
+            value: 'P',
+            reason:
+              'There cannot be two items in the transaction payers with the same id.'
+          }
+        }
+      ])
     })
   })
 })

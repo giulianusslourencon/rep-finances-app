@@ -1,4 +1,4 @@
-import { Balance, BalanceProps } from '@entities/Balance'
+import { Balance, BalanceProps } from '@entities/Finances'
 
 describe('Balance Entity', () => {
   describe('Success Cases', () => {
