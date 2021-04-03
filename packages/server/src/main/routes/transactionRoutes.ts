@@ -6,7 +6,7 @@ import {
   makeCreateTransaction,
   makeFindTransaction,
   makeListTransactions
-} from '@main/factories'
+} from '@main/factories/Transactions'
 
 export const getTransactionRoutes = (): Router => {
   const router = Router()

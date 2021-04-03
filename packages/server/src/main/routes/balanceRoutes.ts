@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
 import { adaptRoute } from '@main/adapters'
-import { makeGetCurrentBalance } from '@main/factories'
+import { makeGetCurrentBalance } from '@main/factories/Balance'
 
 export const getBalanceRoutes = (): Router => {
   const router = Router()

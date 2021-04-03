@@ -1,10 +1,10 @@
-import { MongoBalance, MongoTransactions } from '@main/factories'
-import { GetCurrentBalanceController } from '@presentation/controllers/Balance'
+import { MongoTransactions, MongoBalance } from '@main/factories/external'
+import { GetCurrentBalanceController } from '@presentation/controllers/Finances/implementations'
 
 import {
-  GetCurrentBalanceUseCase,
-  UpdateRegisteredBalanceUseCase
-} from '@useCases/Balance/implementations'
+  UpdateRegisteredBalanceUseCase,
+  GetCurrentBalanceUseCase
+} from '@useCases/Finances/implementations'
 
 export const makeGetCurrentBalance = () => {
   const updateBalance = new UpdateRegisteredBalanceUseCase(

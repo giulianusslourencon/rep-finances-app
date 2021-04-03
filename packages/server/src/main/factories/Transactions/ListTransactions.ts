@@ -1,5 +1,5 @@
-import { MongoTransactions } from '@main/factories'
-import { ListTransactionsController } from '@presentation/controllers/Transactions'
+import { MongoTransactions } from '@main/factories/external'
+import { ListTransactionsController } from '@presentation/controllers/Finances/implementations'
 
 import { ListTransactionsUseCase } from '@useCases/Finances/implementations'
 

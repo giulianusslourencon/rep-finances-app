@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { app } from '@main/config/app'
-import { MongoBalance, MongoTransactions } from '@main/factories'
+import { MongoBalance, MongoTransactions } from '@main/factories/external'
 import request from 'supertest'
 
 describe('Transaction routes', () => {

@@ -1,5 +1,5 @@
-import { MongoTransactions } from '@main/factories'
-import { CountTransactionsController } from '@presentation/controllers/Transactions'
+import { MongoTransactions } from '@main/factories/external'
+import { CountTransactionsController } from '@presentation/controllers/Finances/implementations'
 
 import { CountTransactionsUseCase } from '@useCases/Finances/implementations'
 
