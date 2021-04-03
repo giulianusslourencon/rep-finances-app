@@ -1,4 +1,4 @@
-import { SetupTransactionsDatabase } from '@tests/mongodb'
+import { SetupTransactionsDatabase } from '@tests/external/mongodb'
 
 import { TransactionProps } from '@entities/Finances'
 

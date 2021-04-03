@@ -1,16 +1,19 @@
-import { SetupBalanceDatabase, SetupTransactionsDatabase } from '@tests/mongodb'
-import { updatedBalance } from '@tests/mongodb/data'
+import {
+  SetupBalanceDatabase,
+  SetupTransactionsDatabase
+} from '@tests/external/mongodb'
+import { updatedBalance } from '@tests/external/mongodb/data'
+
+import {
+  GetCurrentBalanceUseCase,
+  UpdateRegisteredBalanceUseCase
+} from '@useCases/Finances/implementations'
 
 import {
   MongoBalanceRepository,
   MongoTransactionsRepository
 } from '@repositories/mongodb/implementations'
 import { BalanceModel, TransactionModel } from '@repositories/mongodb/schemas'
-
-import {
-  GetCurrentBalanceUseCase,
-  UpdateRegisteredBalanceUseCase
-} from '@useCases/Finances/implementations'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const MongoBalance = new MongoBalanceRepository()

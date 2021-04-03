@@ -1,5 +1,9 @@
 import { TransactionInitialPropsBuilder } from '@tests/builders'
-import { SetupBalanceDatabase, SetupTransactionsDatabase } from '@tests/mongodb'
+import {
+  SetupBalanceDatabase,
+  SetupTransactionsDatabase
+} from '@tests/external/mongodb'
+import { makeIdGeneratorStub } from '@tests/external/utils'
 
 import { InvalidFields } from '@entities/errors'
 import { TransactionProps } from '@entities/Finances'
@@ -14,9 +18,12 @@ import { BalanceModel, TransactionModel } from '@repositories/mongodb/schemas'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const MongoBalance = new MongoBalanceRepository()
+const idGeneratorStub = makeIdGeneratorStub()
+
 const createTransactionUseCase = new CreateTransactionUseCase(
   MongoTransactions,
-  MongoBalance
+  MongoBalance,
+  idGeneratorStub
 )
 
 const TransactionsSetup = new SetupTransactionsDatabase(TransactionModel)
@@ -39,6 +46,16 @@ describe('Create Transaction Use Case', () => {
   })
 
   describe('Success Cases', () => {
+    it('Should generate a unique id for the new transaction', async () => {
+      const idGeneratorSpy = jest.spyOn(idGeneratorStub, 'generateUniqueId')
+
+      await createTransactionUseCase.execute(
+        TransactionInitialPropsBuilder.aTransaction().build()
+      )
+
+      expect(idGeneratorSpy).toBeCalled()
+    })
+
     it('Should add a new valid transaction to collection and set all following months to not updated', async () => {
       const createdTransaction = await createTransactionUseCase.execute(
         TransactionInitialPropsBuilder.aTransaction().build()

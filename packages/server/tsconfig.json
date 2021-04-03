@@ -6,23 +6,26 @@
       "@tests/*": [
         "__tests__/*"
       ],
-      "@presentation/*": [
-        "src/adapters/presentation/*"
+      "@shared/*": [
+        "src/shared/*"
       ],
       "@entities/*": [
         "src/entities/*"
+      ],
+      "@useCases/*": [
+        "src/useCases/*"
+      ],
+      "@utils/*": [
+        "src/adapters/utils/*"
+      ],
+      "@presentation/*": [
+        "src/adapters/presentation/*"
       ],
       "@repositories/*": [
         "src/adapters/repositories/*"
       ],
       "@main/*": [
         "src/main/*"
-      ],
-      "@shared/*": [
-        "src/shared/*"
-      ],
-      "@useCases/*": [
-        "src/useCases/*"
       ]
     }
   },

@@ -17,7 +17,7 @@ describe('Transaction Entity', () => {
           P: 20
         }
       }
-      const transactionOrError = Transaction.create(transactionInit)
+      const transactionOrError = Transaction.create(transactionInit, 'id')
 
       expect(transactionOrError.isRight()).toBeTruthy()
 
@@ -45,7 +45,7 @@ describe('Transaction Entity', () => {
           P: 20
         }
       }
-      const transactionOrError = Transaction.create(transactionInit)
+      const transactionOrError = Transaction.create(transactionInit, 'id')
 
       expect(transactionOrError.isLeft()).toBeTruthy()
       expect(transactionOrError.value).toEqual<InvalidFields>([
@@ -74,7 +74,7 @@ describe('Transaction Entity', () => {
           P: 20
         }
       }
-      const transactionOrError = Transaction.create(transactionInit)
+      const transactionOrError = Transaction.create(transactionInit, 'id')
 
       expect(transactionOrError.isLeft()).toBeTruthy()
       expect(transactionOrError.value).toEqual<InvalidFields>([
@@ -103,7 +103,7 @@ describe('Transaction Entity', () => {
           P: 20
         }
       }
-      const transactionOrError = Transaction.create(transactionInit)
+      const transactionOrError = Transaction.create(transactionInit, 'id')
 
       expect(transactionOrError.isLeft()).toBeTruthy()
       expect(transactionOrError.value).toEqual<InvalidFields>([
@@ -133,7 +133,7 @@ describe('Transaction Entity', () => {
           P: -20
         }
       }
-      const transactionOrError = Transaction.create(transactionInit)
+      const transactionOrError = Transaction.create(transactionInit, 'id')
 
       expect(transactionOrError.isLeft()).toBeTruthy()
       expect(transactionOrError.value).toEqual<InvalidFields>([
@@ -169,7 +169,7 @@ describe('Transaction Entity', () => {
           P: 30
         }
       }
-      const transactionOrError = Transaction.create(transactionInit)
+      const transactionOrError = Transaction.create(transactionInit, 'id')
 
       expect(transactionOrError.isLeft()).toBeTruthy()
       expect(transactionOrError.value).toEqual<InvalidFields>([

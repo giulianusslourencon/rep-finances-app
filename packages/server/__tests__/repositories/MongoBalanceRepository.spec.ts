@@ -1,5 +1,5 @@
-import { SetupBalanceDatabase } from '@tests/mongodb'
-import { balance } from '@tests/mongodb/data'
+import { SetupBalanceDatabase } from '@tests/external/mongodb'
+import { balance } from '@tests/external/mongodb/data'
 
 import { MonthBalance, BalanceAttributes } from '@repositories/attributes'
 import { MongoBalanceRepository } from '@repositories/mongodb/implementations'

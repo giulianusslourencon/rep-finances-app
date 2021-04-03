@@ -1,9 +1,9 @@
-import { SetupTransactionsDatabase } from '@tests/mongodb'
+import { SetupTransactionsDatabase } from '@tests/external/mongodb'
+
+import { CountTransactionsUseCase } from '@useCases/Finances/implementations'
 
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations'
 import { TransactionModel } from '@repositories/mongodb/schemas'
-
-import { CountTransactionsUseCase } from '@useCases/Finances/implementations'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const countTransactionsUseCase = new CountTransactionsUseCase(MongoTransactions)

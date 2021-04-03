@@ -1,5 +1,6 @@
-import { transactions } from '@tests/mongodb/data'
 import { Model } from 'mongoose'
+
+import { transactions } from '@tests/external/mongodb/data'
 
 import { TransactionDocument } from '@repositories/mongodb/schemas'
 

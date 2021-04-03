@@ -1,5 +1,6 @@
-import { balance, updatedBalance } from '@tests/mongodb/data'
 import { Model } from 'mongoose'
+
+import { balance, updatedBalance } from '@tests/external/mongodb/data'
 
 import { BalanceDocument } from '@repositories/mongodb/schemas'
 

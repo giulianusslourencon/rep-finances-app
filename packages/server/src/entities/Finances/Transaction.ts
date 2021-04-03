@@ -1,4 +1,5 @@
-import { v4 as uuid } from 'uuid'
+import { Either, left, right } from '@shared/types'
+import { DateParser } from '@shared/utils'
 
 import { Amount, Name } from '@entities/components'
 import { FieldKeys, InvalidError, InvalidFields } from '@entities/errors'
@@ -10,9 +11,6 @@ import {
   TransactionPayers,
   TransactionPayersProps
 } from '@entities/Finances'
-
-import { Either, left, right } from '@shared/types'
-import { DateParser } from '@shared/utils'
 
 export type TransactionInitProps = {
   title: string
@@ -52,7 +50,7 @@ export class Transaction {
     month: string,
     amount: Amount,
     related: RelatedList,
-    id?: string
+    id: string
   ) {
     this.title = title
     this.date = date
@@ -61,14 +59,14 @@ export class Transaction {
     this.month = month
     this.amount = amount
     this.related = related
-    this._id = id || uuid()
+    this._id = id
 
     Object.freeze(this)
   }
 
   static create(
     props: TransactionInitProps,
-    id?: string
+    id: string
   ): Either<InvalidFields, Transaction> {
     const errors: InvalidFields = []
 
