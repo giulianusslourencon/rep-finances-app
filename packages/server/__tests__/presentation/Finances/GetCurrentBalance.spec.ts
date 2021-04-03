@@ -1,5 +1,6 @@
 import { HttpRequest } from '@presentation/contracts'
-import { GetCurrentBalanceController } from '@presentation/controllers/Balance'
+import { GetCurrentBalanceController } from '@presentation/controllers/Finances/implementations'
+import { ErrorViewModel } from '@presentation/viewModels'
 
 import {
   GetCurrentBalance,
@@ -60,9 +61,13 @@ describe('Get Current Balance Controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(500)
-      expect(httpResponse.body).toEqual({
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
         name: 'ServerError',
-        message: 'Server error: Unexpected error.'
+        errors: [
+          {
+            message: 'Server error: Unexpected error.'
+          }
+        ]
       })
     })
 
@@ -80,9 +85,13 @@ describe('Get Current Balance Controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(500)
-      expect(httpResponse.body).toEqual({
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
         name: 'ServerError',
-        message: 'Server error: Error.'
+        errors: [
+          {
+            message: 'Server error: Error.'
+          }
+        ]
       })
     })
   })

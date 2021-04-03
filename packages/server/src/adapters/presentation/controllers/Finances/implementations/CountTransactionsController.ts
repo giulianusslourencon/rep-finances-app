@@ -1,11 +1,9 @@
 import { HttpRequest, HttpResponse } from '@presentation/contracts'
 import { serverError, success } from '@presentation/controllers/helpers'
-import {
-  ErrorViewModel,
-  TransactionsCountViewModel
-} from '@presentation/viewModels'
+import { ErrorViewModel } from '@presentation/viewModels'
+import { TransactionsCountViewModel } from '@presentation/viewModels/Finances'
 
-import { CountTransactions } from '@useCases/Transactions/ports/CountTransactions'
+import { CountTransactions } from '@useCases/Finances/ports/CountTransactions'
 
 export class CountTransactionsController {
   constructor(private countTransactions: CountTransactions) {}

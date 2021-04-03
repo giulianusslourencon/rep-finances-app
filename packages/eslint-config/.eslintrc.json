@@ -34,10 +34,7 @@
     "prettier/prettier": "error",
     "object-curly-spacing": [
       "error",
-      "always",
-      {
-        "arraysInObjects": false
-      }
+      "always"
     ],
     "array-bracket-spacing": [
       "error",
@@ -81,10 +78,11 @@
           "/^express/",
           "module",
           "/^@config/",
-          "/^@entities/",
-          "/^@repositories/",
           "/^@shared/",
+          "/^@tests/",
+          "/^@entities/",
           "/^@useCases/",
+          "/^@repositories/",
           "/^@components/",
           "/^@theme/",
           "/^@utils/",

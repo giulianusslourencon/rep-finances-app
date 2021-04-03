@@ -1,14 +1,18 @@
 import { Controller, HttpRequest, HttpResponse } from '@presentation/contracts'
-import { error, serverError, success } from '@presentation/controllers/helpers'
-import { ListTransactionsValidation } from '@presentation/validators'
+import { ListTransactionsValidation } from '@presentation/controllers/Finances/validators'
 import {
-  ErrorViewModel,
+  missingParamsError,
+  serverError,
+  success
+} from '@presentation/controllers/helpers'
+import { ErrorViewModel } from '@presentation/viewModels'
+import {
   ListQueryViewModel,
   TransactionResume,
   TransactionsArrayViewModel
-} from '@presentation/viewModels'
+} from '@presentation/viewModels/Finances'
 
-import { ListTransactions } from '@useCases/Transactions/ports/ListTransactions'
+import { ListTransactions } from '@useCases/Finances/ports/ListTransactions'
 
 export class ListTransactionsController implements Controller {
   constructor(private listTransactions: ListTransactions) {}
@@ -22,7 +26,7 @@ export class ListTransactionsController implements Controller {
   ): Promise<HttpResponse<TransactionsArrayViewModel | ErrorViewModel>> {
     const validatedInputOrError = ListTransactionsValidation.validate(request)
     if (validatedInputOrError.isLeft())
-      return error(validatedInputOrError.value, 406)
+      return missingParamsError(validatedInputOrError.value)
 
     const { page, nItems, month } = request.query
 

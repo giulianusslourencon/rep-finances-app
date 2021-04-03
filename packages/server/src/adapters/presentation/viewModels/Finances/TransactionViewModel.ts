@@ -1,4 +1,4 @@
-import { TransactionProps } from '@entities/Transaction'
+import { TransactionProps } from '@entities/Finances'
 
 export class TransactionViewModel {
   _id!: string
@@ -11,16 +11,7 @@ export class TransactionViewModel {
   related!: string[]
 
   static map(entity: TransactionProps): TransactionViewModel {
-    return {
-      _id: entity._id,
-      title: entity.title,
-      date: entity.date.toISOString(),
-      amount: entity.amount,
-      related: entity.related,
-      month: entity.month,
-      items: entity.items,
-      payers: entity.payers
-    }
+    return { ...entity, date: entity.date.toISOString() }
   }
 }
 

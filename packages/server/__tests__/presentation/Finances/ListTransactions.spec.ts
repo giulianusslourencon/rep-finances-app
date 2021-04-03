@@ -1,11 +1,12 @@
 import { HttpRequest } from '@presentation/contracts'
-import { ListTransactionsController } from '@presentation/controllers/Transactions'
+import { ListTransactionsController } from '@presentation/controllers/Finances/implementations'
+import { ErrorViewModel } from '@presentation/viewModels'
 
 import {
   ListTransactions,
   ListTransactionsProps,
   ListTransactionsResponse
-} from '@useCases/Transactions/ports/ListTransactions'
+} from '@useCases/Finances/ports/ListTransactions'
 
 interface ISutType {
   sut: ListTransactionsController
@@ -126,7 +127,7 @@ describe('List Transactions Controller', () => {
 
   describe('Error Cases', () => {
     describe('Params Error Cases', () => {
-      it('Should return 406 if page is not a number', async () => {
+      it('Should return 400 if page is not a number', async () => {
         const { sut } = makeSut()
         const httpRequest: HttpRequest = {
           query: { page: 'a' },
@@ -135,15 +136,20 @@ describe('List Transactions Controller', () => {
         }
 
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse.statusCode).toBe(406)
-        expect(httpResponse.body).toEqual({
-          name: 'MissingParamError',
-          message:
-            'Missing param: page must be a `number` type, but the final value was: `NaN` (cast from the value `"a"`).'
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual<ErrorViewModel>({
+          name: 'MissingParamsError',
+          errors: [
+            {
+              field: 'page',
+              message:
+                'Missing param: page must be a `number` type, but the final value was: `NaN` (cast from the value `"a"`).'
+            }
+          ]
         })
       })
 
-      it('Should return 406 if nItems is not a number', async () => {
+      it('Should return 400 if nItems is not a number', async () => {
         const { sut } = makeSut()
         const httpRequest: HttpRequest = {
           query: { nItems: 'a' },
@@ -152,15 +158,20 @@ describe('List Transactions Controller', () => {
         }
 
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse.statusCode).toBe(406)
-        expect(httpResponse.body).toEqual({
-          name: 'MissingParamError',
-          message:
-            'Missing param: nItems must be a `number` type, but the final value was: `NaN` (cast from the value `"a"`).'
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual<ErrorViewModel>({
+          name: 'MissingParamsError',
+          errors: [
+            {
+              field: 'nItems',
+              message:
+                'Missing param: nItems must be a `number` type, but the final value was: `NaN` (cast from the value `"a"`).'
+            }
+          ]
         })
       })
 
-      it('Should return 406 if page is non-positive', async () => {
+      it('Should return 400 if page is non-positive', async () => {
         const { sut } = makeSut()
         const httpRequest: HttpRequest = {
           query: { page: 0 },
@@ -169,14 +180,19 @@ describe('List Transactions Controller', () => {
         }
 
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse.statusCode).toBe(406)
-        expect(httpResponse.body).toEqual({
-          name: 'MissingParamError',
-          message: 'Missing param: page must be a positive number'
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual<ErrorViewModel>({
+          name: 'MissingParamsError',
+          errors: [
+            {
+              field: 'page',
+              message: 'Missing param: page must be a positive number'
+            }
+          ]
         })
       })
 
-      it('Should return 406 if nItems is non-positive', async () => {
+      it('Should return 400 if nItems is non-positive', async () => {
         const { sut } = makeSut()
         const httpRequest: HttpRequest = {
           query: { nItems: -2 },
@@ -185,14 +201,19 @@ describe('List Transactions Controller', () => {
         }
 
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse.statusCode).toBe(406)
-        expect(httpResponse.body).toEqual({
-          name: 'MissingParamError',
-          message: 'Missing param: nItems must be a positive number'
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual<ErrorViewModel>({
+          name: 'MissingParamsError',
+          errors: [
+            {
+              field: 'nItems',
+              message: 'Missing param: nItems must be a positive number'
+            }
+          ]
         })
       })
 
-      it('Should return 406 if month doesnt have length 6', async () => {
+      it('Should return 400 if month doesnt have length 6', async () => {
         const { sut } = makeSut()
         const httpRequest: HttpRequest = {
           query: { month: '1234' },
@@ -201,10 +222,15 @@ describe('List Transactions Controller', () => {
         }
 
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse.statusCode).toBe(406)
-        expect(httpResponse.body).toEqual({
-          name: 'MissingParamError',
-          message: 'Missing param: month must be exactly 6 characters'
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual<ErrorViewModel>({
+          name: 'MissingParamsError',
+          errors: [
+            {
+              field: 'month',
+              message: 'Missing param: month must be exactly 6 characters'
+            }
+          ]
         })
       })
     })
@@ -225,9 +251,13 @@ describe('List Transactions Controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(500)
-      expect(httpResponse.body).toEqual({
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
         name: 'ServerError',
-        message: 'Server error: Unexpected error.'
+        errors: [
+          {
+            message: 'Server error: Unexpected error.'
+          }
+        ]
       })
     })
 
@@ -245,9 +275,13 @@ describe('List Transactions Controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(500)
-      expect(httpResponse.body).toEqual({
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
         name: 'ServerError',
-        message: 'Server error: Error.'
+        errors: [
+          {
+            message: 'Server error: Error.'
+          }
+        ]
       })
     })
   })

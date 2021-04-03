@@ -1,15 +1,19 @@
 import { HttpRequest } from '@presentation/contracts'
-import { CreateTransactionController } from '@presentation/controllers/Transactions'
+import { CreateTransactionController } from '@presentation/controllers/Finances/implementations'
+import { ErrorViewModel } from '@presentation/viewModels'
 
-import { InvalidLabelError } from '@entities/atomics/errors'
+import { left, right } from '@shared/types'
 
-import { left, right } from '@shared/Either'
+import {
+  TransactionBuilder,
+  TransactionInitialPropsBuilder
+} from '@tests/builders'
 
 import {
   CreateTransaction,
   CreateTransactionProps,
   CreateTransactionResponse
-} from '@useCases/Transactions/ports/CreateTransaction'
+} from '@useCases/Finances/ports/CreateTransaction'
 
 interface ISutType {
   sut: CreateTransactionController
@@ -23,24 +27,17 @@ const makeCreateTransactionStub = (): CreateTransaction => {
     ): Promise<CreateTransactionResponse> {
       return Promise.resolve(
         props.title === 'A'
-          ? left(new InvalidLabelError('A'))
-          : right({
-              _id: 'id',
-              amount: 30,
-              items: {
-                item: {
-                  related_users: ['P', 'G'],
-                  amount: 30
+          ? left([
+              {
+                field: 'title',
+                error: {
+                  name: 'InvalidNameError',
+                  value: 'A',
+                  reason: 'The name must contain between 2 and 64 characteres.'
                 }
-              },
-              month: '202012',
-              payers: {
-                P: 30
-              },
-              related: ['P', 'G'],
-              date: new Date(21212121211),
-              title: 'AAAAAAA'
-            })
+              }
+            ])
+          : right(TransactionBuilder.aTransaction().build())
       )
     }
   }
@@ -59,19 +56,7 @@ describe('Create transaction controller', () => {
     it('Should create a new transaction and return the created object with status code 201', async () => {
       const { sut } = makeSut()
       const httpRequest: HttpRequest = {
-        body: {
-          timestamp: 21212121211,
-          title: 'AAAAAAA',
-          items: {
-            item: {
-              related_users: ['P', 'G'],
-              amount: 30
-            }
-          },
-          payers: {
-            P: 30
-          }
-        },
+        body: TransactionInitialPropsBuilder.aTransaction().build(),
         query: {},
         params: {}
       }
@@ -86,28 +71,24 @@ describe('Create transaction controller', () => {
     it('Should not create a new transaction if one or more fields are not valid', async () => {
       const { sut } = makeSut()
       const httpRequest: HttpRequest = {
-        body: {
-          timestamp: 21212121211,
-          title: 'A',
-          items: {
-            item: {
-              related_users: ['P', 'G'],
-              amount: 30
-            }
-          },
-          payers: {
-            P: 30
-          }
-        },
+        body: TransactionInitialPropsBuilder.aTransaction()
+          .withInvalidTitle()
+          .build(),
         query: {},
         params: {}
       }
 
       const httpResponse = await sut.handle(httpRequest)
-      expect(httpResponse.statusCode).toBe(400)
-      expect(httpResponse.body).toEqual({
-        name: 'InvalidLabelError',
-        message: 'The label "A" is invalid.'
+
+      expect(httpResponse.statusCode).toBe(406)
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
+        name: 'InvalidFieldsError',
+        errors: [
+          {
+            field: 'title',
+            message: 'The name must contain between 2 and 64 characteres.'
+          }
+        ]
       })
     })
 
@@ -132,10 +113,15 @@ describe('Create transaction controller', () => {
         }
 
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse.statusCode).toBe(406)
-        expect(httpResponse.body).toEqual({
-          name: 'MissingParamError',
-          message: 'Missing param: title is a required field'
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual<ErrorViewModel>({
+          name: 'MissingParamsError',
+          errors: [
+            {
+              field: 'title',
+              message: 'Missing param: title is a required field'
+            }
+          ]
         })
       })
 
@@ -159,10 +145,15 @@ describe('Create transaction controller', () => {
         }
 
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse.statusCode).toBe(406)
-        expect(httpResponse.body).toEqual({
-          name: 'MissingParamError',
-          message: 'Missing param: timestamp is a required field'
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual<ErrorViewModel>({
+          name: 'MissingParamsError',
+          errors: [
+            {
+              field: 'timestamp',
+              message: 'Missing param: timestamp is a required field'
+            }
+          ]
         })
       })
 
@@ -187,11 +178,16 @@ describe('Create transaction controller', () => {
         }
 
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse.statusCode).toBe(406)
-        expect(httpResponse.body).toEqual({
-          name: 'MissingParamError',
-          message:
-            'Missing param: timestamp must be a `number` type, but the final value was: `NaN` (cast from the value `"abacate"`).'
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual<ErrorViewModel>({
+          name: 'MissingParamsError',
+          errors: [
+            {
+              field: 'timestamp',
+              message:
+                'Missing param: timestamp must be a `number` type, but the final value was: `NaN` (cast from the value `"abacate"`).'
+            }
+          ]
         })
       })
 
@@ -210,10 +206,15 @@ describe('Create transaction controller', () => {
         }
 
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse.statusCode).toBe(406)
-        expect(httpResponse.body).toEqual({
-          name: 'MissingParamError',
-          message: 'Missing param: items is a required field'
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual<ErrorViewModel>({
+          name: 'MissingParamsError',
+          errors: [
+            {
+              field: 'items',
+              message: 'Missing param: items is a required field'
+            }
+          ]
         })
       })
 
@@ -235,10 +236,15 @@ describe('Create transaction controller', () => {
         }
 
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse.statusCode).toBe(406)
-        expect(httpResponse.body).toEqual({
-          name: 'MissingParamError',
-          message: 'Missing param: payers is a required field'
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual<ErrorViewModel>({
+          name: 'MissingParamsError',
+          errors: [
+            {
+              field: 'payers',
+              message: 'Missing param: payers is a required field'
+            }
+          ]
         })
       })
     })
@@ -271,9 +277,13 @@ describe('Create transaction controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(500)
-      expect(httpResponse.body).toEqual({
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
         name: 'ServerError',
-        message: 'Server error: Unexpected error.'
+        errors: [
+          {
+            message: 'Server error: Unexpected error.'
+          }
+        ]
       })
     })
 
@@ -303,9 +313,13 @@ describe('Create transaction controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(500)
-      expect(httpResponse.body).toEqual({
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
         name: 'ServerError',
-        message: 'Server error: Error.'
+        errors: [
+          {
+            message: 'Server error: Error.'
+          }
+        ]
       })
     })
   })

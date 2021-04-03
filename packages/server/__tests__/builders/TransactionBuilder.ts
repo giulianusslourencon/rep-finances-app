@@ -16,7 +16,7 @@ export class TransactionBuilder {
       },
       date: new Date(1608865200000),
       title: 'Vinho pra gay night de Natal',
-      _id: 'idzada',
+      _id: 'id',
       amount: 10,
       month: '202012',
       related: ['P', 'D']

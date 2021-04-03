@@ -1,12 +1,15 @@
 import { HttpRequest, HttpResponse } from '@presentation/contracts'
-import { error, serverError, success } from '@presentation/controllers/helpers'
 import {
-  ErrorViewModel,
-  TransactionDetailsViewModel
-} from '@presentation/viewModels'
+  invalidFieldsError,
+  notFoundError,
+  serverError,
+  success
+} from '@presentation/controllers/helpers'
+import { ErrorViewModel } from '@presentation/viewModels'
+import { TransactionDetailsViewModel } from '@presentation/viewModels/Finances'
 
-import { GetTransactionBalance } from '@useCases/Balance/ports/GetTransactionBalance'
-import { FindTransaction } from '@useCases/Transactions/ports/FindTransaction'
+import { FindTransaction } from '@useCases/Finances/ports/FindTransaction'
+import { GetTransactionBalance } from '@useCases/Finances/ports/GetTransactionBalance'
 
 export class FindTransactionController {
   constructor(
@@ -26,7 +29,7 @@ export class FindTransactionController {
     try {
       const transactionOrError = await this.findTransaction.execute({ id })
       if (transactionOrError.isLeft()) {
-        return error(transactionOrError.value, 404)
+        return notFoundError(transactionOrError.value)
       }
 
       const transaction = transactionOrError.value
@@ -35,7 +38,7 @@ export class FindTransactionController {
         transaction
       })
       if (balanceOrError.isLeft()) {
-        return error(balanceOrError.value)
+        return invalidFieldsError(balanceOrError.value)
       }
 
       const balance = balanceOrError.value

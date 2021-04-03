@@ -4,13 +4,13 @@ import { SetupBalanceDatabase, SetupTransactionsDatabase } from '@tests/mongodb'
 import { InvalidFields } from '@entities/errors'
 import { TransactionProps } from '@entities/Finances'
 
+import { CreateTransactionUseCase } from '@useCases/Finances/implementations'
+
 import {
   MongoBalanceRepository,
   MongoTransactionsRepository
 } from '@repositories/mongodb/implementations'
 import { BalanceModel, TransactionModel } from '@repositories/mongodb/schemas'
-
-import { CreateTransactionUseCase } from '@useCases/Finances/implementations'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const MongoBalance = new MongoBalanceRepository()

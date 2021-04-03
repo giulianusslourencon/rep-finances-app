@@ -1,13 +1,18 @@
 import { HttpRequest, HttpResponse } from '@presentation/contracts'
-import { error, serverError, success } from '@presentation/controllers/helpers'
-import { CreateTransactionValidation } from '@presentation/validators'
+import { CreateTransactionValidation } from '@presentation/controllers/Finances/validators'
+import {
+  invalidFieldsError,
+  missingParamsError,
+  serverError,
+  success
+} from '@presentation/controllers/helpers'
+import { ErrorViewModel } from '@presentation/viewModels'
 import {
   CreateTransactionViewModel,
-  ErrorViewModel,
   TransactionViewModel
-} from '@presentation/viewModels'
+} from '@presentation/viewModels/Finances'
 
-import { CreateTransaction } from '@useCases/Transactions/ports/CreateTransaction'
+import { CreateTransaction } from '@useCases/Finances/ports/CreateTransaction'
 
 export class CreateTransactionController {
   constructor(private createTransaction: CreateTransaction) {}
@@ -24,7 +29,7 @@ export class CreateTransactionController {
         request
       )
       if (validatedInputOrError.isLeft())
-        return error(validatedInputOrError.value, 406)
+        return missingParamsError(validatedInputOrError.value)
 
       const { title, timestamp, items, payers } = request.body
 
@@ -36,7 +41,7 @@ export class CreateTransactionController {
       })
 
       if (transactionOrError.isLeft()) {
-        return error(transactionOrError.value)
+        return invalidFieldsError(transactionOrError.value)
       }
 
       const transaction = transactionOrError.value

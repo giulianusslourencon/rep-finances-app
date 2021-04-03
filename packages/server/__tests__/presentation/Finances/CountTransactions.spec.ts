@@ -1,11 +1,12 @@
 import { HttpRequest } from '@presentation/contracts'
-import { CountTransactionsController } from '@presentation/controllers/Transactions'
+import { CountTransactionsController } from '@presentation/controllers/Finances/implementations'
+import { ErrorViewModel } from '@presentation/viewModels'
 
 import {
   CountTransactions,
   CountTransactionsProps,
   CountTransactionsResponse
-} from '@useCases/Transactions/ports/CountTransactions'
+} from '@useCases/Finances/ports/CountTransactions'
 
 interface ISutType {
   sut: CountTransactionsController
@@ -80,9 +81,13 @@ describe('Count Transactions Controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(500)
-      expect(httpResponse.body).toEqual({
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
         name: 'ServerError',
-        message: 'Server error: Unexpected error.'
+        errors: [
+          {
+            message: 'Server error: Unexpected error.'
+          }
+        ]
       })
     })
 
@@ -100,9 +105,13 @@ describe('Count Transactions Controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(500)
-      expect(httpResponse.body).toEqual({
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
         name: 'ServerError',
-        message: 'Server error: Error.'
+        errors: [
+          {
+            message: 'Server error: Error.'
+          }
+        ]
       })
     })
   })

@@ -1,4 +1,4 @@
-import { BalanceProps } from '@entities/Balance'
+import { BalanceProps } from '@entities/Finances'
 
 export class CurrentBalanceViewModel {
   balance!: {

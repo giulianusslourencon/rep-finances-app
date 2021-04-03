@@ -1,7 +1,6 @@
-import { TransactionViewModel } from '@presentation/viewModels'
+import { TransactionViewModel } from '@presentation/viewModels/Finances'
 
-import { BalanceProps } from '@entities/Balance'
-import { TransactionProps } from '@entities/Transaction'
+import { BalanceProps, TransactionProps } from '@entities/Finances'
 
 export class TransactionDetailsViewModel {
   transaction!: TransactionViewModel

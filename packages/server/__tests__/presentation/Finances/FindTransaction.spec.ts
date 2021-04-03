@@ -1,22 +1,24 @@
 import { HttpRequest } from '@presentation/contracts'
-import { FindTransactionController } from '@presentation/controllers/Transactions'
-import { TransactionDetailsViewModel } from '@presentation/viewModels'
+import { FindTransactionController } from '@presentation/controllers/Finances/implementations'
+import { ErrorViewModel } from '@presentation/viewModels'
+import { TransactionDetailsViewModel } from '@presentation/viewModels/Finances'
 
-import { TransactionProps } from '@entities/Transaction'
+import { left, right } from '@shared/types'
 
-import { left, right } from '@shared/Either'
+import { TransactionBuilder } from '@tests/builders'
 
-import {
-  GetTransactionBalance,
-  GetTransactionBalanceProps,
-  GetTransactionBalanceResponse
-} from '@useCases/Balance/ports/GetTransactionBalance'
-import { TransactionNotFoundError } from '@useCases/errors'
+import { TransactionProps } from '@entities/Finances'
+
 import {
   FindTransaction,
   FindTransactionProps,
   FindTransactionResponse
-} from '@useCases/Transactions/ports/FindTransaction'
+} from '@useCases/Finances/ports/FindTransaction'
+import {
+  GetTransactionBalance,
+  GetTransactionBalanceProps,
+  GetTransactionBalanceResponse
+} from '@useCases/Finances/ports/GetTransactionBalance'
 
 interface ISutType {
   sut: FindTransactionController
@@ -29,27 +31,16 @@ const makeFindTransactionStub = (): FindTransaction => {
     async execute(
       props: FindTransactionProps
     ): Promise<FindTransactionResponse> {
-      const foundTransaction: TransactionProps = {
-        _id: 'id',
-        amount: 30,
-        items: {
-          item: {
-            related_users: ['P', 'G'],
-            amount: 30
-          }
-        },
-        month: '202012',
-        payers: {
-          P: 30
-        },
-        related: ['P', 'G'],
-        date: new Date(21212121211),
-        title: 'AAAAAAA'
-      }
+      const foundTransaction: TransactionProps = TransactionBuilder.aTransaction().build()
       return Promise.resolve(
         props.id === 'id'
           ? right(foundTransaction)
-          : left(new TransactionNotFoundError(props.id))
+          : left({
+              name: 'TransactionNotFoundError',
+              key: 'id',
+              value: 'opa',
+              message: 'There is no transaction registered with id "opa"'
+            })
       )
     }
   }
@@ -112,14 +103,19 @@ describe('Find Transaction Controller', () => {
       const httpRequest: HttpRequest = {
         body: {},
         query: {},
-        params: { id: 'id2' }
+        params: { id: 'opa' }
       }
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(404)
-      expect(httpResponse.body).toEqual({
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
         name: 'TransactionNotFoundError',
-        message: 'Transaction with id "id2" not found'
+        errors: [
+          {
+            field: 'id',
+            message: 'There is no transaction registered with id "opa"'
+          }
+        ]
       })
     })
   })
@@ -139,9 +135,13 @@ describe('Find Transaction Controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(500)
-      expect(httpResponse.body).toEqual({
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
         name: 'ServerError',
-        message: 'Server error: Unexpected error.'
+        errors: [
+          {
+            message: 'Server error: Unexpected error.'
+          }
+        ]
       })
     })
 
@@ -159,9 +159,13 @@ describe('Find Transaction Controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(500)
-      expect(httpResponse.body).toEqual({
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
         name: 'ServerError',
-        message: 'Server error: Error.'
+        errors: [
+          {
+            message: 'Server error: Error.'
+          }
+        ]
       })
     })
 
@@ -181,9 +185,13 @@ describe('Find Transaction Controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(500)
-      expect(httpResponse.body).toEqual({
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
         name: 'ServerError',
-        message: 'Server error: Unexpected error.'
+        errors: [
+          {
+            message: 'Server error: Unexpected error.'
+          }
+        ]
       })
     })
 
@@ -203,9 +211,13 @@ describe('Find Transaction Controller', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse.statusCode).toBe(500)
-      expect(httpResponse.body).toEqual({
+      expect(httpResponse.body).toEqual<ErrorViewModel>({
         name: 'ServerError',
-        message: 'Server error: Error.'
+        errors: [
+          {
+            message: 'Server error: Error.'
+          }
+        ]
       })
     })
   })
