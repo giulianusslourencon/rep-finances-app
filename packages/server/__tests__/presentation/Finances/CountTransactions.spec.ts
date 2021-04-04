@@ -1,5 +1,5 @@
-import { HttpRequest } from '@presentation/contracts'
-import { CountTransactionsController } from '@presentation/controllers/Finances/implementations'
+import { Controller, HttpRequest } from '@presentation/contracts'
+import { CountTransactionsControllerOperation } from '@presentation/controllers/Finances/operations'
 import { ErrorViewModel } from '@presentation/viewModels'
 
 import {
@@ -9,7 +9,7 @@ import {
 } from '@useCases/Finances/ports/CountTransactions'
 
 interface ISutType {
-  sut: CountTransactionsController
+  sut: Controller
   countTransactionsStub: CountTransactions
 }
 
@@ -27,7 +27,9 @@ const makeCountTransactionsStub = (): CountTransactions => {
 
 const makeSut = (): ISutType => {
   const countTransactionsStub = makeCountTransactionsStub()
-  const sut = new CountTransactionsController(countTransactionsStub)
+  const sut = new Controller(
+    new CountTransactionsControllerOperation(countTransactionsStub)
+  )
   return { sut, countTransactionsStub }
 }
 

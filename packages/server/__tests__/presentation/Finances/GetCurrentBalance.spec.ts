@@ -1,5 +1,5 @@
-import { HttpRequest } from '@presentation/contracts'
-import { GetCurrentBalanceController } from '@presentation/controllers/Finances/implementations'
+import { Controller, HttpRequest } from '@presentation/contracts'
+import { GetCurrentBalanceControllerOperation } from '@presentation/controllers/Finances/operations'
 import { ErrorViewModel } from '@presentation/viewModels'
 
 import {
@@ -8,7 +8,7 @@ import {
 } from '@useCases/Finances/ports/GetCurrentBalance'
 
 interface ISutType {
-  sut: GetCurrentBalanceController
+  sut: Controller
   getCurrentBalanceStub: GetCurrentBalance
 }
 
@@ -24,7 +24,9 @@ const makeGetCurrentBalanceStub = (): GetCurrentBalance => {
 
 const makeSut = (): ISutType => {
   const getCurrentBalanceStub = makeGetCurrentBalanceStub()
-  const sut = new GetCurrentBalanceController(getCurrentBalanceStub)
+  const sut = new Controller(
+    new GetCurrentBalanceControllerOperation(getCurrentBalanceStub)
+  )
   return { sut, getCurrentBalanceStub }
 }
 

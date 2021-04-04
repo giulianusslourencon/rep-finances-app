@@ -1,5 +1,5 @@
 import { MongoTransactions } from '@main/factories/external'
-import { FindTransactionController } from '@presentation/controllers/Finances/implementations'
+import { FindTransactionControllerOperation } from '@presentation/controllers/Finances/operations'
 
 import {
   FindTransactionUseCase,
@@ -9,5 +9,5 @@ import {
 export const makeFindTransaction = () => {
   const getTransactionBalance = new GetTransactionBalanceUseCase()
   const useCase = new FindTransactionUseCase(MongoTransactions)
-  return new FindTransactionController(useCase, getTransactionBalance)
+  return new FindTransactionControllerOperation(useCase, getTransactionBalance)
 }

@@ -1,5 +1,5 @@
-import { HttpRequest } from '@presentation/contracts'
-import { CreateTransactionController } from '@presentation/controllers/Finances/implementations'
+import { Controller, HttpRequest } from '@presentation/contracts'
+import { CreateTransactionControllerOperation } from '@presentation/controllers/Finances/operations'
 import { ErrorViewModel } from '@presentation/viewModels'
 
 import { left, right } from '@shared/types'
@@ -16,7 +16,7 @@ import {
 } from '@useCases/Finances/ports/CreateTransaction'
 
 interface ISutType {
-  sut: CreateTransactionController
+  sut: Controller
   createTransactionStub: CreateTransaction
 }
 
@@ -47,7 +47,9 @@ const makeCreateTransactionStub = (): CreateTransaction => {
 
 const makeSut = (): ISutType => {
   const createTransactionStub = makeCreateTransactionStub()
-  const sut = new CreateTransactionController(createTransactionStub)
+  const sut = new Controller(
+    new CreateTransactionControllerOperation(createTransactionStub)
+  )
   return { sut, createTransactionStub }
 }
 
@@ -115,11 +117,11 @@ describe('Create transaction controller', () => {
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual<ErrorViewModel>({
-          name: 'MissingParamsError',
+          name: 'InvalidInputError',
           errors: [
             {
               field: 'title',
-              message: 'Missing param: title is a required field'
+              message: 'Invalid input: title is a required field'
             }
           ]
         })
@@ -147,11 +149,11 @@ describe('Create transaction controller', () => {
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual<ErrorViewModel>({
-          name: 'MissingParamsError',
+          name: 'InvalidInputError',
           errors: [
             {
               field: 'timestamp',
-              message: 'Missing param: timestamp is a required field'
+              message: 'Invalid input: timestamp is a required field'
             }
           ]
         })
@@ -180,12 +182,12 @@ describe('Create transaction controller', () => {
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual<ErrorViewModel>({
-          name: 'MissingParamsError',
+          name: 'InvalidInputError',
           errors: [
             {
               field: 'timestamp',
               message:
-                'Missing param: timestamp must be a `number` type, but the final value was: `NaN` (cast from the value `"abacate"`).'
+                'Invalid input: timestamp must be a `number` type, but the final value was: `NaN` (cast from the value `"abacate"`).'
             }
           ]
         })
@@ -208,11 +210,11 @@ describe('Create transaction controller', () => {
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual<ErrorViewModel>({
-          name: 'MissingParamsError',
+          name: 'InvalidInputError',
           errors: [
             {
               field: 'items',
-              message: 'Missing param: items is a required field'
+              message: 'Invalid input: items is a required field'
             }
           ]
         })
@@ -238,11 +240,11 @@ describe('Create transaction controller', () => {
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual<ErrorViewModel>({
-          name: 'MissingParamsError',
+          name: 'InvalidInputError',
           errors: [
             {
               field: 'payers',
-              message: 'Missing param: payers is a required field'
+              message: 'Invalid input: payers is a required field'
             }
           ]
         })

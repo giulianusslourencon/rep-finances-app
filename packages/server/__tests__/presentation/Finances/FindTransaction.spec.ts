@@ -1,5 +1,5 @@
-import { HttpRequest } from '@presentation/contracts'
-import { FindTransactionController } from '@presentation/controllers/Finances/implementations'
+import { Controller, HttpRequest } from '@presentation/contracts'
+import { FindTransactionControllerOperation } from '@presentation/controllers/Finances/operations'
 import { ErrorViewModel } from '@presentation/viewModels'
 import { TransactionDetailsViewModel } from '@presentation/viewModels/Finances'
 
@@ -21,7 +21,7 @@ import {
 } from '@useCases/Finances/ports/GetTransactionBalance'
 
 interface ISutType {
-  sut: FindTransactionController
+  sut: Controller
   findTransactionStub: FindTransaction
   getTransactionBalanceStub: GetTransactionBalance
 }
@@ -70,9 +70,11 @@ const makeGetTransactionBalanceStub = (): GetTransactionBalance => {
 const makeSut = (): ISutType => {
   const findTransactionStub = makeFindTransactionStub()
   const getTransactionBalanceStub = makeGetTransactionBalanceStub()
-  const sut = new FindTransactionController(
-    findTransactionStub,
-    getTransactionBalanceStub
+  const sut = new Controller(
+    new FindTransactionControllerOperation(
+      findTransactionStub,
+      getTransactionBalanceStub
+    )
   )
   return { sut, findTransactionStub, getTransactionBalanceStub }
 }

@@ -1,3 +1,3 @@
 export * from './ControllerError'
-export * from './MissingParamsError'
+export * from './InvalidInputError'
 export * from './ServerError'

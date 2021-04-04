@@ -1,14 +1,14 @@
 import { HttpRequest } from '@presentation/contracts'
-import { MissingParamsError } from '@presentation/controllers/errors'
+import { InvalidInputError } from '@presentation/controllers/errors'
 import { CreateTransactionViewModel } from '@presentation/viewModels/Finances'
 import * as Yup from 'yup'
 
 import { Either, left, right } from '@shared/types'
 
 export class CreateTransactionValidation {
-  static validate(
+  validate(
     request: HttpRequest<CreateTransactionViewModel>
-  ): Either<MissingParamsError, CreateTransactionViewModel> {
+  ): Either<InvalidInputError, CreateTransactionViewModel> {
     const schema = Yup.object().shape({
       title: Yup.string().required(),
       timestamp: Yup.number().required(),
@@ -32,7 +32,7 @@ export class CreateTransactionValidation {
       return right(obj)
     } catch (error) {
       const yupError = error as Yup.ValidationError
-      return left(new MissingParamsError(yupError.errors))
+      return left(new InvalidInputError(yupError.errors))
     }
   }
 }

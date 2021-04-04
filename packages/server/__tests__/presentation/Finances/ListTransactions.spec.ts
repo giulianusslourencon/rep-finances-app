@@ -1,5 +1,5 @@
-import { HttpRequest } from '@presentation/contracts'
-import { ListTransactionsController } from '@presentation/controllers/Finances/implementations'
+import { Controller, HttpRequest } from '@presentation/contracts'
+import { ListTransactionsControllerOperation } from '@presentation/controllers/Finances/operations'
 import { ErrorViewModel } from '@presentation/viewModels'
 
 import {
@@ -9,7 +9,7 @@ import {
 } from '@useCases/Finances/ports/ListTransactions'
 
 interface ISutType {
-  sut: ListTransactionsController
+  sut: Controller
   listTransactionsStub: ListTransactions
 }
 
@@ -37,7 +37,9 @@ const makeListTransactionsStub = (): ListTransactions => {
 
 const makeSut = (): ISutType => {
   const listTransactionsStub = makeListTransactionsStub()
-  const sut = new ListTransactionsController(listTransactionsStub)
+  const sut = new Controller(
+    new ListTransactionsControllerOperation(listTransactionsStub)
+  )
   return { sut, listTransactionsStub }
 }
 
@@ -138,12 +140,12 @@ describe('List Transactions Controller', () => {
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual<ErrorViewModel>({
-          name: 'MissingParamsError',
+          name: 'InvalidInputError',
           errors: [
             {
               field: 'page',
               message:
-                'Missing param: page must be a `number` type, but the final value was: `NaN` (cast from the value `"a"`).'
+                'Invalid input: page must be a `number` type, but the final value was: `NaN` (cast from the value `"a"`).'
             }
           ]
         })
@@ -160,12 +162,12 @@ describe('List Transactions Controller', () => {
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual<ErrorViewModel>({
-          name: 'MissingParamsError',
+          name: 'InvalidInputError',
           errors: [
             {
               field: 'nItems',
               message:
-                'Missing param: nItems must be a `number` type, but the final value was: `NaN` (cast from the value `"a"`).'
+                'Invalid input: nItems must be a `number` type, but the final value was: `NaN` (cast from the value `"a"`).'
             }
           ]
         })
@@ -182,11 +184,11 @@ describe('List Transactions Controller', () => {
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual<ErrorViewModel>({
-          name: 'MissingParamsError',
+          name: 'InvalidInputError',
           errors: [
             {
               field: 'page',
-              message: 'Missing param: page must be a positive number'
+              message: 'Invalid input: page must be a positive number'
             }
           ]
         })
@@ -203,11 +205,11 @@ describe('List Transactions Controller', () => {
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual<ErrorViewModel>({
-          name: 'MissingParamsError',
+          name: 'InvalidInputError',
           errors: [
             {
               field: 'nItems',
-              message: 'Missing param: nItems must be a positive number'
+              message: 'Invalid input: nItems must be a positive number'
             }
           ]
         })
@@ -224,11 +226,11 @@ describe('List Transactions Controller', () => {
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual<ErrorViewModel>({
-          name: 'MissingParamsError',
+          name: 'InvalidInputError',
           errors: [
             {
               field: 'month',
-              message: 'Missing param: month must be exactly 6 characters'
+              message: 'Invalid input: month must be exactly 6 characters'
             }
           ]
         })

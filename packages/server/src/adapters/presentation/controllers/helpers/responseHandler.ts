@@ -1,6 +1,6 @@
 import { HttpResponse } from '@presentation/contracts'
 import {
-  MissingParamsError,
+  InvalidInputError,
   ServerError
 } from '@presentation/controllers/errors'
 import { ErrorViewModel } from '@presentation/viewModels'
@@ -17,8 +17,8 @@ export const success = <T = Record<string, never>>(
   body: data
 })
 
-export const missingParamsError = (
-  error: MissingParamsError
+export const invalidInputError = (
+  error: InvalidInputError
 ): HttpResponse<ErrorViewModel> => ({
   statusCode: 400,
   body: error

@@ -3,7 +3,7 @@ import {
   MongoBalance,
   idGenerator
 } from '@main/factories/external'
-import { CreateTransactionController } from '@presentation/controllers/Finances/implementations'
+import { CreateTransactionControllerOperation } from '@presentation/controllers/Finances/operations'
 
 import { CreateTransactionUseCase } from '@useCases/Finances/implementations'
 
@@ -13,5 +13,5 @@ export const makeCreateTransaction = () => {
     MongoBalance,
     idGenerator
   )
-  return new CreateTransactionController(useCase)
+  return new CreateTransactionControllerOperation(useCase)
 }

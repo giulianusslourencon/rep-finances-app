@@ -1,5 +1,25 @@
-import { HttpRequest, HttpResponse } from './Http'
+import {
+  HttpRequest,
+  HttpResponse,
+  IControllerOperation
+} from '@presentation/contracts'
+import {
+  invalidInputError,
+  serverError
+} from '@presentation/controllers/helpers'
 
-export interface Controller {
-  handle: (request: HttpRequest) => Promise<HttpResponse>
+export class Controller {
+  constructor(private controllerOp: IControllerOperation) {}
+
+  async handle(request: HttpRequest): Promise<HttpResponse> {
+    try {
+      const validationResult = this.controllerOp.validator.validate(request)
+      if (validationResult.isLeft())
+        return invalidInputError(validationResult.value)
+
+      return await this.controllerOp.operate(request)
+    } catch (error) {
+      return serverError(error.message)
+    }
+  }
 }
