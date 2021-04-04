@@ -14,17 +14,18 @@ module.exports = {
   plugins: [
     ['module-resolver', {
       alias: {
+        '@shared': './src/shared',
+        '@entities': './src/entities',
+        '@useCases': './src/useCases',
+        '@utils': './src/adapters/utils',
         '@presentation': './src/adapters/presentation',
         '@repositories': './src/adapters/repositories',
-        '@entities': './src/entities',
         '@main': './src/main',
-        '@shared': './src/shared',
-        '@useCases': './src/useCases'
       }
     }],
     ["babel-plugin-add-import-extension", { extension: "mjs" }]
   ],
   ignore: [
-    '**/__tests__'
+    '__tests__'
   ]
 }

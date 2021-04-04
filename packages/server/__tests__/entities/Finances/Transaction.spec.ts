@@ -79,7 +79,7 @@ describe('Transaction Entity', () => {
       expect(transactionOrError.isLeft()).toBeTruthy()
       expect(transactionOrError.value).toEqual<InvalidFields>([
         {
-          field: 'date',
+          field: 'timestamp',
           error: {
             name: 'InvalidDateError',
             value: 'NaN',

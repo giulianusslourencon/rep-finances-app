@@ -90,7 +90,7 @@ export class Transaction {
     const date = new Date(props.timestamp)
     if (isNaN(date.getTime()))
       errors.push({
-        field: 'date',
+        field: 'timestamp',
         error: new InvalidError(
           'Date',
           props.timestamp.toString(),
@@ -118,13 +118,13 @@ export class Transaction {
       })
 
     const amountOrError = Amount.create(itemsAmount)
-    if (amountOrError.isLeft())
-      errors.push({ field: 'amount', error: amountOrError.value })
     const amount = amountOrError.value as Amount
 
-    let related = Object.keys(props.payers)
+    let related = Object.keys(props.payers).map(id => id.trim().toUpperCase())
     for (const item of Object.values(props.items)) {
-      related = related.concat(item.related_users)
+      related = related.concat(
+        item.related_users.map(id => id.trim().toUpperCase())
+      )
     }
     related = [...new Set(related)]
 
