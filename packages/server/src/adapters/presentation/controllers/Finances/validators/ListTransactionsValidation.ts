@@ -8,7 +8,7 @@ import { Either, left, right } from '@shared/types'
 export class ListTransactionsValidation implements IValidator {
   format(data: ListQueryViewModel): ListQueryViewModel {
     return {
-      month: data.month?.toString(),
+      month: data.month && data.month.toString(),
       nItems: data.nItems && parseInt(data.nItems.toString()),
       page: data.page && parseInt(data.page.toString())
     }
