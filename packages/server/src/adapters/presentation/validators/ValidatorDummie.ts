@@ -4,7 +4,7 @@ import { InvalidInputError } from '@presentation/controllers/errors'
 import { Either, right } from '@shared/types'
 
 export class ValidatorDummie implements IValidator {
-  validate(_request: HttpRequest): Either<InvalidInputError, null> {
-    return right(null)
+  validate(request: HttpRequest): Either<InvalidInputError, HttpRequest> {
+    return right(request)
   }
 }

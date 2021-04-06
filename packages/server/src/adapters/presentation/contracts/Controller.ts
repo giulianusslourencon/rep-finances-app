@@ -17,7 +17,7 @@ export class Controller {
       if (validationResult.isLeft())
         return invalidInputError(validationResult.value)
 
-      return await this.controllerOp.operate(request)
+      return await this.controllerOp.operate(validationResult.value)
     } catch (error) {
       return serverError(error.message)
     }
