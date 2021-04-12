@@ -1,8 +1,6 @@
 import { Amount, UserId } from '@entities/components'
-import { InvalidError, InvalidFields } from '@entities/errors'
+import { EntityErrorHandler, InvalidError } from '@entities/errors'
 import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
-
-import { Either, left, right } from '@shared/types'
 
 type ValidatedPayers = [UserId, Amount][]
 
@@ -19,53 +17,42 @@ export class TransactionPayers {
   }
 
   static create(
-    payers: TransactionPayersProps
-  ): Either<InvalidFields, TransactionPayers> {
+    payers: TransactionPayersProps,
+    errorHandler: EntityErrorHandler,
+    path = ''
+  ): TransactionPayers {
     const finalList: ValidatedPayers = []
-    const errors: InvalidFields = []
-    for (const [userId, amount] of Object.entries(payers)) {
-      const userIdOrError = UserId.create(userId)
-      const amountOrError = Amount.create(amount)
-
-      if (userIdOrError.isLeft())
-        errors.push({
-          field: `${userId}.userId`,
-          error: userIdOrError.value
-        })
-      if (amountOrError.isLeft())
-        errors.push({
-          field: `${userId}.amount`,
-          error: amountOrError.value
-        })
+    for (const [user, amount] of Object.entries(payers)) {
+      const userId = UserId.create(user, errorHandler, `${path}.${user}.userId`)
+      const userAmount = Amount.create(
+        amount,
+        errorHandler,
+        `${path}.${user}.amount`
+      )
 
       const duplicated = finalList.filter(
-        item => item[0].value === userIdOrError.value.value
+        item => item[0].value === userId.value
       )
       if (duplicated.length > 0)
-        errors.push({
-          field: userId,
-          error: new InvalidError(
+        errorHandler.addError(
+          new InvalidError(
             'Transaction Payers',
-            userIdOrError.value.value,
+            userId.value,
             new DuplicateReason('id')
-          )
-        })
+          ),
+          `${path}.${user}`
+        )
 
-      if (errors.length === 0)
-        finalList.push([
-          userIdOrError.value as UserId,
-          amountOrError.value as Amount
-        ])
+      finalList.push([userId, userAmount])
     }
 
-    if (errors.length === 0 && !TransactionPayers.validate(finalList))
-      errors.push({
-        error: new InvalidError('Transaction Payers', '', new EmptyReason())
-      })
+    if (!TransactionPayers.validate(finalList))
+      errorHandler.addError(
+        new InvalidError('Transaction Payers', '', new EmptyReason()),
+        path
+      )
 
-    if (errors.length > 0) return left(errors)
-
-    return right(new TransactionPayers(finalList))
+    return new TransactionPayers(finalList)
   }
 
   get value(): TransactionPayersProps {

@@ -1,7 +1,5 @@
-import { FieldKeys, InvalidFields } from '@entities/errors'
+import { EntityErrorHandler } from '@entities/errors'
 import { IndividualBalance, IndividualBalanceProps } from '@entities/Finances'
-
-import { Either, left, right } from '@shared/types'
 
 export type BalanceProps = {
   individual_balance: IndividualBalanceProps
@@ -15,25 +13,23 @@ export class Balance {
     Object.freeze(this)
   }
 
-  static create(balance: BalanceProps): Either<InvalidFields, Balance> {
+  static create(
+    balance: BalanceProps,
+    errorHandler: EntityErrorHandler,
+    path = ''
+  ): Balance {
     Object.keys(balance.individual_balance).forEach(userId => {
       if (!balance.individual_balance[userId])
         delete balance.individual_balance[userId]
     })
 
-    const individualBalanceOrError = IndividualBalance.create(
-      balance.individual_balance
+    const individualBalance = IndividualBalance.create(
+      balance.individual_balance,
+      errorHandler,
+      path
     )
 
-    if (individualBalanceOrError.isLeft())
-      return left(
-        FieldKeys.addKeyOnErrorFields(
-          'individual_balance',
-          individualBalanceOrError.value
-        )
-      )
-
-    return right(new Balance(individualBalanceOrError.value))
+    return new Balance(individualBalance)
   }
 
   get value(): BalanceProps {

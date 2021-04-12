@@ -1,10 +1,12 @@
-import { InvalidFields } from '@entities/errors'
+import { EntityErrorHandler, InvalidFields } from '@entities/errors'
 import { Transaction, TransactionInitProps } from '@entities/Finances'
 
 describe('Transaction Entity', () => {
   describe('Success Cases', () => {
     it('Should allow a valid transaction and fill readonly fields', () => {
+      const errorHandler = new EntityErrorHandler()
       const transactionInit: TransactionInitProps = {
+        id: 'id',
         title: 'Compra X',
         timestamp: 1608336000000,
         items: {
@@ -17,22 +19,22 @@ describe('Transaction Entity', () => {
           P: 20
         }
       }
-      const transactionOrError = Transaction.create(transactionInit, 'id')
+      const transaction = Transaction.create(transactionInit, errorHandler)
 
-      expect(transactionOrError.isRight()).toBeTruthy()
+      expect(errorHandler.hasErrors).toBeFalsy()
 
-      const transaction = (<Transaction>transactionOrError.value).value
-
-      expect(transaction).toHaveProperty('_id')
-      expect(transaction.amount).toBe(20)
-      expect(transaction.month).toBe('202012')
-      expect(transaction.related).toStrictEqual(['P', 'F', 'G'])
+      expect(transaction.value).toHaveProperty('_id')
+      expect(transaction.value.amount).toBe(20)
+      expect(transaction.value.month).toBe('202012')
+      expect(transaction.value.related).toStrictEqual(['P', 'F', 'G'])
     })
   })
 
   describe('Error Cases', () => {
     it('Should not allow a transaction with invalid title', () => {
+      const errorHandler = new EntityErrorHandler()
       const transactionInit: TransactionInitProps = {
+        id: 'id',
         title: 'X',
         timestamp: 1608336000000,
         items: {
@@ -45,12 +47,12 @@ describe('Transaction Entity', () => {
           P: 20
         }
       }
-      const transactionOrError = Transaction.create(transactionInit, 'id')
+      Transaction.create(transactionInit, errorHandler)
 
-      expect(transactionOrError.isLeft()).toBeTruthy()
-      expect(transactionOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: 'title',
+          field: '.title',
           error: {
             name: 'InvalidNameError',
             value: 'X',
@@ -61,7 +63,9 @@ describe('Transaction Entity', () => {
     })
 
     it('Should not allow a transaction with invalid timestamp', () => {
+      const errorHandler = new EntityErrorHandler()
       const transactionInit: TransactionInitProps = {
+        id: 'id',
         title: 'Compra X',
         timestamp: NaN,
         items: {
@@ -74,12 +78,12 @@ describe('Transaction Entity', () => {
           P: 20
         }
       }
-      const transactionOrError = Transaction.create(transactionInit, 'id')
+      Transaction.create(transactionInit, errorHandler)
 
-      expect(transactionOrError.isLeft()).toBeTruthy()
-      expect(transactionOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: 'timestamp',
+          field: '.timestamp',
           error: {
             name: 'InvalidDateError',
             value: 'NaN',
@@ -90,7 +94,9 @@ describe('Transaction Entity', () => {
     })
 
     it('Should not allow a transaction with invalid items', () => {
+      const errorHandler = new EntityErrorHandler()
       const transactionInit: TransactionInitProps = {
+        id: 'id',
         title: 'Compra X',
         timestamp: 1608336000000,
         items: {
@@ -103,12 +109,12 @@ describe('Transaction Entity', () => {
           P: 20
         }
       }
-      const transactionOrError = Transaction.create(transactionInit, 'id')
+      Transaction.create(transactionInit, errorHandler)
 
-      expect(transactionOrError.isLeft()).toBeTruthy()
-      expect(transactionOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: 'items.item1.related_users.__',
+          field: '.items.item1.related_users.__',
           error: {
             name: 'InvalidUserIdError',
             value: '__',
@@ -120,7 +126,9 @@ describe('Transaction Entity', () => {
     })
 
     it('Should not allow a transaction with invalid payers', () => {
+      const errorHandler = new EntityErrorHandler()
       const transactionInit: TransactionInitProps = {
+        id: 'id',
         title: 'Compra X',
         timestamp: 1608336000000,
         items: {
@@ -133,12 +141,12 @@ describe('Transaction Entity', () => {
           P: -20
         }
       }
-      const transactionOrError = Transaction.create(transactionInit, 'id')
+      Transaction.create(transactionInit, errorHandler)
 
-      expect(transactionOrError.isLeft()).toBeTruthy()
-      expect(transactionOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: 'payers.P.amount',
+          field: '.payers.P.amount',
           error: {
             name: 'InvalidAmountError',
             value: '-20',
@@ -150,13 +158,16 @@ describe('Transaction Entity', () => {
             name: 'InvalidPaymentError',
             value: '',
             reason: 'Items values are distinct from total paid.'
-          }
+          },
+          field: ''
         }
       ])
     })
 
     it('Should not allow a transaction with items value distinct from total paid', () => {
+      const errorHandler = new EntityErrorHandler()
       const transactionInit: TransactionInitProps = {
+        id: 'id',
         title: 'Compra X',
         timestamp: 1608336000000,
         items: {
@@ -169,16 +180,17 @@ describe('Transaction Entity', () => {
           P: 30
         }
       }
-      const transactionOrError = Transaction.create(transactionInit, 'id')
+      Transaction.create(transactionInit, errorHandler)
 
-      expect(transactionOrError.isLeft()).toBeTruthy()
-      expect(transactionOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
           error: {
             name: 'InvalidPaymentError',
             value: '',
             reason: 'Items values are distinct from total paid.'
-          }
+          },
+          field: ''
         }
       ])
     })

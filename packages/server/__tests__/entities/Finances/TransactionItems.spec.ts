@@ -1,9 +1,10 @@
-import { InvalidFields } from '@entities/errors'
+import { EntityErrorHandler, InvalidFields } from '@entities/errors'
 import { TransactionItemsProps, TransactionItems } from '@entities/Finances'
 
 describe('Transaction Items Entity', () => {
   describe('Success Cases', () => {
     it('Should allow a list with valid items', () => {
+      const errorHandler = new EntityErrorHandler()
       const items: TransactionItemsProps = {
         item1: {
           amount: 10,
@@ -14,17 +15,16 @@ describe('Transaction Items Entity', () => {
           related_users: ['P']
         }
       }
-      const transactionItemsOrError = TransactionItems.create(items)
+      const transactionItems = TransactionItems.create(items, errorHandler)
 
-      expect(transactionItemsOrError.isRight()).toBeTruthy()
-      expect(
-        (<TransactionItems>transactionItemsOrError.value).value
-      ).toStrictEqual(items)
+      expect(errorHandler.hasErrors).toBeFalsy()
+      expect(transactionItems.value).toStrictEqual(items)
     })
   })
 
   describe('Error Cases', () => {
     it('Should not allow a list with invalid item name', () => {
+      const errorHandler = new EntityErrorHandler()
       const items: TransactionItemsProps = {
         i: {
           amount: 10,
@@ -35,12 +35,12 @@ describe('Transaction Items Entity', () => {
           related_users: ['P']
         }
       }
-      const transactionItemsOrError = TransactionItems.create(items)
+      TransactionItems.create(items, errorHandler)
 
-      expect(transactionItemsOrError.isLeft()).toBeTruthy()
-      expect(transactionItemsOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: 'i.name',
+          field: '.i.name',
           error: {
             name: 'InvalidNameError',
             value: 'i',
@@ -51,6 +51,7 @@ describe('Transaction Items Entity', () => {
     })
 
     it('Should not allow a list with invalid amount', () => {
+      const errorHandler = new EntityErrorHandler()
       const items: TransactionItemsProps = {
         item1: {
           amount: 10,
@@ -61,12 +62,12 @@ describe('Transaction Items Entity', () => {
           related_users: ['P']
         }
       }
-      const transactionItemsOrError = TransactionItems.create(items)
+      TransactionItems.create(items, errorHandler)
 
-      expect(transactionItemsOrError.isLeft()).toBeTruthy()
-      expect(transactionItemsOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: 'item2.amount',
+          field: '.item2.amount',
           error: {
             name: 'InvalidAmountError',
             value: '-20',
@@ -77,6 +78,7 @@ describe('Transaction Items Entity', () => {
     })
 
     it('Should not allow a list with invalid related list', () => {
+      const errorHandler = new EntityErrorHandler()
       const items: TransactionItemsProps = {
         item1: {
           amount: 10,
@@ -87,12 +89,12 @@ describe('Transaction Items Entity', () => {
           related_users: []
         }
       }
-      const transactionItemsOrError = TransactionItems.create(items)
+      TransactionItems.create(items, errorHandler)
 
-      expect(transactionItemsOrError.isLeft()).toBeTruthy()
-      expect(transactionItemsOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: 'item2.related_users',
+          field: '.item2.related_users',
           error: {
             name: 'InvalidRelatedListError',
             value: '',
@@ -103,22 +105,25 @@ describe('Transaction Items Entity', () => {
     })
 
     it('Should not allow an empty list', () => {
+      const errorHandler = new EntityErrorHandler()
       const items: TransactionItemsProps = {}
-      const transactionItemsOrError = TransactionItems.create(items)
+      TransactionItems.create(items, errorHandler)
 
-      expect(transactionItemsOrError.isLeft()).toBeTruthy()
-      expect(transactionItemsOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
           error: {
             name: 'InvalidTransactionItemsError',
             value: '',
             reason: 'There must be at least one item in the transaction items.'
-          }
+          },
+          field: ''
         }
       ])
     })
 
     it('Should not allow a list with duplicated items names', () => {
+      const errorHandler = new EntityErrorHandler()
       const items: TransactionItemsProps = {
         item1: {
           amount: 10,
@@ -129,12 +134,12 @@ describe('Transaction Items Entity', () => {
           related_users: ['P']
         }
       }
-      const transactionItemsOrError = TransactionItems.create(items)
+      TransactionItems.create(items, errorHandler)
 
-      expect(transactionItemsOrError.isLeft()).toBeTruthy()
-      expect(transactionItemsOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: 'item1 ',
+          field: '.item1 ',
           error: {
             name: 'InvalidTransactionItemsError',
             value: 'item1',

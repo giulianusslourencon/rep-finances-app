@@ -1,8 +1,6 @@
 import { UserId } from '@entities/components'
-import { InvalidError, InvalidFields } from '@entities/errors'
+import { EntityErrorHandler, InvalidError } from '@entities/errors'
 import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
-
-import { Either, left, right } from '@shared/types'
 
 export class RelatedList {
   private readonly relatedList: UserId[]
@@ -12,43 +10,42 @@ export class RelatedList {
     Object.freeze(this)
   }
 
-  static create(relatedList: string[]): Either<InvalidFields, RelatedList> {
+  static create(
+    relatedList: string[],
+    errorHandler: EntityErrorHandler,
+    path = ''
+  ): RelatedList {
     const finalList: UserId[] = []
-    const errors: InvalidFields = []
     for (const related of relatedList) {
-      const relatedOrError = UserId.create(related)
+      const relatedUser = UserId.create(
+        related,
+        errorHandler,
+        `${path}.${related}`
+      )
 
-      if (relatedOrError.isLeft())
-        errors.push({
-          field: related,
-          error: relatedOrError.value
-        })
-      else {
-        const duplicated = finalList.filter(
-          item => item.value === relatedOrError.value.value
+      const duplicated = finalList.filter(
+        item => item.value === relatedUser.value
+      )
+      if (duplicated.length > 0)
+        errorHandler.addError(
+          new InvalidError(
+            'Related List',
+            relatedUser.value,
+            new DuplicateReason('id')
+          ),
+          `${path}.${related}`
         )
-        if (duplicated.length > 0)
-          errors.push({
-            field: related,
-            error: new InvalidError(
-              'Related List',
-              relatedOrError.value.value,
-              new DuplicateReason('id')
-            )
-          })
 
-        finalList.push(relatedOrError.value)
-      }
+      finalList.push(relatedUser)
     }
 
     if (!RelatedList.validate(finalList))
-      errors.push({
-        error: new InvalidError('Related List', '', new EmptyReason())
-      })
+      errorHandler.addError(
+        new InvalidError('Related List', '', new EmptyReason()),
+        path
+      )
 
-    if (errors.length > 0) return left(errors)
-
-    return right(new RelatedList(finalList))
+    return new RelatedList(finalList)
   }
 
   get value(): string[] {

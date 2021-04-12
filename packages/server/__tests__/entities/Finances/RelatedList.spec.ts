@@ -1,28 +1,28 @@
-import { InvalidFields } from '@entities/errors'
+import { EntityErrorHandler, InvalidFields } from '@entities/errors'
 import { RelatedList } from '@entities/Finances'
 
 describe('Related List Entity', () => {
   describe('Success Cases', () => {
     it('Should allow a list with valid related users', () => {
-      const related_users = ['P', 'G', 'M']
-      const relatedListOrError = RelatedList.create(related_users)
+      const errorHandler = new EntityErrorHandler()
+      const related_users = ['P', 'G  ', 'm']
+      const relatedList = RelatedList.create(related_users, errorHandler)
 
-      expect(relatedListOrError.isRight()).toBeTruthy()
-      expect((<RelatedList>relatedListOrError.value).value).toStrictEqual(
-        related_users
-      )
+      expect(errorHandler.hasErrors).toBeFalsy()
+      expect(relatedList.value).toStrictEqual(['P', 'G', 'M'])
     })
   })
 
   describe('Error Cases', () => {
     it('Should not allow a list with invalid related users', () => {
+      const errorHandler = new EntityErrorHandler()
       const related_users = ['P', 'G', '@']
-      const relatedListOrError = RelatedList.create(related_users)
+      RelatedList.create(related_users, errorHandler)
 
-      expect(relatedListOrError.isLeft()).toBeTruthy()
-      expect(relatedListOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '@',
+          field: '.@',
           error: {
             name: 'InvalidUserIdError',
             value: '@',
@@ -34,29 +34,31 @@ describe('Related List Entity', () => {
     })
 
     it('Should not allow an empty list', () => {
-      const related_users: string[] = []
-      const relatedListOrError = RelatedList.create(related_users)
+      const errorHandler = new EntityErrorHandler()
+      RelatedList.create([], errorHandler)
 
-      expect(relatedListOrError.isLeft()).toBeTruthy()
-      expect(relatedListOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
           error: {
             name: 'InvalidRelatedListError',
             value: '',
             reason: 'There must be at least one item in the related list.'
-          }
+          },
+          field: ''
         }
       ])
     })
 
     it('Should not allow duplicated ids in a list', () => {
+      const errorHandler = new EntityErrorHandler()
       const related_users = ['P', 'p ', 'g', 'G']
-      const relatedListOrError = RelatedList.create(related_users)
+      RelatedList.create(related_users, errorHandler)
 
-      expect(relatedListOrError.isLeft()).toBeTruthy()
-      expect(relatedListOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: 'p ',
+          field: '.p ',
           error: {
             name: 'InvalidRelatedListError',
             value: 'P',
@@ -65,7 +67,7 @@ describe('Related List Entity', () => {
           }
         },
         {
-          field: 'G',
+          field: '.G',
           error: {
             name: 'InvalidRelatedListError',
             value: 'G',

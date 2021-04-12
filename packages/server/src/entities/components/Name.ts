@@ -1,7 +1,5 @@
-import { InvalidError } from '@entities/errors'
+import { EntityErrorHandler, InvalidError } from '@entities/errors'
 import { SizeReason } from '@entities/errors/reasons'
-
-import { Either, left, right } from '@shared/types'
 
 export class Name {
   private readonly name: string
@@ -11,11 +9,18 @@ export class Name {
     Object.freeze(this)
   }
 
-  static create(name: string): Either<InvalidError, Name> {
+  static create(
+    name: string,
+    errorHandler: EntityErrorHandler,
+    path = ''
+  ): Name {
     if (!Name.validate(name)) {
-      return left(new InvalidError('Name', name, new SizeReason(2, 64)))
+      errorHandler.addError(
+        new InvalidError('Name', name, new SizeReason(2, 64)),
+        path
+      )
     }
-    return right(new Name(name.trim()))
+    return new Name(name.trim())
   }
 
   get value(): string {

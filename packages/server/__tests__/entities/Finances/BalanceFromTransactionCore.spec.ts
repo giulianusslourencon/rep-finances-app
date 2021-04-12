@@ -1,5 +1,5 @@
+import { EntityErrorHandler } from '@entities/errors'
 import {
-  Balance,
   BalanceFromTransactionCore,
   TransactionCoreProps
 } from '@entities/Finances'
@@ -7,11 +7,12 @@ import {
 describe('Balance From Transaction Core Entity', () => {
   describe('Success Cases', () => {
     it('Should generate balance from a single transaction', () => {
+      const errorHandler = new EntityErrorHandler()
       const transaction: TransactionCoreProps = {
         items: {
           item1: {
             amount: 10,
-            related_users: ['P', 'G']
+            related_users: ['P', 'G ']
           }
         },
         payers: {
@@ -19,12 +20,13 @@ describe('Balance From Transaction Core Entity', () => {
         }
       }
 
-      const balanceOrError = BalanceFromTransactionCore.create(transaction)
+      const balance = BalanceFromTransactionCore.create(
+        transaction,
+        errorHandler
+      )
 
-      expect(balanceOrError.isRight()).toBeTruthy()
-      expect(
-        (<Balance>balanceOrError.value).value.individual_balance
-      ).toStrictEqual({ P: 5, G: -5 })
+      expect(errorHandler.hasErrors).toBeFalsy()
+      expect(balance.value.individual_balance).toStrictEqual({ P: 5, G: -5 })
     })
   })
 })

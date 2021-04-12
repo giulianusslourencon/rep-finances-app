@@ -1,5 +1,5 @@
+import { EntityErrorHandler } from '@entities/errors'
 import {
-  Balance,
   BalanceFromArray,
   BalanceProps,
   TransactionCoreProps
@@ -8,6 +8,7 @@ import {
 describe('Balance From Array Entity', () => {
   describe('Success Cases', () => {
     it('Should generate balance from an array of transactions', () => {
+      const errorHandler = new EntityErrorHandler()
       const transactions: TransactionCoreProps[] = [
         {
           items: {
@@ -34,15 +35,14 @@ describe('Balance From Array Entity', () => {
         }
       ]
 
-      const balanceOrError = BalanceFromArray.create(transactions)
+      const balance = BalanceFromArray.create(transactions, errorHandler)
 
-      expect(balanceOrError.isRight()).toBeTruthy()
-      expect(
-        (<Balance>balanceOrError.value).value.individual_balance
-      ).toStrictEqual({ M: 5, G: -5 })
+      expect(errorHandler.hasErrors).toBeFalsy()
+      expect(balance.value.individual_balance).toStrictEqual({ M: 5, G: -5 })
     })
 
     it('Should generate balance from an array of transactions and balances', () => {
+      const errorHandler = new EntityErrorHandler()
       const transactions: (TransactionCoreProps | BalanceProps)[] = [
         {
           items: {
@@ -75,12 +75,10 @@ describe('Balance From Array Entity', () => {
         }
       ]
 
-      const balanceOrError = BalanceFromArray.create(transactions)
+      const balance = BalanceFromArray.create(transactions, errorHandler)
 
-      expect(balanceOrError.isRight()).toBeTruthy()
-      expect(
-        (<Balance>balanceOrError.value).value.individual_balance
-      ).toStrictEqual({})
+      expect(errorHandler.hasErrors).toBeFalsy()
+      expect(balance.value.individual_balance).toStrictEqual({})
     })
   })
 })

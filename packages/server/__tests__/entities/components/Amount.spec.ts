@@ -1,22 +1,24 @@
 import { Amount } from '@entities/components'
-import { InvalidError } from '@entities/errors'
+import { EntityErrorHandler, InvalidError } from '@entities/errors'
 
 describe('Amount Entity', () => {
   describe('Success Cases', () => {
     it('Should allow positive values', () => {
-      const amountOrError = Amount.create(5)
+      const errorHandler = new EntityErrorHandler()
+      const amount = Amount.create(5, errorHandler)
 
-      expect(amountOrError.isRight()).toBeTruthy()
-      expect((<Amount>amountOrError.value).value).toBe(5)
+      expect(errorHandler.hasErrors).toBeFalsy()
+      expect(amount.value).toBe(5)
     })
   })
 
   describe('Error Cases', () => {
     it('Should not allow negative values', () => {
-      const amountOrError = Amount.create(-5)
+      const errorHandler = new EntityErrorHandler()
+      Amount.create(-5, errorHandler)
 
-      expect(amountOrError.isLeft()).toBeTruthy()
-      expect(amountOrError.value).toEqual<InvalidError>({
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.firstError).toEqual<InvalidError>({
         name: 'InvalidAmountError',
         value: '-5',
         reason: 'The amount must be a positive number.'
@@ -24,10 +26,11 @@ describe('Amount Entity', () => {
     })
 
     it('Should not allow zero', () => {
-      const amountOrError = Amount.create(0)
+      const errorHandler = new EntityErrorHandler()
+      Amount.create(0, errorHandler)
 
-      expect(amountOrError.isLeft()).toBeTruthy()
-      expect(amountOrError.value).toEqual<InvalidError>({
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.firstError).toEqual<InvalidError>({
         name: 'InvalidAmountError',
         value: '0',
         reason: 'The amount must be a positive number.'
@@ -35,10 +38,11 @@ describe('Amount Entity', () => {
     })
 
     it('Should not allow NaN', () => {
-      const amountOrError = Amount.create(NaN)
+      const errorHandler = new EntityErrorHandler()
+      Amount.create(NaN, errorHandler)
 
-      expect(amountOrError.isLeft()).toBeTruthy()
-      expect(amountOrError.value).toEqual<InvalidError>({
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.firstError).toEqual<InvalidError>({
         name: 'InvalidAmountError',
         value: 'NaN',
         reason: 'The amount must be a positive number.'

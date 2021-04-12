@@ -1,22 +1,22 @@
+import { EntityErrorHandler } from '@entities/errors'
 import { Balance, BalanceProps } from '@entities/Finances'
 
 describe('Balance Entity', () => {
   describe('Success Cases', () => {
     it('Should remove related users with null balance', () => {
-      const balance: BalanceProps = {
+      const errorHandler = new EntityErrorHandler()
+      const props: BalanceProps = {
         individual_balance: {
           P: 10,
-          G: -10,
+          g: -10,
           M: 0
         }
       }
 
-      const balanceOrError = Balance.create(balance)
+      const balance = Balance.create(props, errorHandler)
 
-      expect(balanceOrError.isRight()).toBeTruthy()
-      expect(
-        (<Balance>balanceOrError.value).value.individual_balance
-      ).toStrictEqual({ P: 10, G: -10 })
+      expect(errorHandler.hasErrors).toBeFalsy()
+      expect(balance.value.individual_balance).toStrictEqual({ P: 10, G: -10 })
     })
   })
 })

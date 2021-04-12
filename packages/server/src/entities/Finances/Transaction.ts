@@ -1,8 +1,7 @@
-import { Either, left, right } from '@shared/types'
 import { DateParser } from '@shared/utils'
 
 import { Amount, Name } from '@entities/components'
-import { FieldKeys, InvalidError, InvalidFields } from '@entities/errors'
+import { EntityErrorHandler, InvalidError } from '@entities/errors'
 import { CustomReason, FormattingReason } from '@entities/errors/reasons'
 import {
   RelatedList,
@@ -13,6 +12,7 @@ import {
 } from '@entities/Finances'
 
 export type TransactionInitProps = {
+  id: string
   title: string
   timestamp: number
   items: TransactionItemsProps
@@ -43,15 +43,16 @@ export class Transaction {
   public readonly related!: RelatedList
 
   private constructor(
+    id: string,
     title: Name,
     date: Date,
     items: TransactionItems,
     payers: TransactionPayers,
     month: string,
     amount: Amount,
-    related: RelatedList,
-    id: string
+    related: RelatedList
   ) {
+    this._id = id
     this.title = title
     this.date = date
     this.items = items
@@ -59,44 +60,41 @@ export class Transaction {
     this.month = month
     this.amount = amount
     this.related = related
-    this._id = id
 
     Object.freeze(this)
   }
 
   static create(
     props: TransactionInitProps,
-    id: string
-  ): Either<InvalidFields, Transaction> {
-    const errors: InvalidFields = []
-
-    const titleOrError = Name.create(props.title)
-    const itemsOrError = TransactionItems.create(props.items)
-    const payersOrError = TransactionPayers.create(props.payers)
-
-    if (titleOrError.isLeft())
-      errors.push({ field: 'title', error: titleOrError.value })
-    if (itemsOrError.isLeft())
-      errors.push(...FieldKeys.addKeyOnErrorFields('items', itemsOrError.value))
-    if (payersOrError.isLeft())
-      errors.push(
-        ...FieldKeys.addKeyOnErrorFields('payers', payersOrError.value)
-      )
-
-    const title = titleOrError.value as Name
-    const items = itemsOrError.value as TransactionItems
-    const payers = payersOrError.value as TransactionPayers
+    errorHandler: EntityErrorHandler,
+    path = ''
+  ): Transaction {
+    const transactionTitle = Name.create(
+      props.title,
+      errorHandler,
+      `${path}.title`
+    )
+    const transactionItems = TransactionItems.create(
+      props.items,
+      errorHandler,
+      `${path}.items`
+    )
+    const transactionPayers = TransactionPayers.create(
+      props.payers,
+      errorHandler,
+      `${path}.payers`
+    )
 
     const date = new Date(props.timestamp)
     if (isNaN(date.getTime()))
-      errors.push({
-        field: 'timestamp',
-        error: new InvalidError(
+      errorHandler.addError(
+        new InvalidError(
           'Date',
           props.timestamp.toString(),
           new FormattingReason()
-        )
-      })
+        ),
+        `${path}.timestamp`
+      )
 
     const month = DateParser.parseDate(props.timestamp)
 
@@ -109,16 +107,16 @@ export class Transaction {
     }, 0)
 
     if (itemsAmount.toFixed(2) !== totalPaid.toFixed(2))
-      errors.push({
-        error: new InvalidError(
+      errorHandler.addError(
+        new InvalidError(
           'Payment',
           '',
           new CustomReason('Items values are distinct from total paid.')
-        )
-      })
+        ),
+        path
+      )
 
-    const amountOrError = Amount.create(itemsAmount)
-    const amount = amountOrError.value as Amount
+    const transactionAmount = Amount.create(itemsAmount, errorHandler, path)
 
     let related = Object.keys(props.payers).map(id => id.trim().toUpperCase())
     for (const item of Object.values(props.items)) {
@@ -128,22 +126,21 @@ export class Transaction {
     }
     related = [...new Set(related)]
 
-    const relatedUsersOrError = RelatedList.create(related)
-    const relatedUsers = relatedUsersOrError.value as RelatedList
+    const relatedUsers = RelatedList.create(
+      related,
+      new EntityErrorHandler(), // Ingoring duplicate errors
+      path
+    )
 
-    if (errors.length > 0) return left(errors)
-
-    return right(
-      new Transaction(
-        title,
-        date,
-        items,
-        payers,
-        month,
-        amount,
-        relatedUsers,
-        id
-      )
+    return new Transaction(
+      props.id,
+      transactionTitle,
+      date,
+      transactionItems,
+      transactionPayers,
+      month,
+      transactionAmount,
+      relatedUsers
     )
   }
 

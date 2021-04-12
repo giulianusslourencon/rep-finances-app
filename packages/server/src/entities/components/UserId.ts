@@ -1,7 +1,5 @@
-import { InvalidError } from '@entities/errors'
+import { EntityErrorHandler, InvalidError } from '@entities/errors'
 import { CustomReason, SizeReason } from '@entities/errors/reasons'
-
-import { Either, left, right } from '@shared/types'
 
 export class UserId {
   private readonly userId: string
@@ -11,7 +9,11 @@ export class UserId {
     Object.freeze(this)
   }
 
-  static create(userId: string): Either<InvalidError, UserId> {
+  static create(
+    userId: string,
+    errorHandler: EntityErrorHandler,
+    path = ''
+  ): UserId {
     const validationResult = UserId.validate(userId.trim())
     if (!validationResult.valid) {
       const errorReason =
@@ -20,9 +22,12 @@ export class UserId {
               'The id cannot contain special characters, nor can it contain a number in the first position.'
             )
           : new SizeReason(1, 2)
-      return left(new InvalidError('User Id', userId, errorReason))
+      errorHandler.addError(
+        new InvalidError('User Id', userId, errorReason),
+        path
+      )
     }
-    return right(new UserId(userId.toUpperCase().trim()))
+    return new UserId(userId.toUpperCase().trim())
   }
 
   get value(): string {

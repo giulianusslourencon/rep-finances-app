@@ -1,29 +1,32 @@
 import { UserId } from '@entities/components'
-import { InvalidError } from '@entities/errors'
+import { EntityErrorHandler, InvalidError } from '@entities/errors'
 
 describe('User Id Entity', () => {
   describe('Success Cases', () => {
     it('Should allow single character string', () => {
-      const userIdOrError = UserId.create('P')
+      const errorHandler = new EntityErrorHandler()
+      const userId = UserId.create('P', errorHandler)
 
-      expect(userIdOrError.isRight()).toBeTruthy()
-      expect((<UserId>userIdOrError.value).value).toBe('P')
+      expect(errorHandler.hasErrors).toBeFalsy()
+      expect(userId.value).toBe('P')
     })
 
     it('Should allow double character string, trim and uppercase it', () => {
-      const userIdOrError = UserId.create('dp   ')
+      const errorHandler = new EntityErrorHandler()
+      const userId = UserId.create('dp     ', errorHandler)
 
-      expect(userIdOrError.isRight()).toBeTruthy()
-      expect((<UserId>userIdOrError.value).value).toBe('DP')
+      expect(errorHandler.hasErrors).toBeFalsy()
+      expect(userId.value).toBe('DP')
     })
   })
 
   describe('Error Cases', () => {
     it('Should not allow more than 2 characteres string', () => {
-      const userIdOrError = UserId.create('aaaaa')
+      const errorHandler = new EntityErrorHandler()
+      UserId.create('aaaaa', errorHandler)
 
-      expect(userIdOrError.isLeft()).toBeTruthy()
-      expect(userIdOrError.value).toEqual<InvalidError>({
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.firstError).toEqual<InvalidError>({
         name: 'InvalidUserIdError',
         value: 'aaaaa',
         reason: 'The user id must contain between 1 and 2 characteres.'
@@ -31,10 +34,11 @@ describe('User Id Entity', () => {
     })
 
     it('Should not allow null trimmed string', () => {
-      const userIdOrError = UserId.create(' ')
+      const errorHandler = new EntityErrorHandler()
+      UserId.create(' ', errorHandler)
 
-      expect(userIdOrError.isLeft()).toBeTruthy()
-      expect(userIdOrError.value).toEqual<InvalidError>({
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.firstError).toEqual<InvalidError>({
         name: 'InvalidUserIdError',
         value: ' ',
         reason: 'The user id must contain between 1 and 2 characteres.'
@@ -42,10 +46,11 @@ describe('User Id Entity', () => {
     })
 
     it('Should not allow special characteres', () => {
-      const userIdOrError = UserId.create('@2')
+      const errorHandler = new EntityErrorHandler()
+      UserId.create('@2', errorHandler)
 
-      expect(userIdOrError.isLeft()).toBeTruthy()
-      expect(userIdOrError.value).toEqual<InvalidError>({
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.firstError).toEqual<InvalidError>({
         name: 'InvalidUserIdError',
         value: '@2',
         reason:
@@ -54,10 +59,11 @@ describe('User Id Entity', () => {
     })
 
     it('Should not allow strings started in numbers', () => {
-      const userIdOrError = UserId.create('2a')
+      const errorHandler = new EntityErrorHandler()
+      UserId.create('2a', errorHandler)
 
-      expect(userIdOrError.isLeft()).toBeTruthy()
-      expect(userIdOrError.value).toEqual<InvalidError>({
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.firstError).toEqual<InvalidError>({
         name: 'InvalidUserIdError',
         value: '2a',
         reason:

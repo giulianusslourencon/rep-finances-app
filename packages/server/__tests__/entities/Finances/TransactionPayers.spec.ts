@@ -1,33 +1,33 @@
-import { InvalidFields } from '@entities/errors'
+import { EntityErrorHandler, InvalidFields } from '@entities/errors'
 import { TransactionPayersProps, TransactionPayers } from '@entities/Finances'
 
 describe('Transaction Payers Entity', () => {
   describe('Success Cases', () => {
     it('Should allow a list with valid items', () => {
-      const items: TransactionPayersProps = {
+      const errorHandler = new EntityErrorHandler()
+      const payers: TransactionPayersProps = {
         P: 10,
         G: 50
       }
-      const transactionPayersOrError = TransactionPayers.create(items)
+      const transactionPayers = TransactionPayers.create(payers, errorHandler)
 
-      expect(transactionPayersOrError.isRight()).toBeTruthy()
-      expect(
-        (<TransactionPayers>transactionPayersOrError.value).value
-      ).toStrictEqual(items)
+      expect(errorHandler.hasErrors).toBeFalsy()
+      expect(transactionPayers.value).toStrictEqual(payers)
     })
   })
 
   describe('Error Cases', () => {
     it('Should not allow a list with invalid user id', () => {
-      const items: TransactionPayersProps = {
+      const errorHandler = new EntityErrorHandler()
+      const payers: TransactionPayersProps = {
         AAAAA: 30
       }
-      const transactionPayersOrError = TransactionPayers.create(items)
+      TransactionPayers.create(payers, errorHandler)
 
-      expect(transactionPayersOrError.isLeft()).toBeTruthy()
-      expect(transactionPayersOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: 'AAAAA.userId',
+          field: '.AAAAA.userId',
           error: {
             name: 'InvalidUserIdError',
             value: 'AAAAA',
@@ -38,16 +38,17 @@ describe('Transaction Payers Entity', () => {
     })
 
     it('Should not allow a list with invalid value', () => {
-      const items: TransactionPayersProps = {
+      const errorHandler = new EntityErrorHandler()
+      const payers: TransactionPayersProps = {
         P: 20,
         G: -2
       }
-      const transactionPayersOrError = TransactionPayers.create(items)
+      TransactionPayers.create(payers, errorHandler)
 
-      expect(transactionPayersOrError.isLeft()).toBeTruthy()
-      expect(transactionPayersOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: 'G.amount',
+          field: '.G.amount',
           error: {
             name: 'InvalidAmountError',
             value: '-2',
@@ -58,32 +59,35 @@ describe('Transaction Payers Entity', () => {
     })
 
     it('Should not allow an empty list', () => {
-      const items: TransactionPayersProps = {}
-      const transactionPayersOrError = TransactionPayers.create(items)
+      const errorHandler = new EntityErrorHandler()
+      const payers: TransactionPayersProps = {}
+      TransactionPayers.create(payers, errorHandler)
 
-      expect(transactionPayersOrError.isLeft()).toBeTruthy()
-      expect(transactionPayersOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
           error: {
             name: 'InvalidTransactionPayersError',
             value: '',
             reason: 'There must be at least one item in the transaction payers.'
-          }
+          },
+          field: ''
         }
       ])
     })
 
     it('Should not allow a list with duplicated user ids', () => {
-      const items: TransactionPayersProps = {
+      const errorHandler = new EntityErrorHandler()
+      const payers: TransactionPayersProps = {
         P: 20,
         p: 10
       }
-      const transactionPayersOrError = TransactionPayers.create(items)
+      TransactionPayers.create(payers, errorHandler)
 
-      expect(transactionPayersOrError.isLeft()).toBeTruthy()
-      expect(transactionPayersOrError.value).toEqual<InvalidFields>([
+      expect(errorHandler.hasErrors).toBeTruthy()
+      expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: 'p',
+          field: '.p',
           error: {
             name: 'InvalidTransactionPayersError',
             value: 'P',

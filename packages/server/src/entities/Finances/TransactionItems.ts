@@ -1,9 +1,7 @@
 import { Amount, Name } from '@entities/components'
-import { FieldKeys, InvalidError, InvalidFields } from '@entities/errors'
+import { EntityErrorHandler, InvalidError } from '@entities/errors'
 import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
 import { RelatedList } from '@entities/Finances'
-
-import { Either, left, right } from '@shared/types'
 
 type ValidatedItems = [Name, { amount: Amount; related_users: RelatedList }][]
 
@@ -23,64 +21,53 @@ export class TransactionItems {
   }
 
   static create(
-    items: TransactionItemsProps
-  ): Either<InvalidFields, TransactionItems> {
+    items: TransactionItemsProps,
+    errorHandler: EntityErrorHandler,
+    path = ''
+  ): TransactionItems {
     const finalList: ValidatedItems = []
-    const errors: InvalidFields = []
     for (const [name, { amount, related_users }] of Object.entries(items)) {
-      const nameOrError = Name.create(name)
-      const amountOrError = Amount.create(amount)
-      const relatedUsersOrError = RelatedList.create(related_users)
-
-      if (nameOrError.isLeft())
-        errors.push({
-          field: `${name}.name`,
-          error: nameOrError.value
-        })
-      if (amountOrError.isLeft())
-        errors.push({
-          field: `${name}.amount`,
-          error: amountOrError.value
-        })
-      if (relatedUsersOrError.isLeft())
-        errors.push(
-          ...FieldKeys.addKeyOnErrorFields(
-            `${name}.related_users`,
-            relatedUsersOrError.value
-          )
-        )
+      const itemName = Name.create(name, errorHandler, `${path}.${name}.name`)
+      const itemAmount = Amount.create(
+        amount,
+        errorHandler,
+        `${path}.${name}.amount`
+      )
+      const relatedUsers = RelatedList.create(
+        related_users,
+        errorHandler,
+        `${path}.${name}.related_users`
+      )
 
       const duplicated = finalList.filter(
-        item => item[0].value === nameOrError.value.value
+        item => item[0].value === itemName.value
       )
       if (duplicated.length > 0)
-        errors.push({
-          field: name,
-          error: new InvalidError(
+        errorHandler.addError(
+          new InvalidError(
             'Transaction Items',
-            nameOrError.value.value,
+            itemName.value,
             new DuplicateReason('name')
-          )
-        })
+          ),
+          `${path}.${name}`
+        )
 
-      if (errors.length === 0)
-        finalList.push([
-          nameOrError.value as Name,
-          {
-            amount: amountOrError.value as Amount,
-            related_users: relatedUsersOrError.value as RelatedList
-          }
-        ])
+      finalList.push([
+        itemName,
+        {
+          amount: itemAmount,
+          related_users: relatedUsers
+        }
+      ])
     }
 
-    if (errors.length === 0 && !TransactionItems.validate(finalList))
-      errors.push({
-        error: new InvalidError('Transaction Items', '', new EmptyReason())
-      })
+    if (!TransactionItems.validate(finalList))
+      errorHandler.addError(
+        new InvalidError('Transaction Items', '', new EmptyReason()),
+        path
+      )
 
-    if (errors.length > 0) return left(errors)
-
-    return right(new TransactionItems(finalList))
+    return new TransactionItems(finalList)
   }
 
   get value(): TransactionItemsProps {

@@ -1,6 +1,6 @@
 import { InvalidError } from '@entities/errors'
 
 export type InvalidFields = {
-  field?: string
+  field: string
   error: InvalidError
 }[]

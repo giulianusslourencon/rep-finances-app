@@ -1,7 +1,5 @@
 import { UserId } from '@entities/components'
-import { InvalidFields } from '@entities/errors'
-
-import { Either, left, right } from '@shared/types'
+import { EntityErrorHandler } from '@entities/errors'
 
 export type IndividualBalanceProps = {
   [userId: string]: number
@@ -18,22 +16,16 @@ export class IndividualBalance {
   }
 
   static create(
-    balance: IndividualBalanceProps
-  ): Either<InvalidFields, IndividualBalance> {
+    balance: IndividualBalanceProps,
+    errorHandler: EntityErrorHandler,
+    path = ''
+  ): IndividualBalance {
     const finalList: ValidatedBalance = []
-    const errors: InvalidFields = []
     for (const [userId, amount] of Object.entries(balance)) {
-      const userIdOrError = UserId.create(userId)
-
-      if (userIdOrError.isLeft())
-        errors.push({
-          field: userId,
-          error: userIdOrError.value
-        })
-      else finalList.push([userIdOrError.value, amount])
+      const id = UserId.create(userId, errorHandler, `${path}.${userId}`)
+      finalList.push([id, amount])
     }
-    if (errors.length > 0) return left(errors)
-    return right(new IndividualBalance(finalList))
+    return new IndividualBalance(finalList)
   }
 
   get value(): IndividualBalanceProps {
