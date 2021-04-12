@@ -1,7 +1,7 @@
-import { TransactionInitProps } from '@entities/Finances'
+import { CreateTransactionProps } from '@useCases/Finances/ports/CreateTransaction'
 
 export class TransactionInitialPropsBuilder {
-  private constructor(private transaction: TransactionInitProps) {}
+  private constructor(private transaction: CreateTransactionProps) {}
 
   static aTransaction = (): TransactionInitialPropsBuilder => {
     return new TransactionInitialPropsBuilder({
@@ -24,7 +24,7 @@ export class TransactionInitialPropsBuilder {
     return this
   }
 
-  build = (): TransactionInitProps => {
+  build = (): CreateTransactionProps => {
     return this.transaction
   }
 }

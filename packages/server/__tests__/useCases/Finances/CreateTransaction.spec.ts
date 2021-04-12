@@ -84,7 +84,7 @@ describe('Create Transaction Use Case', () => {
 
       expect(transactionError.value).toEqual<InvalidFields>([
         {
-          field: 'title',
+          field: '.title',
           error: {
             name: 'InvalidNameError',
             value: 'A',

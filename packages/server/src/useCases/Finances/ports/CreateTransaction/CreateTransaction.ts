@@ -1,11 +1,11 @@
+import { Either } from '@shared/types'
+
 import { InvalidFields } from '@entities/errors'
 import { TransactionInitProps, TransactionProps } from '@entities/Finances'
 
-import { Either } from '@shared/types'
-
 import { UseCase } from '@useCases/contracts'
 
-export type CreateTransactionProps = TransactionInitProps
+export type CreateTransactionProps = Omit<TransactionInitProps, 'id'>
 
 export type CreateTransactionResponse = Either<InvalidFields, TransactionProps>
 

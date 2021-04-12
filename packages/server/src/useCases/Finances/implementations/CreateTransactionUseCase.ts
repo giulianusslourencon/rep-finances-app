@@ -1,6 +1,6 @@
 import { left, right } from '@shared/types'
 
-import { Transaction } from '@entities/Finances'
+import { TransactionEntityManager } from '@entities/managers/Finances'
 
 import {
   CreateTransaction,
@@ -22,7 +22,7 @@ export class CreateTransactionUseCase implements CreateTransaction {
     props: CreateTransactionProps
   ): Promise<CreateTransactionResponse> {
     const id = await this.idGenerator.generateUniqueId()
-    const transactionOrError = Transaction.create(props, id)
+    const transactionOrError = TransactionEntityManager.create({ ...props, id })
 
     if (transactionOrError.isLeft()) return left(transactionOrError.value)
 

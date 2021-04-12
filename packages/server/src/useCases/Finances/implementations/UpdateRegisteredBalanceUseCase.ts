@@ -1,4 +1,5 @@
-import { Balance, BalanceFromArray } from '@entities/Finances'
+import { Balance } from '@entities/Finances'
+import { BalanceEntityManager } from '@entities/managers/Finances'
 
 import {
   UpdateRegisteredBalance,
@@ -41,7 +42,10 @@ export class UpdateRegisteredBalanceUseCase implements UpdateRegisteredBalance {
       )
 
       const updatedMonthBalance = (<Balance>(
-        BalanceFromArray.create([lastMonthBalance, ...monthTransactions]).value
+        BalanceEntityManager.createFromArray([
+          lastMonthBalance,
+          ...monthTransactions
+        ]).value
       )).value
 
       await this.balanceRepository.updateMonth(month, updatedMonthBalance)
