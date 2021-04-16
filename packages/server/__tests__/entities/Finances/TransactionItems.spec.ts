@@ -40,7 +40,7 @@ describe('Transaction Items Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.i.name',
+          field: 'i.name',
           error: {
             name: 'InvalidNameError',
             value: 'i',
@@ -67,7 +67,7 @@ describe('Transaction Items Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.item2.amount',
+          field: 'item2.amount',
           error: {
             name: 'InvalidAmountError',
             value: '-20',
@@ -94,7 +94,7 @@ describe('Transaction Items Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.item2.related_users',
+          field: 'item2.related_users',
           error: {
             name: 'InvalidRelatedListError',
             value: '',
@@ -139,7 +139,7 @@ describe('Transaction Items Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.item1 ',
+          field: 'item1 ',
           error: {
             name: 'InvalidTransactionItemsError',
             value: 'item1',

@@ -52,7 +52,7 @@ describe('Transaction Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.title',
+          field: 'title',
           error: {
             name: 'InvalidNameError',
             value: 'X',
@@ -83,7 +83,7 @@ describe('Transaction Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.timestamp',
+          field: 'timestamp',
           error: {
             name: 'InvalidDateError',
             value: 'NaN',
@@ -114,7 +114,7 @@ describe('Transaction Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.items.item1.related_users.__',
+          field: 'items.item1.related_users.__',
           error: {
             name: 'InvalidUserIdError',
             value: '__',
@@ -146,7 +146,7 @@ describe('Transaction Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.payers.P.amount',
+          field: 'payers.P.amount',
           error: {
             name: 'InvalidAmountError',
             value: '-20',

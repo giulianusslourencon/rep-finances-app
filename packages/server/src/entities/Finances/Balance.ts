@@ -1,3 +1,5 @@
+import { Path } from '@shared/utils'
+
 import { EntityErrorHandler } from '@entities/errors'
 import { IndividualBalance, IndividualBalanceProps } from '@entities/Finances'
 
@@ -16,7 +18,7 @@ export class Balance {
   static create(
     balance: BalanceProps,
     errorHandler: EntityErrorHandler,
-    path = ''
+    path = new Path()
   ): Balance {
     Object.keys(balance.individual_balance).forEach(userId => {
       if (!balance.individual_balance[userId])
@@ -26,7 +28,7 @@ export class Balance {
     const individualBalance = IndividualBalance.create(
       balance.individual_balance,
       errorHandler,
-      path
+      path.add('individual_balance')
     )
 
     return new Balance(individualBalance)

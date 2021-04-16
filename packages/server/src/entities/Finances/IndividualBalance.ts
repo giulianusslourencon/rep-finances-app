@@ -1,3 +1,5 @@
+import { Path } from '@shared/utils'
+
 import { UserId } from '@entities/components'
 import { EntityErrorHandler } from '@entities/errors'
 
@@ -18,11 +20,11 @@ export class IndividualBalance {
   static create(
     balance: IndividualBalanceProps,
     errorHandler: EntityErrorHandler,
-    path = ''
+    path = new Path()
   ): IndividualBalance {
     const finalList: ValidatedBalance = []
     for (const [userId, amount] of Object.entries(balance)) {
-      const id = UserId.create(userId, errorHandler, `${path}.${userId}`)
+      const id = UserId.create(userId, errorHandler, path.add(userId))
       finalList.push([id, amount])
     }
     return new IndividualBalance(finalList)

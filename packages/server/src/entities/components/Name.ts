@@ -1,3 +1,5 @@
+import { Path } from '@shared/utils'
+
 import { EntityErrorHandler, InvalidError } from '@entities/errors'
 import { SizeReason } from '@entities/errors/reasons'
 
@@ -12,12 +14,12 @@ export class Name {
   static create(
     name: string,
     errorHandler: EntityErrorHandler,
-    path = ''
+    path = new Path()
   ): Name {
     if (!Name.validate(name)) {
       errorHandler.addError(
         new InvalidError('Name', name, new SizeReason(2, 64)),
-        path
+        path.resolve()
       )
     }
     return new Name(name.trim())

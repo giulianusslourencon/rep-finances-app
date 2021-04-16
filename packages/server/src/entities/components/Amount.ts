@@ -1,3 +1,5 @@
+import { Path } from '@shared/utils'
+
 import { EntityErrorHandler, InvalidError } from '@entities/errors'
 import { PositiveNumberReason } from '@entities/errors/reasons'
 
@@ -12,7 +14,7 @@ export class Amount {
   static create(
     amount: number,
     errorHandler: EntityErrorHandler,
-    path = ''
+    path = new Path()
   ): Amount {
     if (!Amount.validate(amount)) {
       errorHandler.addError(
@@ -21,7 +23,7 @@ export class Amount {
           amount.toString(),
           new PositiveNumberReason()
         ),
-        path
+        path.resolve()
       )
     }
     return new Amount(amount)

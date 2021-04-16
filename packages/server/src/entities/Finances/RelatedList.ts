@@ -1,3 +1,5 @@
+import { Path } from '@shared/utils'
+
 import { UserId } from '@entities/components'
 import { EntityErrorHandler, InvalidError } from '@entities/errors'
 import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
@@ -13,14 +15,14 @@ export class RelatedList {
   static create(
     relatedList: string[],
     errorHandler: EntityErrorHandler,
-    path = ''
+    path = new Path()
   ): RelatedList {
     const finalList: UserId[] = []
     for (const related of relatedList) {
       const relatedUser = UserId.create(
         related,
         errorHandler,
-        `${path}.${related}`
+        path.add(related)
       )
 
       const duplicated = finalList.filter(
@@ -33,7 +35,7 @@ export class RelatedList {
             relatedUser.value,
             new DuplicateReason('id')
           ),
-          `${path}.${related}`
+          path.add(related).resolve()
         )
 
       finalList.push(relatedUser)
@@ -42,7 +44,7 @@ export class RelatedList {
     if (!RelatedList.validate(finalList))
       errorHandler.addError(
         new InvalidError('Related List', '', new EmptyReason()),
-        path
+        path.resolve()
       )
 
     return new RelatedList(finalList)

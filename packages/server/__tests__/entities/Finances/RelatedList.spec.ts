@@ -22,7 +22,7 @@ describe('Related List Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.@',
+          field: '@',
           error: {
             name: 'InvalidUserIdError',
             value: '@',
@@ -58,7 +58,7 @@ describe('Related List Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.p ',
+          field: 'p ',
           error: {
             name: 'InvalidRelatedListError',
             value: 'P',
@@ -67,7 +67,7 @@ describe('Related List Entity', () => {
           }
         },
         {
-          field: '.G',
+          field: 'G',
           error: {
             name: 'InvalidRelatedListError',
             value: 'G',

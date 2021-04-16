@@ -1,4 +1,4 @@
-import { DateParser } from '@shared/utils'
+import { DateParser, Path } from '@shared/utils'
 
 import { Amount, Name } from '@entities/components'
 import { EntityErrorHandler, InvalidError } from '@entities/errors'
@@ -67,22 +67,22 @@ export class Transaction {
   static create(
     props: TransactionInitProps,
     errorHandler: EntityErrorHandler,
-    path = ''
+    path = new Path()
   ): Transaction {
     const transactionTitle = Name.create(
       props.title,
       errorHandler,
-      `${path}.title`
+      path.add('title')
     )
     const transactionItems = TransactionItems.create(
       props.items,
       errorHandler,
-      `${path}.items`
+      path.add('items')
     )
     const transactionPayers = TransactionPayers.create(
       props.payers,
       errorHandler,
-      `${path}.payers`
+      path.add('payers')
     )
 
     const date = new Date(props.timestamp)
@@ -93,7 +93,7 @@ export class Transaction {
           props.timestamp.toString(),
           new FormattingReason()
         ),
-        `${path}.timestamp`
+        path.add('timestamp').resolve()
       )
 
     const month = DateParser.parseDate(props.timestamp)
@@ -113,7 +113,7 @@ export class Transaction {
           '',
           new CustomReason('Items values are distinct from total paid.')
         ),
-        path
+        path.resolve()
       )
 
     const transactionAmount = Amount.create(itemsAmount, errorHandler, path)

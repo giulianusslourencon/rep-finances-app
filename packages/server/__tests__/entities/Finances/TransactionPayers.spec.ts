@@ -27,7 +27,7 @@ describe('Transaction Payers Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.AAAAA.userId',
+          field: 'AAAAA.userId',
           error: {
             name: 'InvalidUserIdError',
             value: 'AAAAA',
@@ -48,7 +48,7 @@ describe('Transaction Payers Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.G.amount',
+          field: 'G.amount',
           error: {
             name: 'InvalidAmountError',
             value: '-2',
@@ -87,7 +87,7 @@ describe('Transaction Payers Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.p',
+          field: 'p',
           error: {
             name: 'InvalidTransactionPayersError',
             value: 'P',

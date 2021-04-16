@@ -1,3 +1,5 @@
+import { Path } from '@shared/utils'
+
 import { Amount, Name } from '@entities/components'
 import { EntityErrorHandler, InvalidError } from '@entities/errors'
 import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
@@ -23,20 +25,20 @@ export class TransactionItems {
   static create(
     items: TransactionItemsProps,
     errorHandler: EntityErrorHandler,
-    path = ''
+    path = new Path()
   ): TransactionItems {
     const finalList: ValidatedItems = []
     for (const [name, { amount, related_users }] of Object.entries(items)) {
-      const itemName = Name.create(name, errorHandler, `${path}.${name}.name`)
+      const itemName = Name.create(name, errorHandler, path.add(`${name}.name`))
       const itemAmount = Amount.create(
         amount,
         errorHandler,
-        `${path}.${name}.amount`
+        path.add(`${name}.amount`)
       )
       const relatedUsers = RelatedList.create(
         related_users,
         errorHandler,
-        `${path}.${name}.related_users`
+        path.add(`${name}.related_users`)
       )
 
       const duplicated = finalList.filter(
@@ -49,7 +51,7 @@ export class TransactionItems {
             itemName.value,
             new DuplicateReason('name')
           ),
-          `${path}.${name}`
+          path.add(name).resolve()
         )
 
       finalList.push([
@@ -64,7 +66,7 @@ export class TransactionItems {
     if (!TransactionItems.validate(finalList))
       errorHandler.addError(
         new InvalidError('Transaction Items', '', new EmptyReason()),
-        path
+        path.resolve()
       )
 
     return new TransactionItems(finalList)

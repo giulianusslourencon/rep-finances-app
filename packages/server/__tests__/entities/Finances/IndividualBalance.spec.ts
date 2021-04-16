@@ -30,7 +30,7 @@ describe('Individual Balance Entity', () => {
       expect(errorHandler.hasErrors).toBeTruthy()
       expect(errorHandler.errors).toEqual<InvalidFields>([
         {
-          field: '.AAAAA',
+          field: 'AAAAA',
           error: {
             name: 'InvalidUserIdError',
             value: 'AAAAA',

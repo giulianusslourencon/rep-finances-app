@@ -1,3 +1,5 @@
+import { Path } from '@shared/utils'
+
 import { Amount, UserId } from '@entities/components'
 import { EntityErrorHandler, InvalidError } from '@entities/errors'
 import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
@@ -19,15 +21,19 @@ export class TransactionPayers {
   static create(
     payers: TransactionPayersProps,
     errorHandler: EntityErrorHandler,
-    path = ''
+    path = new Path()
   ): TransactionPayers {
     const finalList: ValidatedPayers = []
     for (const [user, amount] of Object.entries(payers)) {
-      const userId = UserId.create(user, errorHandler, `${path}.${user}.userId`)
+      const userId = UserId.create(
+        user,
+        errorHandler,
+        path.add(`${user}.userId`)
+      )
       const userAmount = Amount.create(
         amount,
         errorHandler,
-        `${path}.${user}.amount`
+        path.add(`${user}.amount`)
       )
 
       const duplicated = finalList.filter(
@@ -40,7 +46,7 @@ export class TransactionPayers {
             userId.value,
             new DuplicateReason('id')
           ),
-          `${path}.${user}`
+          path.add(user).resolve()
         )
 
       finalList.push([userId, userAmount])
@@ -49,7 +55,7 @@ export class TransactionPayers {
     if (!TransactionPayers.validate(finalList))
       errorHandler.addError(
         new InvalidError('Transaction Payers', '', new EmptyReason()),
-        path
+        path.resolve()
       )
 
     return new TransactionPayers(finalList)

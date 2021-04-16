@@ -1,3 +1,5 @@
+import { Path } from '@shared/utils'
+
 import { EntityErrorHandler } from '@entities/errors'
 import { Balance, BalanceProps, TransactionCoreProps } from '@entities/Finances'
 
@@ -5,7 +7,7 @@ export class BalanceFromTransactionCore {
   static create(
     transaction: TransactionCoreProps,
     errorHandler: EntityErrorHandler,
-    path = ''
+    path = new Path()
   ): Balance {
     const usersBalance: BalanceProps = {
       individual_balance: { ...transaction.payers }

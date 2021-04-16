@@ -1,3 +1,5 @@
+import { Path } from '@shared/utils'
+
 import { EntityErrorHandler } from '@entities/errors'
 import {
   Balance,
@@ -10,7 +12,7 @@ export class BalanceFromArray {
   static create(
     transactionsOrBalances: (TransactionCoreProps | BalanceProps)[],
     errorHandler: EntityErrorHandler,
-    path = ''
+    path = new Path()
   ): Balance {
     const balances: BalanceProps[] = transactionsOrBalances.map(
       transactionOrBalance => {

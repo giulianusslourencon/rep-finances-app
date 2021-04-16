@@ -1,3 +1,5 @@
+import { Path } from '@shared/utils'
+
 import { EntityErrorHandler, InvalidError } from '@entities/errors'
 import { CustomReason, SizeReason } from '@entities/errors/reasons'
 
@@ -12,7 +14,7 @@ export class UserId {
   static create(
     userId: string,
     errorHandler: EntityErrorHandler,
-    path = ''
+    path = new Path()
   ): UserId {
     const validationResult = UserId.validate(userId.trim())
     if (!validationResult.valid) {
@@ -24,7 +26,7 @@ export class UserId {
           : new SizeReason(1, 2)
       errorHandler.addError(
         new InvalidError('User Id', userId, errorReason),
-        path
+        path.resolve()
       )
     }
     return new UserId(userId.toUpperCase().trim())
