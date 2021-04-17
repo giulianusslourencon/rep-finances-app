@@ -6,7 +6,7 @@ import {
   GetCurrentBalanceUseCase
 } from '@useCases/Finances/implementations'
 
-export const makeGetCurrentBalance = () => {
+export const makeGetCurrentBalance = (): GetCurrentBalanceControllerOperation => {
   const updateBalance = new UpdateRegisteredBalanceUseCase(
     MongoTransactions,
     MongoBalance

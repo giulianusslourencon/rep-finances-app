@@ -7,7 +7,7 @@ import { CreateTransactionControllerOperation } from '@presentation/controllers/
 
 import { CreateTransactionUseCase } from '@useCases/Finances/implementations'
 
-export const makeCreateTransaction = () => {
+export const makeCreateTransaction = (): CreateTransactionControllerOperation => {
   const useCase = new CreateTransactionUseCase(
     MongoTransactions,
     MongoBalance,

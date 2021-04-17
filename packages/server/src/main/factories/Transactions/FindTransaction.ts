@@ -6,7 +6,7 @@ import {
   GetTransactionBalanceUseCase
 } from '@useCases/Finances/implementations'
 
-export const makeFindTransaction = () => {
+export const makeFindTransaction = (): FindTransactionControllerOperation => {
   const getTransactionBalance = new GetTransactionBalanceUseCase()
   const useCase = new FindTransactionUseCase(MongoTransactions)
   return new FindTransactionControllerOperation(useCase, getTransactionBalance)

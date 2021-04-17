@@ -3,7 +3,7 @@ import { ListTransactionsControllerOperation } from '@presentation/controllers/F
 
 import { ListTransactionsUseCase } from '@useCases/Finances/implementations'
 
-export const makeListTransactions = () => {
+export const makeListTransactions = (): ListTransactionsControllerOperation => {
   const useCase = new ListTransactionsUseCase(MongoTransactions)
   return new ListTransactionsControllerOperation(useCase)
 }
