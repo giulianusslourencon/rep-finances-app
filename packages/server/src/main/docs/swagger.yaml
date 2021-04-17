@@ -1,0 +1,25 @@
+openapi: 3.0.0
+
+info:
+  title: Rep Finances API
+  description: Tool for register transactions among a group of people and calculate the finances balance in the group.
+  version: 1.2.1-alpha
+
+servers:
+  - url: https://repsy-api.herokuapp.com/api
+    description: Production server
+
+paths:
+  /transactions:
+    get:
+      summary: Returns a list of registered transactions.
+      description: Returns a list of reistered transactions paginated by the "page" query (positive number, defaults to 1) and "nItems" query (positive number, defaults to 15)
+      responses:
+        '200':    # status code
+          description: A JSON array of transaction resumes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
