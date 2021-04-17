@@ -12,6 +12,7 @@ import Title from '@components/Title'
 import TransactionData from '@components/TransactionData'
 
 import API from '@utils/api'
+import { ErrorResponse } from '@utils/types'
 
 type Transaction = {
   _id: string
@@ -36,7 +37,7 @@ type Balance = {
 }
 
 type Props = {
-  error?: { name: string; message: string }
+  error?: ErrorResponse
   transaction: Transaction
   balance: Balance
 }

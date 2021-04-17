@@ -39,6 +39,7 @@ import LabelInput from '@components/LabelInput'
 import Layout from '@components/Layout'
 
 import API from '@utils/api'
+import { ErrorResponse } from '@utils/types'
 import {
   validateAmount,
   validateLabel,
@@ -120,9 +121,7 @@ const CreateTransaction: React.FC = () => {
     onClose: onDateModalClose
   } = useDisclosure()
 
-  const [errors, setErrors] = useState(
-    [] as { name: string; message: string }[]
-  )
+  const [errors, setErrors] = useState([] as ErrorResponse[])
 
   const [awaitingRequest, setAwaitingRequest] = useState(false)
 
@@ -256,9 +255,9 @@ const CreateTransaction: React.FC = () => {
         const response = await API.createTransaction(transaction)
         Router.push(`/transactions/item/${response.data._id}`)
       } catch (error) {
-        const errorMessage = error.response?.data || {
+        const errorMessage: ErrorResponse = error.response?.data || {
           name: error.code,
-          message: error.message
+          errors: [{ message: error.message }]
         }
         setErrors([errorMessage])
         setAwaitingRequest(false)

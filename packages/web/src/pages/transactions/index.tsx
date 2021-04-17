@@ -25,10 +25,10 @@ import Time from '@components/Time'
 import Title from '@components/Title'
 
 import API from '@utils/api'
-import { TransactionList } from '@utils/types'
+import { ErrorResponse, TransactionList } from '@utils/types'
 
 type Props = {
-  error?: { name: string; message: string }
+  error?: ErrorResponse
   transactions: TransactionList
   paginationProps: {
     itemsCount: number

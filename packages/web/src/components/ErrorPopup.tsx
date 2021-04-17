@@ -7,11 +7,10 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 
+import { ErrorResponse } from '@utils/types'
+
 type ErrorProps = {
-  error: {
-    name: string
-    message: string
-  }
+  error: ErrorResponse
 }
 
 const ErrorPopup: React.FC<ErrorProps & AlertProps> = ({ error, ...props }) => {
@@ -19,7 +18,9 @@ const ErrorPopup: React.FC<ErrorProps & AlertProps> = ({ error, ...props }) => {
     <Alert status="error" {...props}>
       <AlertIcon color="red.500" />
       <AlertTitle mr={4}>{error.name}</AlertTitle>
-      <AlertDescription textAlign="center">{error.message}</AlertDescription>
+      <AlertDescription textAlign="center">
+        {error.errors[0].message}
+      </AlertDescription>
     </Alert>
   )
 }

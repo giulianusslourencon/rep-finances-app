@@ -8,9 +8,10 @@ import IdBox from '@components/IdBox'
 import Layout from '@components/Layout'
 
 import API from '@utils/api'
+import { ErrorResponse } from '@utils/types'
 
 type Props = {
-  error?: { name: string; message: string }
+  error?: ErrorResponse
   balance: [string, number][]
 }
 

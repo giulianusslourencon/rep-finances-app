@@ -1,3 +1,11 @@
+export type ErrorResponse = {
+  name: string
+  errors: {
+    message: string
+    field?: string
+  }[]
+}
+
 export type Transaction = {
   title: string
   timestamp: number
