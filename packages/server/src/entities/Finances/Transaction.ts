@@ -116,7 +116,11 @@ export class Transaction {
         path.resolve()
       )
 
-    const transactionAmount = Amount.create(itemsAmount, errorHandler, path)
+    const transactionAmount = Amount.create(
+      itemsAmount,
+      new EntityErrorHandler(),
+      path
+    )
 
     let related = Object.keys(props.payers).map(id => id.trim().toUpperCase())
     for (const item of Object.values(props.items)) {
