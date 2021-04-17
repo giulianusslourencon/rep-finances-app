@@ -7,12 +7,12 @@ describe('Path', () => {
     expect(path.resolve()).toBe('field1.field2.field3')
   })
 
-  it('Should add a new field to the path sequence', () => {
+  it('Should add new fields to the path sequence', () => {
     const path = new Path(['field1', 'field2'])
-    const addedPath = path.add('field3')
+    const addedPath = path.add('field3', 'field4')
 
     expect(path.resolve()).toBe('field1.field2')
-    expect(addedPath.resolve()).toBe('field1.field2.field3')
+    expect(addedPath.resolve()).toBe('field1.field2.field3.field4')
   })
 
   it('Should return an empty string if there is no field on the path sequence', () => {

@@ -29,7 +29,7 @@ export class TransactionItems {
   ): TransactionItems {
     const finalList: ValidatedItems = []
     for (const [name, { amount, related_users }] of Object.entries(items)) {
-      const itemName = Name.create(name, errorHandler, path.add(`${name}.name`))
+      const itemName = Name.create(name, errorHandler, path.add(name, 'name'))
       const itemAmount = Amount.create(
         amount,
         errorHandler,
@@ -38,7 +38,7 @@ export class TransactionItems {
       const relatedUsers = RelatedList.create(
         related_users,
         errorHandler,
-        path.add(`${name}.related_users`)
+        path.add(name, 'related_users')
       )
 
       const duplicated = finalList.filter(

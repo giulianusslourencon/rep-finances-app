@@ -33,7 +33,7 @@ export class TransactionPayers {
       const userAmount = Amount.create(
         amount,
         errorHandler,
-        path.add(`${user}.amount`)
+        path.add(user, 'amount')
       )
 
       const duplicated = finalList.filter(

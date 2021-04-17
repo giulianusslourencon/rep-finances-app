@@ -5,8 +5,8 @@ export class Path {
     this.fields = initialFields ? [...initialFields] : []
   }
 
-  public add(field: string): Path {
-    return new Path([...this.fields, field])
+  public add(...newFields: string[]): Path {
+    return new Path([...this.fields, ...newFields])
   }
 
   public resolve(): string {
