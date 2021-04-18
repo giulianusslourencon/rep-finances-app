@@ -1,0 +1,28 @@
+tags:
+  - Finances
+summary: Recover a registered transaction by id
+description: Returns all props of the registered transaction with given id and its balance
+operationId: getTransactionById
+parameters:
+  - name: id
+    in: path
+    description: Transaction ID
+    required: true
+    schema:
+      type: string
+responses:
+  '200':    # status code
+    description: An object with the transaction props and balance
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            transaction:
+              $ref: '../../components/schemas/Transaction.yaml'
+            balance:
+              $ref: '../../components/schemas/Balance.yaml'
+  '404':
+    description: The transaction was not found
+  default:
+    description: Unexpected error

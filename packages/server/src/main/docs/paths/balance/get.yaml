@@ -1,0 +1,15 @@
+tags:
+  - Finances
+summary: Returns the current balance
+description: Returns the most updated balance including all registered transactions
+operationId: getBalance
+responses:
+  '200':    # status code
+    description: Current balance
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            balance:
+              $ref: '../../components/schemas/Balance.yaml'

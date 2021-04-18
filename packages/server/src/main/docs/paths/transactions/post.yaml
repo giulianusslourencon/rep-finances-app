@@ -1,0 +1,40 @@
+tags:
+  - Finances
+summary: Register a new transaction in the repository
+description: Register a new transaction in the repository and set the month balance to not updated
+operationId: createTransaction
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          title:
+            type: string
+          timestamp:
+            type: number
+          items:
+            $ref: '../../components/schemas/TransactionItems.yaml'
+          payers:
+            $ref: '../../components/schemas/TransactionPayers.yaml'
+        example:
+          title: 100h cookie recipe
+          timestamp: 1618666200000
+          items:
+            'Brown sugar':
+              amount: 15
+              related_users: [P, FB]
+            'Cat sand':
+              amount: 15
+              related_users: [FB]
+          payers:
+            P: 10
+            FB: 20
+responses:
+  '201':    # status code
+    description: Created, returns the created transaction
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/Transaction.yaml'

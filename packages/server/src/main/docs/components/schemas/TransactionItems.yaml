@@ -1,0 +1,17 @@
+type: object
+additionalProperties:
+  type: object
+  properties:
+    amount:
+      type: number
+    related_users:
+      type: array
+      items:
+        type: string
+example:
+  'Brown sugar':
+    amount: 15
+    related_users: [P, FB]
+  'Cat sand':
+    amount: 15
+    related_users: [FB]

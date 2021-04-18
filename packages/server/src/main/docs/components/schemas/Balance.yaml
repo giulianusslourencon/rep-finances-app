@@ -1,0 +1,6 @@
+type: object
+additionalProperties:
+  type: number
+example:
+  P: 2.5
+  FB: -2.5

@@ -1,41 +1,15 @@
 openapi: 3.0.0
-
 info:
   title: Rep Finances API
   description: Tool for register transactions among a group of people and calculate the finances balance in the group.
   version: 1.2.1-alpha
-
 servers:
-  - url: http://repsy-api.herokuapp.com/api
+  - url: 'http://repsy-api.herokuapp.com/api'
     description: Production server
-  - url: http://localhost:3333/api
+  - url: 'http://localhost:3333/api'
     description: Internal server
-
 components:
   schemas:
-    TransactionResume:
-      type: object
-      properties:
-        _id:
-          type: string
-        title:
-          type: string
-        date:
-          type: string
-          format: Date
-        amount:
-          type: number
-        related:
-          type: array
-          items:
-            type: string
-      example:
-        _id: 96986f8d-720d-4ddd-a933-0570d82e71af
-        title: 100h cookie recipe
-        date: 2021-04-17T13:30:00.000Z
-        amount: 30
-        related: [P, FB]
-
     TransactionItems:
       type: object
       additionalProperties:
@@ -48,13 +22,15 @@ components:
             items:
               type: string
       example:
-        'Brown sugar':
+        Brown sugar:
           amount: 15
-          related_users: [P, FB]
-        'Cat sand':
+          related_users:
+            - P
+            - FB
+        Cat sand:
           amount: 15
-          related_users: [FB]
-
+          related_users:
+            - FB
     TransactionPayers:
       type: object
       additionalProperties:
@@ -62,7 +38,6 @@ components:
       example:
         P: 10
         FB: 20
-
     Transaction:
       type: object
       properties:
@@ -90,44 +65,23 @@ components:
         title: 100h cookie recipe
         date: 2021-04-17T13:30:00.000Z
         items:
-          'Brown sugar':
+          Brown sugar:
             amount: 15
-            related_users: [P, FB]
-          'Cat sand':
+            related_users:
+              - P
+              - FB
+          Cat sand:
             amount: 15
-            related_users: [FB]
+            related_users:
+              - FB
         payers:
           P: 10
           FB: 20
         month: 202104
         amount: 30
-        related: [P, FB]
-
-    TransactionInitialProps:
-      type: object
-      properties:
-        title:
-          type: string
-        timestamp:
-          type: number
-        items:
-          $ref: '#/components/schemas/TransactionItems'
-        payers:
-          $ref: '#/components/schemas/TransactionPayers'
-      example:
-        title: 100h cookie recipe
-        timestamp: 1618666200000
-        items:
-          'Brown sugar':
-            amount: 15
-            related_users: [P, FB]
-          'Cat sand':
-            amount: 15
-            related_users: [FB]
-        payers:
-          P: 10
-          FB: 20
-
+        related:
+          - P
+          - FB
     Balance:
       type: object
       additionalProperties:
@@ -135,38 +89,58 @@ components:
       example:
         P: 2.5
         FB: -2.5
-
 paths:
   /transactions:
     get:
       tags:
         - Finances
       summary: Returns a list of registered transactions
-      description: Returns a list of registered transactions paginated by the "page" query (positive number, defaults to 1) and "nItems" query (positive number, defaults to 15)
+      description: 'Returns a list of registered transactions paginated by the "page" query (positive number, defaults to 1) and "nItems" query (positive number, defaults to 15)'
       operationId: listTransactions
       parameters:
         - name: page
           in: query
-          description: Page number (positive number, defaults to 1)
+          description: 'Page number (positive number, defaults to 1)'
           schema:
             type: integer
             minimum: 1
         - name: nItems
           in: query
-          description: Number of items per page (positive number, defaults to 15)
+          description: 'Number of items per page (positive number, defaults to 15)'
           schema:
             type: integer
             minimum: 1
       responses:
-        '200':    # status code
+        '200':
           description: A JSON array of transaction resumes
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TransactionResume'
-
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    title:
+                      type: string
+                    date:
+                      type: string
+                      format: Date
+                    amount:
+                      type: number
+                    related:
+                      type: array
+                      items:
+                        type: string
+                  example:
+                    _id: 96986f8d-720d-4ddd-a933-0570d82e71af
+                    title: 100h cookie recipe
+                    date: 2021-04-17T13:30:00.000Z
+                    amount: 30
+                    related:
+                      - P
+                      - FB
     post:
       tags:
         - Finances
@@ -178,15 +152,39 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransactionInitialProps'
+              type: object
+              properties:
+                title:
+                  type: string
+                timestamp:
+                  type: number
+                items:
+                  $ref: '#/components/schemas/TransactionItems'
+                payers:
+                  $ref: '#/components/schemas/TransactionPayers'
+              example:
+                title: 100h cookie recipe
+                timestamp: 1618666200000
+                items:
+                  Brown sugar:
+                    amount: 15
+                    related_users:
+                      - P
+                      - FB
+                  Cat sand:
+                    amount: 15
+                    related_users:
+                      - FB
+                payers:
+                  P: 10
+                  FB: 20
       responses:
-        '201':    # status code
-          description: Created, returns the created transaction
+        '201':
+          description: 'Created, returns the created transaction'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Transaction'
-
   /transactions/count:
     get:
       tags:
@@ -195,7 +193,7 @@ paths:
       description: Returns the number of registered transactions
       operationId: getTransactionsCount
       responses:
-        '200':    # status code
+        '200':
           description: Transactions count
           content:
             application/json:
@@ -205,8 +203,7 @@ paths:
                   count:
                     type: number
                     example: 15
-
-  /transactions/{id}:
+  '/transactions/{id}':
     get:
       tags:
         - Finances
@@ -221,7 +218,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':    # status code
+        '200':
           description: An object with the transaction props and balance
           content:
             application/json:
@@ -236,7 +233,6 @@ paths:
           description: The transaction was not found
         default:
           description: Unexpected error
-
   /balance:
     get:
       tags:
@@ -245,7 +241,7 @@ paths:
       description: Returns the most updated balance including all registered transactions
       operationId: getBalance
       responses:
-        '200':    # status code
+        '200':
           description: Current balance
           content:
             application/json:
@@ -254,4 +250,3 @@ paths:
                 properties:
                   balance:
                     $ref: '#/components/schemas/Balance'
-

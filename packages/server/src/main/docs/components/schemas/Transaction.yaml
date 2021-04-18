@@ -1,0 +1,38 @@
+type: object
+properties:
+  _id:
+    type: string
+  title:
+    type: string
+  date:
+    type: string
+    format: Date
+  items:
+    $ref: './TransactionItems.yaml'
+  payers:
+    $ref: './TransactionPayers.yaml'
+  month:
+    type: string
+  amount:
+    type: number
+  related:
+    type: array
+    items:
+      type: string
+example:
+  _id: 96986f8d-720d-4ddd-a933-0570d82e71af
+  title: 100h cookie recipe
+  date: 2021-04-17T13:30:00.000Z
+  items:
+    'Brown sugar':
+      amount: 15
+      related_users: [P, FB]
+    'Cat sand':
+      amount: 15
+      related_users: [FB]
+  payers:
+    P: 10
+    FB: 20
+  month: 202104
+  amount: 30
+  related: [P, FB]

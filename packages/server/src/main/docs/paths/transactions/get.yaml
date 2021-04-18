@@ -1,0 +1,47 @@
+tags:
+  - Finances
+summary: Returns a list of registered transactions
+description: Returns a list of registered transactions paginated by the "page" query (positive number, defaults to 1) and "nItems" query (positive number, defaults to 15)
+operationId: listTransactions
+parameters:
+  - name: page
+    in: query
+    description: Page number (positive number, defaults to 1)
+    schema:
+      type: integer
+      minimum: 1
+  - name: nItems
+    in: query
+    description: Number of items per page (positive number, defaults to 15)
+    schema:
+      type: integer
+      minimum: 1
+responses:
+  '200':    # status code
+    description: A JSON array of transaction resumes
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+              title:
+                type: string
+              date:
+                type: string
+                format: Date
+              amount:
+                type: number
+              related:
+                type: array
+                items:
+                  type: string
+            example:
+              _id: 96986f8d-720d-4ddd-a933-0570d82e71af
+              title: 100h cookie recipe
+              date: 2021-04-17T13:30:00.000Z
+              amount: 30
+              related: [P, FB]

@@ -1,0 +1,16 @@
+tags:
+  - Finances
+summary: Returns the number of registered transactions
+description: Returns the number of registered transactions
+operationId: getTransactionsCount
+responses:
+  '200':    # status code
+    description: Transactions count
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            count:
+              type: number
+              example: 15

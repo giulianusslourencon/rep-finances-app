@@ -1,0 +1,8 @@
+TransactionItems:
+  $ref: './TransactionItems.yaml'
+TransactionPayers:
+  $ref: './TransactionPayers.yaml'
+Transaction:
+  $ref: './Transaction.yaml'
+Balance:
+  $ref: './Balance.yaml'

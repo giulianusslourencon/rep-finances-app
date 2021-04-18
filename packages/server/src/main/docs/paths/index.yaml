@@ -1,0 +1,17 @@
+/transactions:
+  get:
+    $ref: './transactions/get.yaml'
+  post:
+    $ref: './transactions/post.yaml'
+
+/transactions/count:
+  get:
+    $ref: './transactionsCount/get.yaml'
+
+/transactions/{id}:
+  get:
+    $ref: './transactionsId/get.yaml'
+
+/balance:
+  get:
+    $ref: './balance/get.yaml'
