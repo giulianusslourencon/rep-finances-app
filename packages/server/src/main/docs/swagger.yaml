@@ -6,14 +6,157 @@ info:
   version: 1.2.1-alpha
 
 servers:
-  - url: https://repsy-api.herokuapp.com/api
+  - url: http://repsy-api.herokuapp.com/api
     description: Production server
+  - url: http://localhost:3333/api
+    description: Internal server
+
+components:
+  schemas:
+    TransactionResume:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        date:
+          type: string
+          format: Date
+        amount:
+          type: number
+        related:
+          type: array
+          items:
+            type: string
+      example:
+        _id: 96986f8d-720d-4ddd-a933-0570d82e71af
+        title: 100h cookie recipe
+        date: 2021-04-17T13:30:00.000Z
+        amount: 30
+        related: [P, FB]
+
+    TransactionItems:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          amount:
+            type: number
+          related_users:
+            type: array
+            items:
+              type: string
+      example:
+        'Brown sugar':
+          amount: 15
+          related_users: [P, FB]
+        'Cat sand':
+          amount: 15
+          related_users: [FB]
+
+    TransactionPayers:
+      type: object
+      additionalProperties:
+        type: number
+      example:
+        P: 10
+        FB: 20
+
+    Transaction:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        date:
+          type: string
+          format: Date
+        items:
+          $ref: '#/components/schemas/TransactionItems'
+        payers:
+          $ref: '#/components/schemas/TransactionPayers'
+        month:
+          type: string
+        amount:
+          type: number
+        related:
+          type: array
+          items:
+            type: string
+      example:
+        _id: 96986f8d-720d-4ddd-a933-0570d82e71af
+        title: 100h cookie recipe
+        date: 2021-04-17T13:30:00.000Z
+        items:
+          'Brown sugar':
+            amount: 15
+            related_users: [P, FB]
+          'Cat sand':
+            amount: 15
+            related_users: [FB]
+        payers:
+          P: 10
+          FB: 20
+        month: 202104
+        amount: 30
+        related: [P, FB]
+
+    TransactionInitialProps:
+      type: object
+      properties:
+        title:
+          type: string
+        timestamp:
+          type: number
+        items:
+          $ref: '#/components/schemas/TransactionItems'
+        payers:
+          $ref: '#/components/schemas/TransactionPayers'
+      example:
+        title: 100h cookie recipe
+        timestamp: 1618666200000
+        items:
+          'Brown sugar':
+            amount: 15
+            related_users: [P, FB]
+          'Cat sand':
+            amount: 15
+            related_users: [FB]
+        payers:
+          P: 10
+          FB: 20
+
+    Balance:
+      type: object
+      additionalProperties:
+        type: number
+      example:
+        P: 2.5
+        FB: -2.5
 
 paths:
   /transactions:
     get:
-      summary: Returns a list of registered transactions.
-      description: Returns a list of reistered transactions paginated by the "page" query (positive number, defaults to 1) and "nItems" query (positive number, defaults to 15)
+      tags:
+        - Finances
+      summary: Returns a list of registered transactions
+      description: Returns a list of registered transactions paginated by the "page" query (positive number, defaults to 1) and "nItems" query (positive number, defaults to 15)
+      operationId: listTransactions
+      parameters:
+        - name: page
+          in: query
+          description: Page number (positive number, defaults to 1)
+          schema:
+            type: integer
+            minimum: 1
+        - name: nItems
+          in: query
+          description: Number of items per page (positive number, defaults to 15)
+          schema:
+            type: integer
+            minimum: 1
       responses:
         '200':    # status code
           description: A JSON array of transaction resumes
@@ -22,4 +165,93 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
+                  $ref: '#/components/schemas/TransactionResume'
+
+    post:
+      tags:
+        - Finances
+      summary: Register a new transaction in the repository
+      description: Register a new transaction in the repository and set the month balance to not updated
+      operationId: createTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionInitialProps'
+      responses:
+        '201':    # status code
+          description: Created, returns the created transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+
+  /transactions/count:
+    get:
+      tags:
+        - Finances
+      summary: Returns the number of registered transactions
+      description: Returns the number of registered transactions
+      operationId: getTransactionsCount
+      responses:
+        '200':    # status code
+          description: Transactions count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: number
+                    example: 15
+
+  /transactions/{id}:
+    get:
+      tags:
+        - Finances
+      summary: Recover a registered transaction by id
+      description: Returns all props of the registered transaction with given id and its balance
+      operationId: getTransactionById
+      parameters:
+        - name: id
+          in: path
+          description: Transaction ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: An object with the transaction props and balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    $ref: '#/components/schemas/Transaction'
+                  balance:
+                    $ref: '#/components/schemas/Balance'
+        '404':
+          description: The transaction was not found
+        default:
+          description: Unexpected error
+
+  /balance:
+    get:
+      tags:
+        - Finances
+      summary: Returns the current balance
+      description: Returns the most updated balance including all registered transactions
+      operationId: getBalance
+      responses:
+        '200':    # status code
+          description: Current balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    $ref: '#/components/schemas/Balance'
+

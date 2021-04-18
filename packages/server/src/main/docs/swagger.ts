@@ -6,5 +6,5 @@ import YAML from 'yamljs'
 const swaggerDocument = YAML.load('src/main/docs/swagger.yaml')
 
 export const setupSwagger = (app: Express): void => {
-  app.get('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 }

@@ -6,8 +6,8 @@ import { setupSwagger } from '@main/docs'
 
 const app = express()
 
-setupMiddleware(app)
 setupSwagger(app)
+setupMiddleware(app)
 setupRoutes(app)
 
 export { app }
