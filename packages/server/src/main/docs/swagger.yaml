@@ -89,6 +89,122 @@ components:
       example:
         P: 2.5
         FB: -2.5
+  responses:
+    InvalidFields:
+      description: The data is invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                    field:
+                      type: string
+                  required:
+                    - message
+            required:
+              - name
+              - errors
+            example:
+              name: InvalidFieldsError
+              errors:
+                - message: 'The id cannot contain special characters, nor can it contain a number in the first position.'
+                  field: items.item1.related_users.__
+                - message: The amount must be a positive number.
+                  field: payers.P.amount
+    InvalidInput:
+      description: The given data does not match with the expected
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                    field:
+                      type: string
+                  required:
+                    - message
+            required:
+              - name
+              - errors
+            example:
+              name: InvalidInputError
+              errors:
+                - message: 'Invalid input: title is a required field'
+                  field: title
+                - message: 'Invalid input: timestamp must be a `number` type, but the final value was: `NaN` (cast from the value `"abacate"`).'
+                  field: timestamp
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                    field:
+                      type: string
+                  required:
+                    - message
+            required:
+              - name
+              - errors
+            example:
+              name: TransactionNotFoundError
+              errors:
+                - message: There is no transaction registered with _id "id-123"
+                  field: _id
+    Server:
+      description: An unexpected condition was encountered
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                    field:
+                      type: string
+                  required:
+                    - message
+            required:
+              - name
+              - errors
+            example:
+              name: ServerError
+              errors:
+                - message: 'Server error: Unexpected error'
 paths:
   /transactions:
     get:
@@ -141,6 +257,10 @@ paths:
                     related:
                       - P
                       - FB
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '500':
+          $ref: '#/components/responses/Server'
     post:
       tags:
         - Finances
@@ -185,6 +305,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Transaction'
+        '400':
+          $ref: '#/components/responses/InvalidInput'
+        '406':
+          $ref: '#/components/responses/InvalidFields'
+        '500':
+          $ref: '#/components/responses/Server'
   /transactions/count:
     get:
       tags:
@@ -203,6 +329,8 @@ paths:
                   count:
                     type: number
                     example: 15
+        '500':
+          $ref: '#/components/responses/Server'
   '/transactions/{id}':
     get:
       tags:
@@ -230,9 +358,9 @@ paths:
                   balance:
                     $ref: '#/components/schemas/Balance'
         '404':
-          description: The transaction was not found
-        default:
-          description: Unexpected error
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/Server'
   /balance:
     get:
       tags:
@@ -250,3 +378,5 @@ paths:
                 properties:
                   balance:
                     $ref: '#/components/schemas/Balance'
+        '500':
+          $ref: '#/components/responses/Server'

@@ -45,3 +45,7 @@ responses:
               date: 2021-04-17T13:30:00.000Z
               amount: 30
               related: [P, FB]
+  '400':
+    $ref: '../../components/responses/InvalidInput.yaml'
+  '500':
+    $ref: '../../components/responses/Server.yaml'

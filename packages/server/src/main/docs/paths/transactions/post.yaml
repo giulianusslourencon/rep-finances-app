@@ -38,3 +38,9 @@ responses:
       application/json:
         schema:
           $ref: '../../components/schemas/Transaction.yaml'
+  '400':
+    $ref: '../../components/responses/InvalidInput.yaml'
+  '406':
+    $ref: '../../components/responses/InvalidFields.yaml'
+  '500':
+    $ref: '../../components/responses/Server.yaml'

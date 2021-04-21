@@ -14,3 +14,5 @@ responses:
             count:
               type: number
               example: 15
+  '500':
+    $ref: '../../components/responses/Server.yaml'

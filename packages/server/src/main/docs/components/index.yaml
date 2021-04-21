@@ -1,2 +1,5 @@
 schemas:
   $ref: './schemas/index.yaml'
+
+responses:
+  $ref: './responses/index.yaml'

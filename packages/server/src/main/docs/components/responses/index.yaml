@@ -1,0 +1,8 @@
+InvalidFields:
+  $ref: './InvalidFields.yaml'
+InvalidInput:
+  $ref: './InvalidInput.yaml'
+NotFound:
+  $ref: './NotFound.yaml'
+Server:
+  $ref: './Server.yaml'

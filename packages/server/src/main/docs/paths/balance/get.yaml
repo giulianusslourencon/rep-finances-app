@@ -13,3 +13,5 @@ responses:
           properties:
             balance:
               $ref: '../../components/schemas/Balance.yaml'
+  '500':
+    $ref: '../../components/responses/Server.yaml'

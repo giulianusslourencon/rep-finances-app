@@ -1,0 +1,29 @@
+description: The data is invalid
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+              field:
+                type: string
+            required:
+              - message
+      required:
+        - name
+        - errors
+      example:
+        name: 'InvalidFieldsError'
+        errors:
+          - message: 'The id cannot contain special characters, nor can it contain a number in the first position.'
+            field: 'items.item1.related_users.__'
+          - message: 'The amount must be a positive number.'
+            field: 'payers.P.amount'

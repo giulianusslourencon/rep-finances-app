@@ -23,6 +23,6 @@ responses:
             balance:
               $ref: '../../components/schemas/Balance.yaml'
   '404':
-    description: The transaction was not found
-  default:
-    description: Unexpected error
+    $ref: '../../components/responses/NotFound.yaml'
+  '500':
+    $ref: '../../components/responses/Server.yaml'

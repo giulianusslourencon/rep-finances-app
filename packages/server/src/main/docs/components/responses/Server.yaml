@@ -1,0 +1,26 @@
+description: An unexpected condition was encountered
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+              field:
+                type: string
+            required:
+              - message
+      required:
+        - name
+        - errors
+      example:
+        name: 'ServerError'
+        errors:
+          - message: 'Server error: Unexpected error'
