@@ -1,3 +1,5 @@
+Error:
+  $ref: './Error.yaml'
 TransactionItems:
   $ref: './TransactionItems.yaml'
 TransactionPayers:

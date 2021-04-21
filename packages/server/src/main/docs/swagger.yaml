@@ -10,6 +10,25 @@ servers:
     description: Internal server
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+              field:
+                type: string
+            required:
+              - message
+      required:
+        - name
+        - errors
     TransactionItems:
       type: object
       additionalProperties:
@@ -95,116 +114,48 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              name:
-                type: string
-              errors:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    message:
-                      type: string
-                    field:
-                      type: string
-                  required:
-                    - message
-            required:
-              - name
-              - errors
-            example:
-              name: InvalidFieldsError
-              errors:
-                - message: 'The id cannot contain special characters, nor can it contain a number in the first position.'
-                  field: items.item1.related_users.__
-                - message: The amount must be a positive number.
-                  field: payers.P.amount
+            $ref: '#/components/schemas/Error'
+          example:
+            name: InvalidFieldsError
+            errors:
+              - message: 'The id cannot contain special characters, nor can it contain a number in the first position.'
+                field: items.item1.related_users.__
+              - message: The amount must be a positive number.
+                field: payers.P.amount
     InvalidInput:
       description: The given data does not match with the expected
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              name:
-                type: string
-              errors:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    message:
-                      type: string
-                    field:
-                      type: string
-                  required:
-                    - message
-            required:
-              - name
-              - errors
-            example:
-              name: InvalidInputError
-              errors:
-                - message: 'Invalid input: title is a required field'
-                  field: title
-                - message: 'Invalid input: timestamp must be a `number` type, but the final value was: `NaN` (cast from the value `"abacate"`).'
-                  field: timestamp
+            $ref: '#/components/schemas/Error'
+          example:
+            name: InvalidInputError
+            errors:
+              - message: 'Invalid input: title is a required field'
+                field: title
+              - message: 'Invalid input: timestamp must be a `number` type, but the final value was: `NaN` (cast from the value `"abacate"`).'
+                field: timestamp
     NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              name:
-                type: string
-              errors:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    message:
-                      type: string
-                    field:
-                      type: string
-                  required:
-                    - message
-            required:
-              - name
-              - errors
-            example:
-              name: TransactionNotFoundError
-              errors:
-                - message: There is no transaction registered with _id "id-123"
-                  field: _id
+            $ref: '#/components/schemas/Error'
+          example:
+            name: TransactionNotFoundError
+            errors:
+              - message: There is no transaction registered with _id "id-123"
+                field: _id
     Server:
       description: An unexpected condition was encountered
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              name:
-                type: string
-              errors:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    message:
-                      type: string
-                    field:
-                      type: string
-                  required:
-                    - message
-            required:
-              - name
-              - errors
-            example:
-              name: ServerError
-              errors:
-                - message: 'Server error: Unexpected error'
+            $ref: '#/components/schemas/Error'
+          example:
+            name: ServerError
+            errors:
+              - message: 'Server error: Unexpected error'
 paths:
   /transactions:
     get:

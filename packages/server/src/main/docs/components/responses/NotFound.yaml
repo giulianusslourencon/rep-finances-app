@@ -2,26 +2,9 @@ description: The specified resource was not found
 content:
   application/json:
     schema:
-      type: object
-      properties:
-        name:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-              field:
-                type: string
-            required:
-              - message
-      required:
-        - name
-        - errors
-      example:
-        name: 'TransactionNotFoundError'
-        errors:
-          - message: 'There is no transaction registered with _id "id-123"'
-            field: '_id'
+      $ref: '../schemas/Error.yaml'
+    example:
+      name: 'TransactionNotFoundError'
+      errors:
+        - message: 'There is no transaction registered with _id "id-123"'
+          field: '_id'

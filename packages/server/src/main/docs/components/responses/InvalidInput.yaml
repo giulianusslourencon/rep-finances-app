@@ -2,28 +2,11 @@ description: The given data does not match with the expected
 content:
   application/json:
     schema:
-      type: object
-      properties:
-        name:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-              field:
-                type: string
-            required:
-              - message
-      required:
-        - name
-        - errors
-      example:
-        name: 'InvalidInputError'
-        errors:
-          - message: 'Invalid input: title is a required field'
-            field: 'title'
-          - message: 'Invalid input: timestamp must be a `number` type, but the final value was: `NaN` (cast from the value `"abacate"`).'
-            field: 'timestamp'
+      $ref: '../schemas/Error.yaml'
+    example:
+      name: 'InvalidInputError'
+      errors:
+        - message: 'Invalid input: title is a required field'
+          field: 'title'
+        - message: 'Invalid input: timestamp must be a `number` type, but the final value was: `NaN` (cast from the value `"abacate"`).'
+          field: 'timestamp'
