@@ -9,7 +9,7 @@ import {
   notFoundError,
   success
 } from '@presentation/controllers/helpers'
-import { ValidatorDummie } from '@presentation/validators'
+import { ValidatorDummie } from '@presentation/controllers/validators'
 import { ErrorViewModel } from '@presentation/viewModels'
 import { TransactionDetailsViewModel } from '@presentation/viewModels/Finances'
 
