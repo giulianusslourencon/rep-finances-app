@@ -1,2 +1,2 @@
-export * from './CreateTransactionValidation'
-export * from './ListTransactionsValidation'
+export * from './CreateTransactionValidator'
+export * from './ListTransactionsValidator'

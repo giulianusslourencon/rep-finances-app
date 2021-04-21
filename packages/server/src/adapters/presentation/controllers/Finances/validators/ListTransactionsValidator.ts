@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 
 import { Either, left, right } from '@shared/types'
 
-export class ListTransactionsValidation implements IValidator {
+export class ListTransactionsValidator implements IValidator {
   format(data: ListQueryViewModel): ListQueryViewModel {
     return {
       month: data.month && data.month.toString(),

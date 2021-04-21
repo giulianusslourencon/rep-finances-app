@@ -4,7 +4,7 @@ import {
   IControllerOperation,
   IValidator
 } from '@presentation/contracts'
-import { CreateTransactionValidation } from '@presentation/controllers/Finances/validators'
+import { CreateTransactionValidator } from '@presentation/controllers/Finances/validators'
 import { invalidFieldsError, success } from '@presentation/controllers/helpers'
 import { ErrorViewModel } from '@presentation/viewModels'
 import {
@@ -18,7 +18,7 @@ export class CreateTransactionControllerOperation
   implements IControllerOperation {
   validator: IValidator
   constructor(private createTransaction: CreateTransaction) {
-    this.validator = new CreateTransactionValidation()
+    this.validator = new CreateTransactionValidator()
   }
 
   async operate(

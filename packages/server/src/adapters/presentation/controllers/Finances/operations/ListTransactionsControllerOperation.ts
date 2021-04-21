@@ -4,7 +4,7 @@ import {
   IControllerOperation,
   IValidator
 } from '@presentation/contracts'
-import { ListTransactionsValidation } from '@presentation/controllers/Finances/validators'
+import { ListTransactionsValidator } from '@presentation/controllers/Finances/validators'
 import { success } from '@presentation/controllers/helpers'
 import { ErrorViewModel } from '@presentation/viewModels'
 import {
@@ -19,7 +19,7 @@ export class ListTransactionsControllerOperation
   implements IControllerOperation {
   validator: IValidator
   constructor(private listTransactions: ListTransactions) {
-    this.validator = new ListTransactionsValidation()
+    this.validator = new ListTransactionsValidator()
   }
 
   async operate(

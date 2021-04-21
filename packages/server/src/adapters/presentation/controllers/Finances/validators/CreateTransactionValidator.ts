@@ -10,7 +10,7 @@ import {
   TransactionPayersProps
 } from '@entities/Finances'
 
-export class CreateTransactionValidation implements IValidator {
+export class CreateTransactionValidator implements IValidator {
   format(data: CreateTransactionViewModel): CreateTransactionViewModel {
     const items: TransactionItemsProps = {}
     for (const [key, value] of Object.entries(data.items)) {
