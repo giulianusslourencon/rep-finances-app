@@ -11,7 +11,7 @@ import {
 } from '@entities/Finances'
 
 export class CreateTransactionValidator implements IValidator {
-  format(data: CreateTransactionViewModel): CreateTransactionViewModel {
+  private format(data: CreateTransactionViewModel): CreateTransactionViewModel {
     const items: TransactionItemsProps = {}
     for (const [key, value] of Object.entries(data.items)) {
       items[key] = {

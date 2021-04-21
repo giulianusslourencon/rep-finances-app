@@ -6,9 +6,9 @@ import * as Yup from 'yup'
 import { Either, left, right } from '@shared/types'
 
 export class ListTransactionsValidator implements IValidator {
-  format(data: ListQueryViewModel): ListQueryViewModel {
+  private format(data: ListQueryViewModel): ListQueryViewModel {
     return {
-      month: data.month && data.month.toString(),
+      month: data.month && data.month.toString().trim(),
       nItems: data.nItems && parseInt(data.nItems.toString()),
       page: data.page && parseInt(data.page.toString())
     }
@@ -23,7 +23,10 @@ export class ListTransactionsValidator implements IValidator {
     const schema = Yup.object().shape({
       page: Yup.number().integer().positive().optional(),
       nItems: Yup.number().integer().positive().optional(),
-      month: Yup.string().length(6).optional()
+      month: Yup.string()
+        .trim()
+        .matches(/^\d{6}$/, 'month must be a number of exactly 6 positions')
+        .optional()
     })
 
     try {
