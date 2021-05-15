@@ -50,7 +50,11 @@ export class CreateTransactionValidator implements IValidator {
         .of(
           Yup.object({
             amount: Yup.number().required(),
-            related_users: Yup.array().of(Yup.string()).required()
+            related_users: Yup.array()
+              .typeError(params => `${params.path} must be a \`array\` type`)
+              .of(Yup.string())
+              .min(1)
+              .required()
           })
         )
         .min(1)
@@ -58,6 +62,7 @@ export class CreateTransactionValidator implements IValidator {
       payers: Yup.array()
         .transform((cur, orig) => this.recordToArray(cur, orig, 'payers'))
         .of(Yup.number().required())
+        .min(1)
         .required()
     })
 
@@ -66,8 +71,10 @@ export class CreateTransactionValidator implements IValidator {
       request.body = this.format(request.body)
       return right(request)
     } catch (error) {
-      const yupError = error as Yup.ValidationError
-      return left(new InvalidInputError(yupError.errors))
+      if (error instanceof Yup.ValidationError) {
+        return left(new InvalidInputError(error.errors))
+      }
+      return left(new InvalidInputError(['unexpected error']))
     }
   }
 }

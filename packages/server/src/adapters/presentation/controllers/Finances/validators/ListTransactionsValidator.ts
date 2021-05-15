@@ -6,14 +6,6 @@ import * as Yup from 'yup'
 import { Either, left, right } from '@shared/types'
 
 export class ListTransactionsValidator implements IValidator {
-  private format(data: ListQueryViewModel): ListQueryViewModel {
-    return {
-      month: data.month && data.month.toString().trim(),
-      nItems: data.nItems && parseInt(data.nItems.toString()),
-      page: data.page && parseInt(data.page.toString())
-    }
-  }
-
   validate(
     request: HttpRequest<Record<string, never>, ListQueryViewModel>
   ): Either<
@@ -30,12 +22,14 @@ export class ListTransactionsValidator implements IValidator {
     })
 
     try {
-      schema.validateSync(request.query)
-      request.query = this.format(request.query)
+      const obj = schema.validateSync(request.query)
+      request.query = obj
       return right(request)
     } catch (error) {
-      const yupError = error as Yup.ValidationError
-      return left(new InvalidInputError(yupError.errors))
+      if (error instanceof Yup.ValidationError) {
+        return left(new InvalidInputError(error.errors))
+      }
+      return left(new InvalidInputError(['unexpected error']))
     }
   }
 }
