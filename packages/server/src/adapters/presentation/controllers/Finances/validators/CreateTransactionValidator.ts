@@ -33,6 +33,12 @@ export class CreateTransactionValidator implements IValidator {
     }
   }
 
+  private recordToArray = (cur: unknown, orig: unknown, field: string) => {
+    if (orig instanceof Object && !(orig instanceof Array))
+      return Object.values(orig)
+    throw new Yup.ValidationError(field + ' must be an `object` type')
+  }
+
   validate(
     request: HttpRequest<CreateTransactionViewModel>
   ): Either<InvalidInputError, HttpRequest<CreateTransactionViewModel>> {
@@ -40,16 +46,17 @@ export class CreateTransactionValidator implements IValidator {
       title: Yup.string().required(),
       timestamp: Yup.number().required(),
       items: Yup.array()
-        .transform((_, orig) => Object.values(orig))
+        .transform((cur, orig) => this.recordToArray(cur, orig, 'items'))
         .of(
           Yup.object({
             amount: Yup.number().required(),
-            related_users: Yup.array().of(Yup.string())
+            related_users: Yup.array().of(Yup.string()).required()
           })
         )
+        .min(1)
         .required(),
       payers: Yup.array()
-        .transform((_, orig) => Object.values(orig))
+        .transform((cur, orig) => this.recordToArray(cur, orig, 'payers'))
         .of(Yup.number().required())
         .required()
     })
