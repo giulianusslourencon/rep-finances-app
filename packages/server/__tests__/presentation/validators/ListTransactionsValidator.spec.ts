@@ -1,22 +1,22 @@
-import { HttpRequest } from '@presentation/contracts'
+import { InvalidInputError } from '@presentation/controllers/errors'
 import { ListTransactionsValidator } from '@presentation/controllers/Finances/validators'
 
-import { left, right } from '@shared/types'
+import { right } from '@shared/types'
+
+import { HttpRequestBuilder } from '@tests/builders'
 
 describe('List Transactions Validator', () => {
   describe('Success Cases', () => {
     it('Should allow valid parameters', () => {
       const validator = new ListTransactionsValidator()
 
-      const request: HttpRequest = {
-        body: {},
-        query: {
+      const request = HttpRequestBuilder.anHttpRequest()
+        .withQuery({
           month: '202106',
           page: 3,
           nItems: 20
-        },
-        params: {}
-      }
+        })
+        .build()
 
       const response = validator.validate(request)
 
@@ -26,11 +26,7 @@ describe('List Transactions Validator', () => {
     it('Should allow without the optional parameters', () => {
       const validator = new ListTransactionsValidator()
 
-      const request: HttpRequest = {
-        body: {},
-        query: {},
-        params: {}
-      }
+      const request = HttpRequestBuilder.anHttpRequest().build()
 
       const response = validator.validate(request)
 
@@ -40,15 +36,13 @@ describe('List Transactions Validator', () => {
     it('Should format the parameters', () => {
       const validator = new ListTransactionsValidator()
 
-      const request: HttpRequest = {
-        body: {},
-        query: {
+      const request = HttpRequestBuilder.anHttpRequest()
+        .withQuery({
           month: 202106,
           page: '3',
           nItems: '20  '
-        },
-        params: {}
-      }
+        })
+        .build()
 
       const response = validator.validate(request)
 
@@ -71,54 +65,35 @@ describe('List Transactions Validator', () => {
       it('Should return a invalid input error if the "page" query is not a number', () => {
         const validator = new ListTransactionsValidator()
 
-        const request: HttpRequest = {
-          body: {},
-          query: {
+        const request = HttpRequestBuilder.anHttpRequest()
+          .withQuery({
             page: 'aa'
-          },
-          params: {}
-        }
+          })
+          .build()
 
         const response = validator.validate(request)
 
-        expect(response).toEqual(
-          left({
-            name: 'InvalidInputError',
-            errors: [
-              {
-                field: 'page',
-                message:
-                  'Invalid input: page must be a `number` type, but the final value was: `NaN` (cast from the value `"aa"`).'
-              }
-            ]
-          })
-        )
+        expect(response.isLeft()).toBeTruthy()
+        const error = response.value as InvalidInputError
+        expect(error.name).toBe('InvalidInputError')
+        expect(error.errors[0].field).toBe('page')
       })
 
       it('Should return a invalid input error if the "page" query is non-positive', () => {
         const validator = new ListTransactionsValidator()
 
-        const request: HttpRequest = {
-          body: {},
-          query: {
+        const request = HttpRequestBuilder.anHttpRequest()
+          .withQuery({
             page: -1
-          },
-          params: {}
-        }
+          })
+          .build()
 
         const response = validator.validate(request)
 
-        expect(response).toEqual(
-          left({
-            name: 'InvalidInputError',
-            errors: [
-              {
-                field: 'page',
-                message: 'Invalid input: page must be a positive number'
-              }
-            ]
-          })
-        )
+        expect(response.isLeft()).toBeTruthy()
+        const error = response.value as InvalidInputError
+        expect(error.name).toBe('InvalidInputError')
+        expect(error.errors[0].field).toBe('page')
       })
     })
 
@@ -126,54 +101,35 @@ describe('List Transactions Validator', () => {
       it('Should return a invalid input error if the "nItems" query is not a number', () => {
         const validator = new ListTransactionsValidator()
 
-        const request: HttpRequest = {
-          body: {},
-          query: {
+        const request = HttpRequestBuilder.anHttpRequest()
+          .withQuery({
             nItems: 'aa'
-          },
-          params: {}
-        }
+          })
+          .build()
 
         const response = validator.validate(request)
 
-        expect(response).toEqual(
-          left({
-            name: 'InvalidInputError',
-            errors: [
-              {
-                field: 'nItems',
-                message:
-                  'Invalid input: nItems must be a `number` type, but the final value was: `NaN` (cast from the value `"aa"`).'
-              }
-            ]
-          })
-        )
+        expect(response.isLeft()).toBeTruthy()
+        const error = response.value as InvalidInputError
+        expect(error.name).toBe('InvalidInputError')
+        expect(error.errors[0].field).toBe('nItems')
       })
 
       it('Should return a invalid input error if the "nItems" query is non-positive', () => {
         const validator = new ListTransactionsValidator()
 
-        const request: HttpRequest = {
-          body: {},
-          query: {
+        const request = HttpRequestBuilder.anHttpRequest()
+          .withQuery({
             nItems: 0
-          },
-          params: {}
-        }
+          })
+          .build()
 
         const response = validator.validate(request)
 
-        expect(response).toEqual(
-          left({
-            name: 'InvalidInputError',
-            errors: [
-              {
-                field: 'nItems',
-                message: 'Invalid input: nItems must be a positive number'
-              }
-            ]
-          })
-        )
+        expect(response.isLeft()).toBeTruthy()
+        const error = response.value as InvalidInputError
+        expect(error.name).toBe('InvalidInputError')
+        expect(error.errors[0].field).toBe('nItems')
       })
     })
 
@@ -181,82 +137,52 @@ describe('List Transactions Validator', () => {
       it('Should return a invalid input error if the "month" query is not a number', () => {
         const validator = new ListTransactionsValidator()
 
-        const request: HttpRequest = {
-          body: {},
-          query: {
+        const request = HttpRequestBuilder.anHttpRequest()
+          .withQuery({
             month: '1A2B3C'
-          },
-          params: {}
-        }
+          })
+          .build()
 
         const response = validator.validate(request)
 
-        expect(response).toEqual(
-          left({
-            name: 'InvalidInputError',
-            errors: [
-              {
-                field: 'month',
-                message:
-                  'Invalid input: month must be a number of exactly 6 positions'
-              }
-            ]
-          })
-        )
+        expect(response.isLeft()).toBeTruthy()
+        const error = response.value as InvalidInputError
+        expect(error.name).toBe('InvalidInputError')
+        expect(error.errors[0].field).toBe('month')
       })
 
       it('Should return a invalid input error if the "month" has less than 6 positions', () => {
         const validator = new ListTransactionsValidator()
 
-        const request: HttpRequest = {
-          body: {},
-          query: {
+        const request = HttpRequestBuilder.anHttpRequest()
+          .withQuery({
             month: '20210'
-          },
-          params: {}
-        }
+          })
+          .build()
 
         const response = validator.validate(request)
 
-        expect(response).toEqual(
-          left({
-            name: 'InvalidInputError',
-            errors: [
-              {
-                field: 'month',
-                message:
-                  'Invalid input: month must be a number of exactly 6 positions'
-              }
-            ]
-          })
-        )
+        expect(response.isLeft()).toBeTruthy()
+        const error = response.value as InvalidInputError
+        expect(error.name).toBe('InvalidInputError')
+        expect(error.errors[0].field).toBe('month')
       })
 
       it('Should return a invalid input error if the "month" has more than 6 positions', () => {
         const validator = new ListTransactionsValidator()
 
-        const request: HttpRequest = {
-          body: {},
-          query: {
+        const request = HttpRequestBuilder.anHttpRequest()
+          .withQuery({
             month: '2021060  '
-          },
-          params: {}
-        }
+          })
+          .build()
 
         const response = validator.validate(request)
 
-        expect(response).toEqual(
-          left({
-            name: 'InvalidInputError',
-            errors: [
-              {
-                field: 'month',
-                message:
-                  'Invalid input: month must be a number of exactly 6 positions'
-              }
-            ]
-          })
-        )
+        expect(response.isLeft()).toBeTruthy()
+        const error = response.value as InvalidInputError
+        expect(error.name).toBe('InvalidInputError')
+        expect(error.errors[0].field).toBe('month')
       })
     })
   })
