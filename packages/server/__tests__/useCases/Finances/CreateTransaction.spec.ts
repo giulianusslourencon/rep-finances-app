@@ -1,4 +1,4 @@
-import { TransactionInitialPropsBuilder } from '@tests/builders'
+import { TransactionInitialPropsBuilder } from '@tests/builders/Finances'
 import {
   SetupBalanceDatabase,
   SetupTransactionsDatabase

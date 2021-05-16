@@ -1,4 +1,4 @@
-import { TransactionBuilder } from '@tests/builders'
+import { TransactionBuilder } from '@tests/builders/Finances'
 import { SetupTransactionsDatabase } from '@tests/external/mongodb'
 import { transactions } from '@tests/external/mongodb/data'
 

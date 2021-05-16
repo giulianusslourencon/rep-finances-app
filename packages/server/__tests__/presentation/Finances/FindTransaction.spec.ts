@@ -5,7 +5,7 @@ import { TransactionDetailsViewModel } from '@presentation/viewModels/Finances'
 
 import { left, right } from '@shared/types'
 
-import { TransactionBuilder } from '@tests/builders'
+import { TransactionBuilder } from '@tests/builders/Finances'
 
 import { TransactionProps } from '@entities/Finances'
 

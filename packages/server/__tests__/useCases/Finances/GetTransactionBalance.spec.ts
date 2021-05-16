@@ -1,6 +1,6 @@
-import { TransactionInitialPropsBuilder } from '@tests/builders'
-
 import { right } from '@shared/types'
+
+import { TransactionInitialPropsBuilder } from '@tests/builders/Finances'
 
 import { GetTransactionBalanceUseCase } from '@useCases/Finances/implementations'
 

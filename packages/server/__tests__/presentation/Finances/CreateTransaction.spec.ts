@@ -7,7 +7,7 @@ import { left, right } from '@shared/types'
 import {
   TransactionBuilder,
   TransactionInitialPropsBuilder
-} from '@tests/builders'
+} from '@tests/builders/Finances'
 
 import {
   CreateTransaction,
