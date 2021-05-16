@@ -47,7 +47,7 @@ export const invalidFieldsError = (
   }
 })
 
-export const serverError = (reason: string): HttpResponse<ErrorViewModel> => ({
+export const serverError = (reason?: string): HttpResponse<ErrorViewModel> => ({
   statusCode: 500,
   body: new ServerError(reason || 'Unexpected error')
 })
