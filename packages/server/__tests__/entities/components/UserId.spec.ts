@@ -1,5 +1,5 @@
 import { UserId } from '@entities/components'
-import { EntityErrorHandler, InvalidError } from '@entities/errors'
+import { EntityErrorHandler } from '@entities/errors'
 
 describe('User Id Entity', () => {
   describe('Success Cases', () => {
@@ -26,11 +26,6 @@ describe('User Id Entity', () => {
       UserId.create('aaaaa', errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.firstError).toEqual<InvalidError>({
-        name: 'InvalidUserIdError',
-        value: 'aaaaa',
-        reason: 'The user id must contain between 1 and 2 characteres.'
-      })
     })
 
     it('Should not allow null trimmed string', () => {
@@ -38,11 +33,6 @@ describe('User Id Entity', () => {
       UserId.create(' ', errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.firstError).toEqual<InvalidError>({
-        name: 'InvalidUserIdError',
-        value: ' ',
-        reason: 'The user id must contain between 1 and 2 characteres.'
-      })
     })
 
     it('Should not allow special characteres', () => {
@@ -50,12 +40,6 @@ describe('User Id Entity', () => {
       UserId.create('@2', errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.firstError).toEqual<InvalidError>({
-        name: 'InvalidUserIdError',
-        value: '@2',
-        reason:
-          'The id cannot contain special characters, nor can it contain a number in the first position.'
-      })
     })
 
     it('Should not allow strings started in numbers', () => {
@@ -63,12 +47,6 @@ describe('User Id Entity', () => {
       UserId.create('2a', errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.firstError).toEqual<InvalidError>({
-        name: 'InvalidUserIdError',
-        value: '2a',
-        reason:
-          'The id cannot contain special characters, nor can it contain a number in the first position.'
-      })
     })
   })
 })

@@ -1,4 +1,4 @@
-import { EntityErrorHandler, InvalidFields } from '@entities/errors'
+import { EntityErrorHandler } from '@entities/errors'
 import { RelatedList } from '@entities/Finances'
 
 describe('Related List Entity', () => {
@@ -20,17 +20,8 @@ describe('Related List Entity', () => {
       RelatedList.create(related_users, errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.errors).toEqual<InvalidFields>([
-        {
-          field: '@',
-          error: {
-            name: 'InvalidUserIdError',
-            value: '@',
-            reason:
-              'The id cannot contain special characters, nor can it contain a number in the first position.'
-          }
-        }
-      ])
+      expect(errorHandler.errors[0].field).toBe('@')
+      expect(errorHandler.errors[0].error.name).toBe('InvalidUserIdError')
     })
 
     it('Should not allow an empty list', () => {
@@ -38,44 +29,18 @@ describe('Related List Entity', () => {
       RelatedList.create([], errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.errors).toEqual<InvalidFields>([
-        {
-          error: {
-            name: 'InvalidRelatedListError',
-            value: '',
-            reason: 'There must be at least one item in the related list.'
-          },
-          field: ''
-        }
-      ])
+      expect(errorHandler.errors[0].field).toBe('')
+      expect(errorHandler.errors[0].error.name).toBe('InvalidRelatedListError')
     })
 
     it('Should not allow duplicated ids in a list', () => {
       const errorHandler = new EntityErrorHandler()
-      const related_users = ['P', 'p ', 'g', 'G']
+      const related_users = ['P', 'p ', 'g']
       RelatedList.create(related_users, errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.errors).toEqual<InvalidFields>([
-        {
-          field: 'p ',
-          error: {
-            name: 'InvalidRelatedListError',
-            value: 'P',
-            reason:
-              'There cannot be two items in the related list with the same id.'
-          }
-        },
-        {
-          field: 'G',
-          error: {
-            name: 'InvalidRelatedListError',
-            value: 'G',
-            reason:
-              'There cannot be two items in the related list with the same id.'
-          }
-        }
-      ])
+      expect(errorHandler.errors[0].field).toBe('p ')
+      expect(errorHandler.errors[0].error.name).toBe('InvalidRelatedListError')
     })
   })
 })

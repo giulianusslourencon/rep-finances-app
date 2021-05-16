@@ -1,5 +1,5 @@
 import { Amount } from '@entities/components'
-import { EntityErrorHandler, InvalidError } from '@entities/errors'
+import { EntityErrorHandler } from '@entities/errors'
 
 describe('Amount Entity', () => {
   describe('Success Cases', () => {
@@ -18,11 +18,6 @@ describe('Amount Entity', () => {
       Amount.create(-5, errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.firstError).toEqual<InvalidError>({
-        name: 'InvalidAmountError',
-        value: '-5',
-        reason: 'The amount must be a positive number.'
-      })
     })
 
     it('Should not allow zero', () => {
@@ -30,11 +25,6 @@ describe('Amount Entity', () => {
       Amount.create(0, errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.firstError).toEqual<InvalidError>({
-        name: 'InvalidAmountError',
-        value: '0',
-        reason: 'The amount must be a positive number.'
-      })
     })
 
     it('Should not allow NaN', () => {
@@ -42,11 +32,6 @@ describe('Amount Entity', () => {
       Amount.create(NaN, errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.firstError).toEqual<InvalidError>({
-        name: 'InvalidAmountError',
-        value: 'NaN',
-        reason: 'The amount must be a positive number.'
-      })
     })
   })
 })

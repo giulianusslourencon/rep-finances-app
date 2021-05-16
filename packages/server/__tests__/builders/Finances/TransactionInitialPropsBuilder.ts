@@ -1,3 +1,5 @@
+import { TransactionInitProps } from '@entities/Finances'
+
 import { CreateTransactionProps } from '@useCases/Finances/ports/CreateTransaction'
 
 export class TransactionInitialPropsBuilder {
@@ -24,7 +26,31 @@ export class TransactionInitialPropsBuilder {
     return this
   }
 
+  withInvalidTimestamp = (): TransactionInitialPropsBuilder => {
+    this.transaction.timestamp = NaN
+    return this
+  }
+
+  withInvalidItems = (): TransactionInitialPropsBuilder => {
+    this.transaction.items.item.related_users[1] = '__'
+    return this
+  }
+
+  withInvalidPayers = (): TransactionInitialPropsBuilder => {
+    this.transaction.payers.P = -20
+    return this
+  }
+
+  withInvalidPayment = (): TransactionInitialPropsBuilder => {
+    this.transaction.payers.P = 20
+    return this
+  }
+
   build = (): CreateTransactionProps => {
     return this.transaction
+  }
+
+  buildWithId = (): TransactionInitProps => {
+    return { ...this.transaction, id: 'id' }
   }
 }

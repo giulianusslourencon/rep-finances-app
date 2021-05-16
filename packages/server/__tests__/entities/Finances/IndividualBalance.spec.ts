@@ -1,4 +1,4 @@
-import { EntityErrorHandler, InvalidFields } from '@entities/errors'
+import { EntityErrorHandler } from '@entities/errors'
 import { IndividualBalance, IndividualBalanceProps } from '@entities/Finances'
 
 describe('Individual Balance Entity', () => {
@@ -28,16 +28,8 @@ describe('Individual Balance Entity', () => {
       IndividualBalance.create(balance, errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.errors).toEqual<InvalidFields>([
-        {
-          field: 'AAAAA',
-          error: {
-            name: 'InvalidUserIdError',
-            value: 'AAAAA',
-            reason: 'The user id must contain between 1 and 2 characteres.'
-          }
-        }
-      ])
+      expect(errorHandler.errors[0].field).toBe('AAAAA')
+      expect(errorHandler.errors[0].error.name).toBe('InvalidUserIdError')
     })
   })
 })

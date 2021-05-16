@@ -1,5 +1,5 @@
 import { Name } from '@entities/components'
-import { EntityErrorHandler, InvalidError } from '@entities/errors'
+import { EntityErrorHandler } from '@entities/errors'
 
 describe('Name Entity', () => {
   describe('Success Cases', () => {
@@ -18,11 +18,6 @@ describe('Name Entity', () => {
       Name.create('A', errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.firstError).toEqual<InvalidError>({
-        name: 'InvalidNameError',
-        value: 'A',
-        reason: 'The name must contain between 2 and 64 characteres.'
-      })
     })
 
     it('Should not allow names with too many characteres', () => {
@@ -31,11 +26,6 @@ describe('Name Entity', () => {
       Name.create(title, errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.firstError).toEqual<InvalidError>({
-        name: 'InvalidNameError',
-        value: title,
-        reason: 'The name must contain between 2 and 64 characteres.'
-      })
     })
 
     it('Should not allow names with only blank spaces', () => {
@@ -43,11 +33,6 @@ describe('Name Entity', () => {
       Name.create('   ', errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.firstError).toEqual<InvalidError>({
-        name: 'InvalidNameError',
-        value: '   ',
-        reason: 'The name must contain between 2 and 64 characteres.'
-      })
     })
   })
 })
