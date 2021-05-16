@@ -2,7 +2,7 @@ import { SetupTransactionsDatabase } from '@tests/external/mongodb'
 
 import { TransactionProps } from '@entities/Finances'
 
-import { UseCaseError } from '@useCases/errors'
+import { NotFoundError } from '@useCases/errors'
 import { FindTransactionUseCase } from '@useCases/Finances/implementations'
 
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations'
@@ -43,12 +43,11 @@ describe('Find Transaction Use Case', () => {
         id: 'opa'
       })
 
-      expect(notFoundTransaction.value).toEqual<UseCaseError>({
-        name: 'TransactionNotFoundError',
-        key: 'id',
-        value: 'opa',
-        message: 'There is no transaction registered with id "opa"'
-      })
+      expect(notFoundTransaction.isLeft()).toBeTruthy()
+      const error = notFoundTransaction.value as NotFoundError
+      expect(error.name).toBe('TransactionNotFoundError')
+      expect(error.key).toBe('id')
+      expect(error.value).toBe('opa')
     })
   })
 })

@@ -82,16 +82,10 @@ describe('Create Transaction Use Case', () => {
         TransactionInitialPropsBuilder.aTransaction().withInvalidTitle().build()
       )
 
-      expect(transactionError.value).toEqual<InvalidFields>([
-        {
-          field: 'title',
-          error: {
-            name: 'InvalidNameError',
-            value: 'A',
-            reason: 'The name must contain between 2 and 64 characteres.'
-          }
-        }
-      ])
+      expect(transactionError.isLeft()).toBeTruthy()
+      const errors = transactionError.value as InvalidFields
+      expect(errors[0].field).toBe('title')
+      expect(errors[0].error.name).toBe('InvalidNameError')
 
       const monthBalances = await BalanceModel.find({}).lean()
       for (const balance of monthBalances) {
