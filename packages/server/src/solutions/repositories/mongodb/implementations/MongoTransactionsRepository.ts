@@ -1,10 +1,10 @@
-import { TransactionAttributes } from '@repositories/attributes'
-import { MongoRepository } from '@repositories/mongodb/implementations'
-import { TransactionModel } from '@repositories/mongodb/schemas'
-import { ITransactionsRepository } from '@repositories/ports'
-
 import { TransactionList } from '@useCases/Finances/ports/ListTransactions'
 import { ItemsAndPayersList } from '@useCases/Finances/ports/UpdateRegisteredBalance'
+
+import { MongoRepository } from '@repositories/mongodb/implementations'
+import { TransactionModel } from '@repositories/mongodb/models'
+import { ITransactionsRepository } from '@repositories/ports'
+import { TransactionSchema } from '@repositories/schemas'
 
 export class MongoTransactionsRepository
   extends MongoRepository
@@ -52,13 +52,11 @@ export class MongoTransactionsRepository
     ).lean()
   }
 
-  async findById(
-    id: string
-  ): Promise<TransactionAttributes | null | undefined> {
+  async findById(id: string): Promise<TransactionSchema | null | undefined> {
     return await TransactionModel.findById(id).lean()
   }
 
-  async save(transaction: TransactionAttributes): Promise<void> {
+  async save(transaction: TransactionSchema): Promise<void> {
     await TransactionModel.create(transaction)
   }
 

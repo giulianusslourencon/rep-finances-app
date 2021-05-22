@@ -4,7 +4,7 @@ export type MonthBalance = {
   individual_balance: IndividualBalanceProps
 }
 
-export type BalanceAttributes = MonthBalance & {
+export type BalanceSchema = MonthBalance & {
   _id: string
   updated: boolean
 }

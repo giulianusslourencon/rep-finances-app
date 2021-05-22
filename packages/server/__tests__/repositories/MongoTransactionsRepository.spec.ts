@@ -1,11 +1,11 @@
-import { TransactionBuilder } from '@tests/builders/Finances'
-import { SetupTransactionsDatabase } from '@tests/external/mongodb'
-import { transactions } from '@tests/external/mongodb/data'
+import { TransactionBuilder } from '@tests/__helpers__/builders/Finances'
+import { SetupTransactionsDatabase } from '@tests/__helpers__/solutions/mongodb'
+import { transactions } from '@tests/__helpers__/solutions/mongodb/data'
 
 import { TransactionProps } from '@entities/Finances'
 
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations'
-import { TransactionModel } from '@repositories/mongodb/schemas'
+import { TransactionModel } from '@repositories/mongodb/models'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const TransactionsSetup = new SetupTransactionsDatabase(TransactionModel)

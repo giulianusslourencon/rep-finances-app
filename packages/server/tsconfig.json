@@ -15,14 +15,14 @@
       "@useCases/*": [
         "src/useCases/*"
       ],
-      "@utils/*": [
-        "src/adapters/utils/*"
-      ],
       "@presentation/*": [
-        "src/adapters/presentation/*"
+        "src/presentation/*"
+      ],
+      "@utils/*": [
+        "src/solutions/utils/*"
       ],
       "@repositories/*": [
-        "src/adapters/repositories/*"
+        "src/solutions/repositories/*"
       ],
       "@main/*": [
         "src/main/*"

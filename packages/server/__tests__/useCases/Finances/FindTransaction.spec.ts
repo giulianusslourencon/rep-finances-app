@@ -1,4 +1,4 @@
-import { SetupTransactionsDatabase } from '@tests/external/mongodb'
+import { SetupTransactionsDatabase } from '@tests/__helpers__/solutions/mongodb'
 
 import { TransactionProps } from '@entities/Finances'
 
@@ -6,7 +6,7 @@ import { NotFoundError } from '@useCases/errors'
 import { FindTransactionUseCase } from '@useCases/Finances/implementations'
 
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations'
-import { TransactionModel } from '@repositories/mongodb/schemas'
+import { TransactionModel } from '@repositories/mongodb/models'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const findTransactionUseCase = new FindTransactionUseCase(MongoTransactions)

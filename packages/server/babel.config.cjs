@@ -17,10 +17,10 @@ module.exports = {
         '@shared': './src/shared',
         '@entities': './src/entities',
         '@useCases': './src/useCases',
-        '@utils': './src/adapters/utils',
-        '@presentation': './src/adapters/presentation',
-        '@repositories': './src/adapters/repositories',
-        '@main': './src/main',
+        '@presentation': './src/presentation',
+        '@utils': './src/solutions/utils',
+        '@repositories': './src/solutions/repositories',
+        '@main': './src/main'
       }
     }],
     ["babel-plugin-add-import-extension", { extension: "mjs" }]

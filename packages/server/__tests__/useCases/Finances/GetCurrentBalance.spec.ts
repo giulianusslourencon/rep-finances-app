@@ -1,8 +1,8 @@
 import {
   SetupBalanceDatabase,
   SetupTransactionsDatabase
-} from '@tests/external/mongodb'
-import { updatedBalance } from '@tests/external/mongodb/data'
+} from '@tests/__helpers__/solutions/mongodb'
+import { updatedBalance } from '@tests/__helpers__/solutions/mongodb/data'
 
 import {
   GetCurrentBalanceUseCase,
@@ -13,7 +13,7 @@ import {
   MongoBalanceRepository,
   MongoTransactionsRepository
 } from '@repositories/mongodb/implementations'
-import { BalanceModel, TransactionModel } from '@repositories/mongodb/schemas'
+import { BalanceModel, TransactionModel } from '@repositories/mongodb/models'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const MongoBalance = new MongoBalanceRepository()

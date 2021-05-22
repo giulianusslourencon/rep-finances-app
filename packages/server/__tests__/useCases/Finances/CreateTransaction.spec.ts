@@ -1,9 +1,9 @@
-import { TransactionInitialPropsBuilder } from '@tests/builders/Finances'
+import { TransactionInitialPropsBuilder } from '@tests/__helpers__/builders/Finances'
 import {
   SetupBalanceDatabase,
   SetupTransactionsDatabase
-} from '@tests/external/mongodb'
-import { makeIdGeneratorStub } from '@tests/external/utils'
+} from '@tests/__helpers__/solutions/mongodb'
+import { makeIdGeneratorStub } from '@tests/__helpers__/solutions/utils'
 
 import { InvalidFields } from '@entities/errors'
 import { TransactionProps } from '@entities/Finances'
@@ -14,7 +14,7 @@ import {
   MongoBalanceRepository,
   MongoTransactionsRepository
 } from '@repositories/mongodb/implementations'
-import { BalanceModel, TransactionModel } from '@repositories/mongodb/schemas'
+import { BalanceModel, TransactionModel } from '@repositories/mongodb/models'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const MongoBalance = new MongoBalanceRepository()

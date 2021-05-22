@@ -1,6 +1,6 @@
 import { CountTransactionsControllerOperation } from '@presentation/controllers/Finances/operations'
 
-import { HttpRequestBuilder } from '@tests/builders'
+import { HttpRequestBuilder } from '@tests/__helpers__/builders'
 
 import {
   CountTransactions,

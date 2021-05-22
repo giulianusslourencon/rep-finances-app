@@ -1,9 +1,9 @@
-import { SetupBalanceDatabase } from '@tests/external/mongodb'
-import { balance } from '@tests/external/mongodb/data'
+import { SetupBalanceDatabase } from '@tests/__helpers__/solutions/mongodb'
+import { balance } from '@tests/__helpers__/solutions/mongodb/data'
 
-import { MonthBalance, BalanceAttributes } from '@repositories/attributes'
 import { MongoBalanceRepository } from '@repositories/mongodb/implementations'
-import { BalanceModel } from '@repositories/mongodb/schemas'
+import { BalanceModel } from '@repositories/mongodb/models'
+import { MonthBalance, BalanceSchema } from '@repositories/schemas'
 
 const MongoBalance = new MongoBalanceRepository()
 const BalanceSetup = new SetupBalanceDatabase(BalanceModel)
@@ -36,10 +36,10 @@ describe('Mongo Balance Repository', () => {
 
       const updatedMonth = await BalanceModel.findById('202012').lean()
 
-      expect(
-        (<BalanceAttributes>updatedMonth).individual_balance
-      ).toStrictEqual(updatedBalance.individual_balance)
-      expect((<BalanceAttributes>updatedMonth).updated).toBeTruthy()
+      expect((<BalanceSchema>updatedMonth).individual_balance).toStrictEqual(
+        updatedBalance.individual_balance
+      )
+      expect((<BalanceSchema>updatedMonth).updated).toBeTruthy()
     })
 
     it('Should create a new month if not exists', async () => {
@@ -57,10 +57,10 @@ describe('Mongo Balance Repository', () => {
       const updatedMonth = await BalanceModel.findById('202101').lean()
 
       expect(updatedMonth).toBeTruthy()
-      expect(
-        (<BalanceAttributes>updatedMonth).individual_balance
-      ).toStrictEqual(updatedBalance.individual_balance)
-      expect((<BalanceAttributes>updatedMonth).updated).toBeTruthy()
+      expect((<BalanceSchema>updatedMonth).individual_balance).toStrictEqual(
+        updatedBalance.individual_balance
+      )
+      expect((<BalanceSchema>updatedMonth).updated).toBeTruthy()
     })
   })
 

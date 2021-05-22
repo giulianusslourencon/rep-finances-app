@@ -14,7 +14,7 @@ import {
 
 import { Either, right, left } from '@shared/types'
 
-import { HttpRequestBuilder } from '@tests/builders'
+import { HttpRequestBuilder } from '@tests/__helpers__/builders'
 
 interface ISutType {
   sut: Controller

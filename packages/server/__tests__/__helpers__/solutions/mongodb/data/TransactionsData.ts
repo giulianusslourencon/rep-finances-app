@@ -1,6 +1,6 @@
-import { TransactionAttributes } from '@repositories/attributes'
+import { TransactionSchema } from '@repositories/schemas'
 
-export const transactions: TransactionAttributes[] = [
+export const transactions: TransactionSchema[] = [
   {
     _id: '20201219',
     amount: 50,

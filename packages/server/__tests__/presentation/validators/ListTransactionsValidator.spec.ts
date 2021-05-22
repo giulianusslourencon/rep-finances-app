@@ -3,7 +3,7 @@ import { ListTransactionsValidator } from '@presentation/controllers/Finances/va
 
 import { right } from '@shared/types'
 
-import { HttpRequestBuilder } from '@tests/builders'
+import { HttpRequestBuilder } from '@tests/__helpers__/builders'
 
 describe('List Transactions Validator', () => {
   describe('Success Cases', () => {

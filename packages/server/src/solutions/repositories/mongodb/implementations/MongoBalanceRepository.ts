@@ -1,7 +1,7 @@
-import { MonthBalance } from '@repositories/attributes'
 import { MongoRepository } from '@repositories/mongodb/implementations'
-import { BalanceModel } from '@repositories/mongodb/schemas'
+import { BalanceModel } from '@repositories/mongodb/models'
 import { IBalanceRepository } from '@repositories/ports'
+import { MonthBalance } from '@repositories/schemas'
 
 export class MongoBalanceRepository
   extends MongoRepository

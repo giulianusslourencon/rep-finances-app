@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
 
-import { TransactionAttributes } from '@repositories/attributes'
+import { TransactionSchema } from '@repositories/schemas'
 
-export type TransactionDocument = mongoose.Document & TransactionAttributes
+export type TransactionDocument = mongoose.Document & TransactionSchema
 
-const TransactionSchema = new mongoose.Schema({
+const TransactionMongooseSchema = new mongoose.Schema({
   _id: {
     type: String,
     trim: true
@@ -45,5 +45,5 @@ const TransactionSchema = new mongoose.Schema({
 
 export const TransactionModel = mongoose.model<TransactionDocument>(
   'Transaction',
-  TransactionSchema
+  TransactionMongooseSchema
 )

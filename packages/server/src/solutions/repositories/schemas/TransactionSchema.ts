@@ -1,3 +1,3 @@
 import { TransactionProps } from '@entities/Finances'
 
-export type TransactionAttributes = TransactionProps
+export type TransactionSchema = TransactionProps

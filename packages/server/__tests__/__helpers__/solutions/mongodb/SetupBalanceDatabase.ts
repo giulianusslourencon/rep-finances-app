@@ -1,8 +1,11 @@
 import { Model } from 'mongoose'
 
-import { balance, updatedBalance } from '@tests/external/mongodb/data'
+import {
+  balance,
+  updatedBalance
+} from '@tests/__helpers__/solutions/mongodb/data'
 
-import { BalanceDocument } from '@repositories/mongodb/schemas'
+import { BalanceDocument } from '@repositories/mongodb/models'
 
 export class SetupBalanceDatabase {
   constructor(private BalanceModel: Model<BalanceDocument>) {}
