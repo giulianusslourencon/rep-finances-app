@@ -3,12 +3,11 @@ import { SetupTransactionsDatabase } from '@tests/__helpers__/solutions/mongodb'
 import { ListTransactionsUseCase } from '@useCases/Finances/implementations'
 
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations'
-import { TransactionModel } from '@repositories/mongodb/models'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const listTransactionsUseCase = new ListTransactionsUseCase(MongoTransactions)
 
-const TransactionsSetup = new SetupTransactionsDatabase(TransactionModel)
+const TransactionsSetup = new SetupTransactionsDatabase()
 
 describe('List Transactions Use Case', () => {
   beforeAll(async () => {

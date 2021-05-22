@@ -13,7 +13,7 @@ import {
   MongoBalanceRepository,
   MongoTransactionsRepository
 } from '@repositories/mongodb/implementations'
-import { BalanceModel, TransactionModel } from '@repositories/mongodb/models'
+import { BalanceModel } from '@repositories/mongodb/models'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const MongoBalance = new MongoBalanceRepository()
@@ -28,8 +28,8 @@ const getCurrentBalanceUseCase = new GetCurrentBalanceUseCase(
   updateRegisteredBalanceUseCase
 )
 
-const TransactionsSetup = new SetupTransactionsDatabase(TransactionModel)
-const BalanceSetup = new SetupBalanceDatabase(BalanceModel)
+const TransactionsSetup = new SetupTransactionsDatabase()
+const BalanceSetup = new SetupBalanceDatabase()
 
 describe('Get Current Balance Use Case', () => {
   beforeAll(async () => {

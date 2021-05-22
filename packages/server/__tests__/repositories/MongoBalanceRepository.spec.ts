@@ -6,7 +6,7 @@ import { BalanceModel } from '@repositories/mongodb/models'
 import { MonthBalance, BalanceSchema } from '@repositories/schemas'
 
 const MongoBalance = new MongoBalanceRepository()
-const BalanceSetup = new SetupBalanceDatabase(BalanceModel)
+const BalanceSetup = new SetupBalanceDatabase()
 
 describe('Mongo Balance Repository', () => {
   beforeAll(async () => {

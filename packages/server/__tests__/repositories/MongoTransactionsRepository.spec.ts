@@ -5,10 +5,9 @@ import { transactions } from '@tests/__helpers__/solutions/mongodb/data'
 import { TransactionProps } from '@entities/Finances'
 
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations'
-import { TransactionModel } from '@repositories/mongodb/models'
 
 const MongoTransactions = new MongoTransactionsRepository()
-const TransactionsSetup = new SetupTransactionsDatabase(TransactionModel)
+const TransactionsSetup = new SetupTransactionsDatabase()
 
 describe('Mongo Transactions Repository', () => {
   beforeAll(async () => {

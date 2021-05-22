@@ -6,12 +6,11 @@ import { NotFoundError } from '@useCases/errors'
 import { FindTransactionUseCase } from '@useCases/Finances/implementations'
 
 import { MongoTransactionsRepository } from '@repositories/mongodb/implementations'
-import { TransactionModel } from '@repositories/mongodb/models'
 
 const MongoTransactions = new MongoTransactionsRepository()
 const findTransactionUseCase = new FindTransactionUseCase(MongoTransactions)
 
-const TransactionsSetup = new SetupTransactionsDatabase(TransactionModel)
+const TransactionsSetup = new SetupTransactionsDatabase()
 
 describe('Find Transaction Use Case', () => {
   beforeAll(async () => {
