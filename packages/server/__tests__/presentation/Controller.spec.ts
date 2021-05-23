@@ -1,40 +1,20 @@
 import {
-  Controller,
-  IControllerOperation,
-  IValidator,
   HttpRequest,
-  HttpResponse
+  HttpResponse,
+  IControllerOperation
 } from '@presentation/contracts'
-import { InvalidInputError } from '@presentation/controllers/errors'
-import {
-  success,
-  invalidInputError,
-  serverError
-} from '@presentation/controllers/helpers'
-
-import { Either, right, left } from '@shared/types'
+import { Controller } from '@presentation/controllers'
+import { serverError, success } from '@presentation/controllers/helpers'
 
 import { HttpRequestBuilder } from '@tests/__helpers__/builders'
 
 interface ISutType {
   sut: Controller
   operationStub: IControllerOperation
-  validatorStub: IValidator
-}
-
-const makeValidatorStub = (): IValidator => {
-  class ValidatorStub implements IValidator {
-    validate(request: HttpRequest): Either<InvalidInputError, HttpRequest> {
-      return right(request)
-    }
-  }
-
-  return new ValidatorStub()
 }
 
 const makeOperationStub = (): IControllerOperation => {
   class OperationStub implements IControllerOperation {
-    validator = makeValidatorStub()
     async operate(_request: HttpRequest): Promise<HttpResponse> {
       return success('Success')
     }
@@ -45,15 +25,14 @@ const makeOperationStub = (): IControllerOperation => {
 
 const makeSut = (): ISutType => {
   const operationStub = makeOperationStub()
-  const validatorStub = operationStub.validator
   const sut = new Controller(operationStub)
 
-  return { sut, operationStub, validatorStub }
+  return { sut, operationStub }
 }
 
 describe('Controller', () => {
   describe('Success Cases', () => {
-    it('Should return the operation response if the request pass the validation', async () => {
+    it('Should return the operation response', async () => {
       const { sut } = makeSut()
 
       const httpResponse = await sut.handle(
@@ -61,22 +40,6 @@ describe('Controller', () => {
       )
 
       expect(httpResponse).toEqual(success('Success'))
-    })
-
-    it('Should return a invalid input error if the request dont pass the validation', async () => {
-      const { sut, validatorStub } = makeSut()
-
-      jest.spyOn(validatorStub, 'validate').mockImplementation(() => {
-        return left(new InvalidInputError(['field']))
-      })
-
-      const httpResponse = await sut.handle(
-        HttpRequestBuilder.anHttpRequest().build()
-      )
-
-      expect(httpResponse).toEqual(
-        invalidInputError(new InvalidInputError(['field']))
-      )
     })
   })
 

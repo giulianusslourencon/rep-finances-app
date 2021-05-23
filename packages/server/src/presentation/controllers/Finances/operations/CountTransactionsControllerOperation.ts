@@ -1,11 +1,9 @@
 import {
   HttpRequest,
   HttpResponse,
-  IControllerOperation,
-  IValidator
+  IControllerOperation
 } from '@presentation/contracts'
 import { success } from '@presentation/controllers/helpers'
-import { ValidatorDummie } from '@presentation/controllers/validators'
 import { ErrorViewModel } from '@presentation/viewModels'
 import { TransactionsCountViewModel } from '@presentation/viewModels/Finances'
 
@@ -13,10 +11,7 @@ import { CountTransactions } from '@useCases/Finances/ports/CountTransactions'
 
 export class CountTransactionsControllerOperation
   implements IControllerOperation {
-  validator: IValidator
-  constructor(private countTransactions: CountTransactions) {
-    this.validator = new ValidatorDummie()
-  }
+  constructor(private countTransactions: CountTransactions) {}
 
   async operate(
     request: HttpRequest<

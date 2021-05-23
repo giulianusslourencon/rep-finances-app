@@ -8,6 +8,7 @@ import {
   TransactionBuilder,
   TransactionInitialPropsBuilder
 } from '@tests/__helpers__/builders/Finances'
+import { CreateTransactionVMBuilder } from '@tests/__helpers__/builders/Finances/viewModels'
 
 import {
   CreateTransaction,
@@ -69,6 +70,23 @@ describe('Create transaction controller', () => {
   })
 
   describe('Error Cases', () => {
+    it('Should return 400 if the input is invalid', async () => {
+      const { sut } = makeSut()
+
+      const httpRequest = HttpRequestBuilder.anHttpRequest()
+        .withBody(
+          CreateTransactionVMBuilder.aTransaction().withoutTitle().build()
+        )
+        .build()
+
+      const httpResponse = await sut.operate(httpRequest)
+
+      expect(httpResponse.statusCode).toBe(400)
+      const responseBody = httpResponse.body as ErrorViewModel
+      expect(responseBody.name).toBe('InvalidInputError')
+      expect(responseBody.errors[0].field).toBe('title')
+    })
+
     it('Should return 406 and not create a new transaction if one or more fields are not valid', async () => {
       const { sut } = makeSut()
 

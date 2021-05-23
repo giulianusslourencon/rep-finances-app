@@ -1,15 +1,13 @@
 import {
   HttpRequest,
   HttpResponse,
-  IControllerOperation,
-  IValidator
+  IControllerOperation
 } from '@presentation/contracts'
 import {
   invalidFieldsError,
   notFoundError,
   success
 } from '@presentation/controllers/helpers'
-import { ValidatorDummie } from '@presentation/controllers/validators'
 import { ErrorViewModel } from '@presentation/viewModels'
 import { TransactionDetailsViewModel } from '@presentation/viewModels/Finances'
 
@@ -18,13 +16,10 @@ import { GetTransactionBalance } from '@useCases/Finances/ports/GetTransactionBa
 
 export class FindTransactionControllerOperation
   implements IControllerOperation {
-  validator: IValidator
   constructor(
     private findTransaction: FindTransaction,
     private getTransactionBalance: GetTransactionBalance
-  ) {
-    this.validator = new ValidatorDummie()
-  }
+  ) {}
 
   async operate(
     request: HttpRequest<

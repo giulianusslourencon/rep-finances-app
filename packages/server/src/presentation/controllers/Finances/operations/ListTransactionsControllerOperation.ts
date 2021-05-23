@@ -1,11 +1,11 @@
 import {
   HttpRequest,
   HttpResponse,
-  IControllerOperation,
-  IValidator
+  IControllerOperation
 } from '@presentation/contracts'
 import { ListTransactionsValidator } from '@presentation/controllers/Finances/validators'
 import { success } from '@presentation/controllers/helpers'
+import { validate } from '@presentation/decorators'
 import { ErrorViewModel } from '@presentation/viewModels'
 import {
   ListQueryViewModel,
@@ -17,11 +17,9 @@ import { ListTransactions } from '@useCases/Finances/ports/ListTransactions'
 
 export class ListTransactionsControllerOperation
   implements IControllerOperation {
-  validator: IValidator
-  constructor(private listTransactions: ListTransactions) {
-    this.validator = new ListTransactionsValidator()
-  }
+  constructor(private listTransactions: ListTransactions) {}
 
+  @validate(new ListTransactionsValidator())
   async operate(
     request: HttpRequest<
       Record<string, never>,

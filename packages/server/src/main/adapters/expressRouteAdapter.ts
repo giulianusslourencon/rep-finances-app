@@ -1,10 +1,7 @@
 import { RequestHandler } from 'express'
 
-import {
-  Controller,
-  HttpRequest,
-  IControllerOperation
-} from '@presentation/contracts'
+import { HttpRequest, IControllerOperation } from '@presentation/contracts'
+import { Controller } from '@presentation/controllers'
 
 export const adaptRoute = (operation: IControllerOperation): RequestHandler => {
   return async (req, res) => {

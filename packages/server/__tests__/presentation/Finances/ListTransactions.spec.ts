@@ -1,4 +1,5 @@
 import { ListTransactionsControllerOperation } from '@presentation/controllers/Finances/operations'
+import { ErrorViewModel } from '@presentation/viewModels'
 
 import { HttpRequestBuilder } from '@tests/__helpers__/builders'
 
@@ -126,6 +127,23 @@ describe('List Transactions Controller', () => {
         month: '202012',
         skipLimit: { limit: 15, skip: 0 }
       })
+    })
+  })
+
+  describe('Error Cases', () => {
+    it('Should return 400 if the input is invalid', async () => {
+      const { sut } = makeSut()
+
+      const httpRequest = HttpRequestBuilder.anHttpRequest()
+        .withQuery({ month: '2020120' })
+        .build()
+
+      const httpResponse = await sut.operate(httpRequest)
+
+      expect(httpResponse.statusCode).toBe(400)
+      const responseBody = httpResponse.body as ErrorViewModel
+      expect(responseBody.name).toBe('InvalidInputError')
+      expect(responseBody.errors[0].field).toBe('month')
     })
   })
 })

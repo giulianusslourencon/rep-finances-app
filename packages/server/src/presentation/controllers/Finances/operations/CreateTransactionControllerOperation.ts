@@ -1,11 +1,11 @@
 import {
   HttpRequest,
   HttpResponse,
-  IControllerOperation,
-  IValidator
+  IControllerOperation
 } from '@presentation/contracts'
 import { CreateTransactionValidator } from '@presentation/controllers/Finances/validators'
 import { invalidFieldsError, success } from '@presentation/controllers/helpers'
+import { validate } from '@presentation/decorators'
 import { ErrorViewModel } from '@presentation/viewModels'
 import {
   CreateTransactionViewModel,
@@ -16,11 +16,9 @@ import { CreateTransaction } from '@useCases/Finances/ports/CreateTransaction'
 
 export class CreateTransactionControllerOperation
   implements IControllerOperation {
-  validator: IValidator
-  constructor(private createTransaction: CreateTransaction) {
-    this.validator = new CreateTransactionValidator()
-  }
+  constructor(private createTransaction: CreateTransaction) {}
 
+  @validate(new CreateTransactionValidator())
   async operate(
     request: HttpRequest<
       CreateTransactionViewModel,
