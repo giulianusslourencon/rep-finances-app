@@ -1,13 +1,15 @@
-FROM node:current-alpine AS build
+FROM node:lts-alpine AS build
 
 COPY . .
 RUN yarn install
+RUN yarn global add swagger-cli
 RUN yarn audit
 RUN yarn run build
 
 
-FROM node:current-alpine
+FROM node:lts-alpine
 COPY --from=build dist .
+COPY --from=build swagger.yaml .
 COPY --from=build node_modules ./node_modules
 
 ENTRYPOINT [ "node" ]

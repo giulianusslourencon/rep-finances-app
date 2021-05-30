@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "swagger:merge": "swagger-cli bundle src/main/docs/index.yaml --outfile src/main/docs/swagger.yaml --type yaml",
+    "swagger:merge": "swagger-cli bundle src/main/docs/index.yaml --outfile swagger.yaml --type yaml",
     "build": "yarn run swagger:merge & babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored --out-file-extension .mjs",
     "start": "node --experimental-modules dist/main/server.mjs",
     "dev": "yarn run swagger:merge & tsnd -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/main/server.ts"
@@ -24,6 +24,7 @@
     "@babel/cli": "^7.12.8",
     "@babel/core": "^7.12.9",
     "@babel/node": "^7.12.6",
+    "@babel/plugin-proposal-decorators": "^7.14.2",
     "@babel/preset-env": "^7.12.7",
     "@babel/preset-typescript": "^7.12.7",
     "@shelf/jest-mongodb": "^1.2.3",

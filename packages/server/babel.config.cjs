@@ -23,7 +23,8 @@ module.exports = {
         '@main': './src/main'
       }
     }],
-    ["babel-plugin-add-import-extension", { extension: "mjs" }]
+    ["babel-plugin-add-import-extension", { extension: "mjs" }],
+    ["@babel/plugin-proposal-decorators", { "legacy": true }]
   ],
   ignore: [
     '__tests__'
