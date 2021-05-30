@@ -8,7 +8,7 @@ module.exports = {
   name,
   clearMocks: true,
   collectCoverage: true,
-  collectCoverageFrom: ['src/services/**/*.ts'],
+  collectCoverageFrom: ['src/**/*.ts'],
   coverageDirectory: 'coverage',
   coverageReporters: ['json', 'lcov'],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
