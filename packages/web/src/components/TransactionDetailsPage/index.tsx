@@ -1,9 +1,8 @@
 import { StackDivider, VStack } from '@chakra-ui/react'
-import { Layout } from '@modules'
 import { useRouter } from 'next/router'
 import React from 'react'
 
-import ErrorPopup from '@components/ErrorPopup'
+import { ErrorPopup, Layout } from '@modules'
 
 import { ErrorResponse } from '@utils/types'
 

@@ -1,7 +1,9 @@
 import { ComponentWithAs, Input, InputProps } from '@chakra-ui/react'
 import React from 'react'
 
-const LabelInput: ComponentWithAs<'input', InputProps> = ({ ...props }) => {
+export const LabelInput: ComponentWithAs<'input', InputProps> = ({
+  ...props
+}) => {
   return (
     <Input
       variant="flushed"
@@ -16,5 +18,3 @@ const LabelInput: ComponentWithAs<'input', InputProps> = ({ ...props }) => {
     />
   )
 }
-
-export default LabelInput

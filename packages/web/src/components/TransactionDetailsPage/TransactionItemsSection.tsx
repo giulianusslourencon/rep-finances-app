@@ -8,8 +8,7 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 
-import Cash from '@components/Cash'
-import RelatedList from '@components/RelatedList'
+import { RelatedList, Cash } from '@modules'
 
 type Props = {
   items: {

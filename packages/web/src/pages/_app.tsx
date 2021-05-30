@@ -8,7 +8,7 @@ import 'nprogress/nprogress.css'
 
 const TopProgressBar = dynamic(
   () => {
-    return import('@components/TopProgressBar')
+    return import('@modules/TopProgressBar')
   },
   { ssr: false }
 )

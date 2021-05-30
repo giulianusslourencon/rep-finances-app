@@ -7,7 +7,7 @@ type Props = {
   variant?: string
 }
 
-const IdBox: React.FC<Props & CenterProps> = ({
+export const IdBox: React.FC<Props & CenterProps> = ({
   userId,
   size,
   variant,
@@ -21,5 +21,3 @@ const IdBox: React.FC<Props & CenterProps> = ({
     </Center>
   )
 }
-
-export default IdBox

@@ -5,7 +5,11 @@ type Props = {
   amount: number
 }
 
-const Cash: React.FC<Props & TextProps> = ({ amount, variant, ...props }) => {
+export const Cash: React.FC<Props & TextProps> = ({
+  amount,
+  variant,
+  ...props
+}) => {
   variant = amount < 0 ? 'negative' : variant
 
   const styles = useStyleConfig('Cash', { variant })
@@ -16,5 +20,3 @@ const Cash: React.FC<Props & TextProps> = ({ amount, variant, ...props }) => {
     </Text>
   )
 }
-
-export default Cash

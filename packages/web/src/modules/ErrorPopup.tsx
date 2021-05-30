@@ -13,7 +13,10 @@ type ErrorProps = {
   error: ErrorResponse
 }
 
-const ErrorPopup: React.FC<ErrorProps & AlertProps> = ({ error, ...props }) => {
+export const ErrorPopup: React.FC<ErrorProps & AlertProps> = ({
+  error,
+  ...props
+}) => {
   return (
     <Alert status="error" {...props}>
       <AlertIcon color="red.500" />
@@ -24,5 +27,3 @@ const ErrorPopup: React.FC<ErrorProps & AlertProps> = ({ error, ...props }) => {
     </Alert>
   )
 }
-
-export default ErrorPopup

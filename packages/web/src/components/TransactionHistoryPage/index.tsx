@@ -1,14 +1,9 @@
 import { Flex, Link, StackDivider, VStack } from '@chakra-ui/react'
-import { Layout } from '@modules'
 import { NextPage } from 'next'
 import NextLink from 'next/link'
 import React from 'react'
 
-import Cash from '@components/Cash'
-import ErrorPopup from '@components/ErrorPopup'
-import RelatedList from '@components/RelatedList'
-import Time from '@components/Time'
-import Title from '@components/Title'
+import { Cash, ErrorPopup, Layout, RelatedList, Time, Title } from '@modules'
 
 import { ErrorResponse, TransactionList } from '@utils/types'
 

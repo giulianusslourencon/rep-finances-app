@@ -29,14 +29,10 @@ import {
   Select,
   FormErrorMessage
 } from '@chakra-ui/react'
-import { Layout } from '@modules'
 import Router from 'next/router'
 import React, { useState } from 'react'
 
-import AmountInput from '@components/AmountInput'
-import ErrorPopup from '@components/ErrorPopup'
-import IdBox from '@components/IdBox'
-import LabelInput from '@components/LabelInput'
+import { AmountInput, ErrorPopup, IdBox, LabelInput, Layout } from '@modules'
 
 import API from '@utils/api'
 import { ErrorResponse } from '@utils/types'

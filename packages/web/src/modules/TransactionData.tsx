@@ -1,14 +1,13 @@
 import { Flex, StackProps, VStack, Text } from '@chakra-ui/react'
 import React from 'react'
 
-import Cash from './Cash'
-import IdBox from './IdBox'
+import { IdBox, Cash } from '@modules'
 
 type Props = {
   data: { id: string; amount: number }[]
 }
 
-const TransactionData: React.FC<Props & StackProps> = ({
+export const TransactionData: React.FC<Props & StackProps> = ({
   children,
   data,
   ...props
@@ -25,5 +24,3 @@ const TransactionData: React.FC<Props & StackProps> = ({
     </VStack>
   )
 }
-
-export default TransactionData

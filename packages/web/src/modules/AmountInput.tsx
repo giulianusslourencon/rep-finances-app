@@ -10,7 +10,10 @@ type AmountInputProps = NumberInputProps & {
   fieldProps?: NumberInputFieldProps
 }
 
-const AmountInput: React.FC<AmountInputProps> = ({ fieldProps, ...props }) => {
+export const AmountInput: React.FC<AmountInputProps> = ({
+  fieldProps,
+  ...props
+}) => {
   return (
     <NumberInput
       variant="flushed"
@@ -26,5 +29,3 @@ const AmountInput: React.FC<AmountInputProps> = ({ fieldProps, ...props }) => {
     </NumberInput>
   )
 }
-
-export default AmountInput
