@@ -1,8 +1,8 @@
 import {
   SetupBalanceDatabase,
   SetupTransactionsDatabase
-} from '@tests/__helpers__/solutions/mongodb'
-import { updatedBalance } from '@tests/__helpers__/solutions/mongodb/data'
+} from '@tests/solutions/mongodb'
+import { updatedBalance } from '@tests/solutions/mongodb/data'
 
 import { UpdateRegisteredBalanceUseCase } from '@useCases/Finances/implementations'
 

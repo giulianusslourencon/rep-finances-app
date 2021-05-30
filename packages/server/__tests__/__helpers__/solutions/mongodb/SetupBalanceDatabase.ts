@@ -1,7 +1,4 @@
-import {
-  balance,
-  updatedBalance
-} from '@tests/__helpers__/solutions/mongodb/data'
+import { balance, updatedBalance } from '@tests/solutions/mongodb/data'
 
 import { BalanceModel } from '@repositories/mongodb/models'
 

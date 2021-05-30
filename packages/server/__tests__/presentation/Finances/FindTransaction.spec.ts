@@ -4,8 +4,8 @@ import { TransactionDetailsViewModel } from '@presentation/viewModels/Finances'
 
 import { left, right } from '@shared/types'
 
-import { HttpRequestBuilder } from '@tests/__helpers__/builders'
-import { TransactionBuilder } from '@tests/__helpers__/builders/Finances'
+import { HttpRequestBuilder } from '@tests/builders'
+import { TransactionBuilder } from '@tests/builders/Finances'
 
 import { TransactionProps } from '@entities/Finances'
 

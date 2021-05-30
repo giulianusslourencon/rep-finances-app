@@ -1,4 +1,4 @@
-import { transactions } from '@tests/__helpers__/solutions/mongodb/data'
+import { transactions } from '@tests/solutions/mongodb/data'
 
 import { TransactionModel } from '@repositories/mongodb/models'
 

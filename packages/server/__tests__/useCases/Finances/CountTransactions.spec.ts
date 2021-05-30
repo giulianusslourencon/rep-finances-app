@@ -1,4 +1,4 @@
-import { SetupTransactionsDatabase } from '@tests/__helpers__/solutions/mongodb'
+import { SetupTransactionsDatabase } from '@tests/solutions/mongodb'
 
 import { CountTransactionsUseCase } from '@useCases/Finances/implementations'
 

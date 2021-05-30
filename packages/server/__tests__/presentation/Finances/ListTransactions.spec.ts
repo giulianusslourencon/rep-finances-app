@@ -1,7 +1,7 @@
 import { ListTransactionsControllerOperation } from '@presentation/controllers/Finances/operations'
 import { ErrorViewModel } from '@presentation/viewModels'
 
-import { HttpRequestBuilder } from '@tests/__helpers__/builders'
+import { HttpRequestBuilder } from '@tests/builders'
 
 import {
   ListTransactions,

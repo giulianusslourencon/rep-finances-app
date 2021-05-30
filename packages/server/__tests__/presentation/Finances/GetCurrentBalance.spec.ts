@@ -1,6 +1,6 @@
 import { GetCurrentBalanceControllerOperation } from '@presentation/controllers/Finances/operations'
 
-import { HttpRequestBuilder } from '@tests/__helpers__/builders'
+import { HttpRequestBuilder } from '@tests/builders'
 
 import {
   GetCurrentBalance,

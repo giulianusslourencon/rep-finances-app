@@ -3,12 +3,12 @@ import { ErrorViewModel } from '@presentation/viewModels'
 
 import { left, right } from '@shared/types'
 
-import { HttpRequestBuilder } from '@tests/__helpers__/builders'
+import { HttpRequestBuilder } from '@tests/builders'
 import {
   TransactionBuilder,
   TransactionInitialPropsBuilder
-} from '@tests/__helpers__/builders/Finances'
-import { CreateTransactionVMBuilder } from '@tests/__helpers__/builders/Finances/viewModels'
+} from '@tests/builders/Finances'
+import { CreateTransactionVMBuilder } from '@tests/builders/Finances/viewModels'
 
 import {
   CreateTransaction,

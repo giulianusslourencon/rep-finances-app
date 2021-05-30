@@ -3,8 +3,8 @@ import { CreateTransactionValidator } from '@presentation/controllers/Finances/v
 
 import { right } from '@shared/types'
 
-import { HttpRequestBuilder } from '@tests/__helpers__/builders'
-import { CreateTransactionVMBuilder } from '@tests/__helpers__/builders/Finances/viewModels'
+import { HttpRequestBuilder } from '@tests/builders'
+import { CreateTransactionVMBuilder } from '@tests/builders/Finances/viewModels'
 
 describe('Create Transaction Validator', () => {
   describe('Success Cases', () => {

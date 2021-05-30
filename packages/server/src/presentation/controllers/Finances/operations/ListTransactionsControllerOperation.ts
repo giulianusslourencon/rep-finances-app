@@ -3,9 +3,9 @@ import {
   HttpResponse,
   IControllerOperation
 } from '@presentation/contracts'
+import { validate } from '@presentation/controllers/decorators'
 import { ListTransactionsValidator } from '@presentation/controllers/Finances/validators'
 import { success } from '@presentation/controllers/helpers'
-import { validate } from '@presentation/decorators'
 import { ErrorViewModel } from '@presentation/viewModels'
 import {
   ListQueryViewModel,

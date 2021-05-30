@@ -1,6 +1,6 @@
-import { TransactionBuilder } from '@tests/__helpers__/builders/Finances'
-import { SetupTransactionsDatabase } from '@tests/__helpers__/solutions/mongodb'
-import { transactions } from '@tests/__helpers__/solutions/mongodb/data'
+import { TransactionBuilder } from '@tests/builders/Finances'
+import { SetupTransactionsDatabase } from '@tests/solutions/mongodb'
+import { transactions } from '@tests/solutions/mongodb/data'
 
 import { TransactionProps } from '@entities/Finances'
 

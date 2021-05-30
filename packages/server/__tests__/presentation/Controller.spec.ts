@@ -6,7 +6,7 @@ import {
 import { Controller } from '@presentation/controllers'
 import { serverError, success } from '@presentation/controllers/helpers'
 
-import { HttpRequestBuilder } from '@tests/__helpers__/builders'
+import { HttpRequestBuilder } from '@tests/builders'
 
 interface ISutType {
   sut: Controller

@@ -1,4 +1,4 @@
-import { TransactionInitialPropsBuilder } from '@tests/__helpers__/builders/Finances'
+import { TransactionInitialPropsBuilder } from '@tests/builders/Finances'
 
 import { EntityErrorHandler } from '@entities/errors'
 import { Transaction } from '@entities/Finances'
