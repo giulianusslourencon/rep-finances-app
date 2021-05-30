@@ -1,18 +1,4 @@
-import {
-  ArrowLeftIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ArrowRightIcon
-} from '@chakra-ui/icons'
-import {
-  Flex,
-  HStack,
-  IconButton,
-  VStack,
-  StackDivider,
-  Text,
-  Link
-} from '@chakra-ui/react'
+import { Flex, Link, StackDivider, VStack } from '@chakra-ui/react'
 import { Layout } from '@modules'
 import { NextPage } from 'next'
 import NextLink from 'next/link'
@@ -25,6 +11,8 @@ import Time from '@components/Time'
 import Title from '@components/Title'
 
 import { ErrorResponse, TransactionList } from '@utils/types'
+
+import { PageFooter } from './PageFooter'
 
 type PaginationProps = {
   itemsCount: number
@@ -60,69 +48,7 @@ export const TransactionHistoryPage: NextPage<TransactionHistoryPageProps> = ({
         { title: 'Voltar', href: '/' },
         { title: 'Adicionar', href: '/transactions/new' }
       ]}
-      footer={
-        <Flex flexGrow={1} justify="space-between" align="center">
-          <HStack>
-            <NextLink href="/transactions?page=1">
-              <IconButton
-                variant="ghost"
-                color="white"
-                colorScheme="whiteAlpha"
-                aria-label="Primeira"
-                icon={<ArrowLeftIcon />}
-                disabled={paginationProps.curPage === 1}
-              />
-            </NextLink>
-            <NextLink
-              href={`/transactions?page=${paginationProps.curPage - 1}`}
-            >
-              <IconButton
-                variant="ghost"
-                color="white"
-                colorScheme="whiteAlpha"
-                aria-label="Anterior"
-                icon={<ChevronLeftIcon />}
-                disabled={paginationProps.curPage === 1}
-              />
-            </NextLink>
-          </HStack>
-          <Text color="white">
-            {`${paginationProps.firstIndex}-${paginationProps.lastIndex}/${paginationProps.itemsCount}`}
-          </Text>
-          <HStack>
-            <NextLink
-              href={`/transactions?page=${paginationProps.curPage + 1}`}
-            >
-              <IconButton
-                variant="ghost"
-                color="white"
-                colorScheme="whiteAlpha"
-                aria-label="Próxima"
-                icon={<ChevronRightIcon />}
-                disabled={
-                  paginationProps.lastIndex >= paginationProps.itemsCount
-                }
-              />
-            </NextLink>
-            <NextLink
-              href={`/transactions?page=${
-                Math.floor((paginationProps.itemsCount - 1) / 15) + 1
-              }`}
-            >
-              <IconButton
-                variant="ghost"
-                color="white"
-                colorScheme="whiteAlpha"
-                aria-label="Última"
-                icon={<ArrowRightIcon />}
-                disabled={
-                  paginationProps.lastIndex >= paginationProps.itemsCount
-                }
-              />
-            </NextLink>
-          </HStack>
-        </Flex>
-      }
+      footer={<PageFooter paginationProps={paginationProps} />}
     >
       <VStack
         divider={<StackDivider borderColor="purple.800" />}
