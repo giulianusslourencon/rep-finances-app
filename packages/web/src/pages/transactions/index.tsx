@@ -1,13 +1,16 @@
-import { StoryPage, StoryPageProps } from '@components/StoryPage'
+import {
+  TransactionHistoryPage,
+  TransactionHistoryPageProps
+} from '@components/TransactionHistoryPage'
 
 import API from '@utils/api'
 
-StoryPage.getInitialProps = async ({ query }) => {
+TransactionHistoryPage.getInitialProps = async ({ query }) => {
   const page = parseInt(query.page?.toString() || '1')
 
   const itemsPerPage = 15
 
-  const props: StoryPageProps = {
+  const props: TransactionHistoryPageProps = {
     transactions: [],
     paginationProps: {
       curPage: page,
@@ -38,4 +41,4 @@ StoryPage.getInitialProps = async ({ query }) => {
   return props
 }
 
-export default StoryPageProps
+export default TransactionHistoryPage

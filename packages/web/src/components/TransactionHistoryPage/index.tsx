@@ -26,18 +26,20 @@ import Title from '@components/Title'
 
 import { ErrorResponse, TransactionList } from '@utils/types'
 
-export type StoryPageProps = {
-  error?: ErrorResponse
-  transactions: TransactionList
-  paginationProps: {
-    itemsCount: number
-    curPage: number
-    firstIndex: number
-    lastIndex: number
-  }
+type PaginationProps = {
+  itemsCount: number
+  curPage: number
+  firstIndex: number
+  lastIndex: number
 }
 
-export const StoryPage: NextPage<StoryPageProps> = ({
+export type TransactionHistoryPageProps = {
+  error?: ErrorResponse
+  transactions: TransactionList
+  paginationProps: PaginationProps
+}
+
+export const TransactionHistoryPage: NextPage<TransactionHistoryPageProps> = ({
   error,
   transactions,
   paginationProps
