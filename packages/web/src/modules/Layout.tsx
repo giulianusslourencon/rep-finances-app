@@ -14,7 +14,7 @@ type Props = {
   footer?: React.ReactNode
 }
 
-const Layout: React.FC<Props & GridProps> = ({
+export const Layout: React.FC<Props & GridProps> = ({
   buttons = [],
   children,
   footer,
@@ -112,5 +112,3 @@ const Layout: React.FC<Props & GridProps> = ({
     </Grid>
   )
 }
-
-export default Layout
