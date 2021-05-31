@@ -84,6 +84,7 @@
           "/^@useCases/",
           "/^@repositories/",
           "/^@components/",
+          "/^@modules/",
           "/^@theme/",
           "/^@utils/",
           [
