@@ -4,38 +4,14 @@ import React from 'react'
 
 import { ErrorPopup, Layout } from '@modules'
 
-import { ErrorResponse } from '@utils/types'
+import { ErrorResponse, TransactionDetails } from '@utils/types'
 
 import { PageHeader } from './PageHeader'
 import { TransactionItemsSection } from './TransactionItemsSection'
 import { TransactionValuesSection } from './TransactionValuesSection'
 
-type Transaction = {
-  _id: string
-  title: string
-  amount: number
-  date: string
-  month: string
-  items: {
-    [itemName: string]: {
-      amount: number
-      related_users: string[]
-    }
-  }
-  payers: {
-    [userId: string]: number
-  }
-  related: string[]
-}
-
-type Balance = {
-  [userId: string]: number
-}
-
-export type TransactionDetailsPageProps = {
+export type TransactionDetailsPageProps = TransactionDetails & {
   error?: ErrorResponse
-  transaction: Transaction
-  balance: Balance
 }
 
 export const TransactionDetailsPage: React.FC<TransactionDetailsPageProps> = ({

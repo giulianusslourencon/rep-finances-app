@@ -43,3 +43,10 @@ export type TransactionDetails = Balance & {
 export type Count = {
   count: number
 }
+
+export type PaginationProps = {
+  itemsCount: number
+  curPage: number
+  firstIndex: number
+  lastIndex: number
+}

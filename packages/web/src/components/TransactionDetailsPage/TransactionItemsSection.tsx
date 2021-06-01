@@ -10,14 +10,9 @@ import React from 'react'
 
 import { RelatedList, Cash } from '@modules'
 
-type Props = {
-  items: {
-    [itemName: string]: {
-      amount: number
-      related_users: string[]
-    }
-  }
-}
+import { Transaction } from '@utils/types'
+
+type Props = Pick<Transaction, 'items'>
 
 export const TransactionItemsSection: React.FC<Props & StackProps> = ({
   items

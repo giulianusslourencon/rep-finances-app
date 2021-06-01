@@ -5,16 +5,9 @@ import React from 'react'
 
 import { Cash, ErrorPopup, Layout, RelatedList, Time, Title } from '@modules'
 
-import { ErrorResponse, TransactionList } from '@utils/types'
+import { ErrorResponse, PaginationProps, TransactionList } from '@utils/types'
 
 import { PageFooter } from './PageFooter'
-
-type PaginationProps = {
-  itemsCount: number
-  curPage: number
-  firstIndex: number
-  lastIndex: number
-}
 
 export type TransactionHistoryPageProps = {
   error?: ErrorResponse

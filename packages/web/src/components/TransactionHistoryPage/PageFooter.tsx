@@ -8,12 +8,7 @@ import { Flex, StackProps, HStack, IconButton, Text } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import React from 'react'
 
-type PaginationProps = {
-  itemsCount: number
-  curPage: number
-  firstIndex: number
-  lastIndex: number
-}
+import { PaginationProps } from '@utils/types'
 
 type Props = {
   paginationProps: PaginationProps
