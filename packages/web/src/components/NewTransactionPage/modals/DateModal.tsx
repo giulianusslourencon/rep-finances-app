@@ -36,13 +36,13 @@ type DateProps = {
 type DateModalProps = {
   disclosure: DisclosureProps
   initialDate: Date
-  onChange: (value: number) => void
+  onUpdate: (value: number) => void
 }
 
 export const DateModal: React.FC<DateModalProps> = ({
   disclosure,
   initialDate,
-  onChange
+  onUpdate
 }) => {
   return (
     <Modal
@@ -63,7 +63,7 @@ export const DateModal: React.FC<DateModalProps> = ({
           values: DateProps,
           { setSubmitting }: FormikHelpers<DateProps>
         ) => {
-          onChange(
+          onUpdate(
             new Date(
               values.year,
               values.month,

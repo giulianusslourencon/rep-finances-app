@@ -1,5 +1,5 @@
 import { Button, StackDivider, VStack } from '@chakra-ui/react'
-import { Formik, FormikHelpers, Form } from 'formik'
+import { Formik, FormikHelpers, Form, FieldArray } from 'formik'
 import React from 'react'
 
 import { Layout } from '@modules/page'
@@ -8,12 +8,11 @@ import {
   TransactionInfoProps,
   TransactionInfoSection
 } from './TransactionInfoSection'
-
-type TransactionItemForm = {
-  itemName: string
-  amount: [number, number]
-  related_users: string[]
-}
+import {
+  getBaseItem,
+  TransactionItemForm,
+  TransactionItemsSection
+} from './TransactionItemsSection'
 
 type TransactionPayerForm = {
   userId: string
@@ -24,15 +23,10 @@ type TransactionFormProps = {
   info: TransactionInfoProps
   items: TransactionItemForm[]
   payers: TransactionPayerForm[]
+  related: string[]
 }
 
 export const NewTransactionPage: React.FC = () => {
-  const baseItem: TransactionItemForm = {
-    itemName: '',
-    related_users: [],
-    amount: [1, 0]
-  }
-
   return (
     <Layout buttons={[{ title: 'Voltar', href: '/' }]}>
       <Formik
@@ -41,8 +35,9 @@ export const NewTransactionPage: React.FC = () => {
             title: '',
             timestamp: Date.now()
           },
-          items: [{ ...baseItem }],
-          payers: [] as TransactionPayerForm[]
+          items: [getBaseItem()],
+          payers: [] as TransactionPayerForm[],
+          related: [] as string[]
         }}
         onSubmit={(
           values: TransactionFormProps,
@@ -62,6 +57,23 @@ export const NewTransactionPage: React.FC = () => {
               align="stretch"
             >
               <TransactionInfoSection setFieldValue={props.setFieldValue} />
+              <FieldArray
+                name="related"
+                render={arrayHelpers => (
+                  <TransactionItemsSection
+                    items={props.values.items}
+                    setFieldValue={props.setFieldValue}
+                    related={props.values.related}
+                    addRelated={user => {
+                      user = user.trim().toUpperCase()
+                      const indexToInsert = props.values.related.filter(
+                        u => u < user
+                      ).length
+                      arrayHelpers.insert(indexToInsert, user)
+                    }}
+                  />
+                )}
+              />
               <Button
                 isLoading={props.isSubmitting}
                 loadingText="Criando..."

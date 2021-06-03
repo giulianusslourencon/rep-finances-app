@@ -79,7 +79,7 @@ export const TransactionInfoSection: React.FC<{
               <DateModal
                 disclosure={dateModalDisclosure}
                 initialDate={new Date(field.value)}
-                onChange={value => setFieldValue('info.timestamp', value)}
+                onUpdate={value => setFieldValue('info.timestamp', value)}
               />
               <Tooltip
                 shouldWrapChildren
