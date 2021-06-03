@@ -32,7 +32,9 @@ import {
 import Router from 'next/router'
 import React, { useState } from 'react'
 
-import { AmountInput, ErrorPopup, IdBox, LabelInput, Layout } from '@modules'
+import { LabelInput, AmountInput } from '@modules/forms'
+import { Layout, ErrorPopup } from '@modules/page'
+import { IdBox } from '@modules/resource'
 
 import API from '@utils/api'
 import { ErrorResponse } from '@utils/types'

@@ -1,7 +1,8 @@
 import { VStack, StackDivider, Flex } from '@chakra-ui/react'
 import React from 'react'
 
-import { Cash, ErrorPopup, IdBox, Layout } from '@modules'
+import { Layout, ErrorPopup } from '@modules/page'
+import { IdBox, Cash } from '@modules/resource'
 
 import { ErrorResponse } from '@utils/types'
 

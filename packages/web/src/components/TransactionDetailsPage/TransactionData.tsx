@@ -1,7 +1,7 @@
 import { Flex, StackProps, VStack, Text } from '@chakra-ui/react'
 import React from 'react'
 
-import { IdBox, Cash } from '@modules'
+import { IdBox, Cash } from '@modules/resource'
 
 type Props = {
   data: { id: string; amount: number }[]

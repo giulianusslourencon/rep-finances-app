@@ -1,7 +1,7 @@
 import { FlexProps, Flex } from '@chakra-ui/react'
 import React from 'react'
 
-import { Time, Title } from '@modules'
+import { Time, Title } from '@modules/resource'
 type Props = {
   title: string
   date: string

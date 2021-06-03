@@ -3,7 +3,8 @@ import { NextPage } from 'next'
 import NextLink from 'next/link'
 import React from 'react'
 
-import { Cash, ErrorPopup, Layout, RelatedList, Time, Title } from '@modules'
+import { Layout, ErrorPopup } from '@modules/page'
+import { Title, Time, RelatedList, Cash } from '@modules/resource'
 
 import { ErrorResponse, PaginationProps, TransactionList } from '@utils/types'
 

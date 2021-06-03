@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 
-import { RelatedList, Cash } from '@modules'
+import { RelatedList, Cash } from '@modules/resource'
 
 import { Transaction } from '@utils/types'
 

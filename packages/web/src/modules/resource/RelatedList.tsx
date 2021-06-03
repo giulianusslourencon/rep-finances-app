@@ -1,6 +1,7 @@
 import { Wrap, WrapItem, WrapProps } from '@chakra-ui/react'
-import { IdBox } from '@modules'
 import React from 'react'
+
+import { IdBox } from '@modules/resource'
 
 type Props = {
   related: string[]
