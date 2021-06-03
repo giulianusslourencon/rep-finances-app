@@ -18,6 +18,8 @@ import React from 'react'
 
 import { LabelInput } from '@modules/forms'
 
+import { validateUserId } from '@utils/validateTransaction'
+
 type DisclosureProps = {
   isOpen: boolean
   onOpen: () => void
@@ -26,6 +28,7 @@ type DisclosureProps = {
 
 type RelatedModalProps = {
   disclosure: DisclosureProps
+  related: string[]
   onAdd: (user: string) => void
 }
 
@@ -35,8 +38,17 @@ type FormProps = {
 
 export const RelatedModal: React.FC<RelatedModalProps> = ({
   disclosure,
+  related,
   onAdd
 }) => {
+  const validateRelated = (user: string) => {
+    if (!validateUserId(user))
+      return 'Campo deve conter ao menos um caracter, não pode conter caracteres especiais e não pode iniciar com um número'
+    if (related.includes(user.trim().toUpperCase()))
+      return 'Esse id já foi cadastrado'
+    return undefined
+  }
+
   return (
     <Modal
       isOpen={disclosure.isOpen}
@@ -65,7 +77,7 @@ export const RelatedModal: React.FC<RelatedModalProps> = ({
               </ModalHeader>
               <ModalCloseButton />
               <ModalBody pb={6}>
-                <Field name="user">
+                <Field name="user" validate={validateRelated}>
                   {({ field, form }: any) => (
                     <FormControl
                       id="newRelated"
@@ -74,7 +86,7 @@ export const RelatedModal: React.FC<RelatedModalProps> = ({
                     >
                       <LabelInput
                         {...field}
-                        value={field.value.toUpperCase()}
+                        value={field.value.trim().toUpperCase()}
                         placeholder="Id do Usuário"
                         minLength={1}
                         maxLength={2}
@@ -92,7 +104,12 @@ export const RelatedModal: React.FC<RelatedModalProps> = ({
               </ModalBody>
               <ModalFooter>
                 <ButtonGroup>
-                  <Button type="submit">Adicionar</Button>
+                  <Button
+                    type="submit"
+                    isDisabled={props.isSubmitting || !props.isValid}
+                  >
+                    Adicionar
+                  </Button>
                   <Button variant="outline" onClick={disclosure.onClose}>
                     Cancelar
                   </Button>

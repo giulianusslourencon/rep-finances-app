@@ -78,11 +78,15 @@ export const TransactionItemsSection: React.FC<TransactionItemsProps> = ({
 
   return (
     <Box>
-      <RelatedModal disclosure={relatedModalDisclosure} onAdd={addRelated} />
+      <RelatedModal
+        disclosure={relatedModalDisclosure}
+        onAdd={addRelated}
+        related={related}
+      />
       <Text fontSize="lg">Itens:</Text>
       <FieldArray
         name="items"
-        render={arrayHelpers => (
+        render={itemsArrayHelper => (
           <VStack spacing={1}>
             {items.map((item, index) => (
               <Box
@@ -142,7 +146,7 @@ export const TransactionItemsSection: React.FC<TransactionItemsProps> = ({
                     <CloseButton
                       size="sm"
                       color="red.500"
-                      onClick={() => arrayHelpers.remove(index)}
+                      onClick={() => itemsArrayHelper.remove(index)}
                       isDisabled={items.length <= 1}
                     />
                   </Tooltip>
@@ -228,7 +232,7 @@ export const TransactionItemsSection: React.FC<TransactionItemsProps> = ({
                   </Tooltip>
                   <FieldArray
                     name={`items.${index}.related_users`}
-                    render={userArrayHelpers => (
+                    render={userArrayHelper => (
                       <Wrap spacing={1} justify="flex-end" align="center">
                         {related.map(user => (
                           <WrapItem key={user}>
@@ -237,8 +241,8 @@ export const TransactionItemsSection: React.FC<TransactionItemsProps> = ({
                               onClick={() => {
                                 const index = item.related_users.indexOf(user)
                                 index >= 0
-                                  ? userArrayHelpers.remove(index)
-                                  : userArrayHelpers.push(user)
+                                  ? userArrayHelper.remove(index)
+                                  : userArrayHelper.push(user)
                               }}
                               variant={
                                 item.related_users.includes(user)
@@ -261,7 +265,7 @@ export const TransactionItemsSection: React.FC<TransactionItemsProps> = ({
                 </Flex>
               </Box>
             ))}
-            <Button onClick={() => arrayHelpers.push(getBaseItem())}>
+            <Button onClick={() => itemsArrayHelper.push(getBaseItem())}>
               Adicionar item
             </Button>
           </VStack>

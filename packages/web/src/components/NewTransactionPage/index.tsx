@@ -13,11 +13,10 @@ import {
   TransactionItemForm,
   TransactionItemsSection
 } from './TransactionItemsSection'
-
-type TransactionPayerForm = {
-  userId: string
-  amount: number
-}
+import {
+  TransactionPayerForm,
+  TransactionPayersSection
+} from './TransactionPayersSection'
 
 type TransactionFormProps = {
   info: TransactionInfoProps
@@ -58,21 +57,45 @@ export const NewTransactionPage: React.FC = () => {
             >
               <TransactionInfoSection setFieldValue={props.setFieldValue} />
               <FieldArray
-                name="related"
-                render={arrayHelpers => (
-                  <TransactionItemsSection
-                    items={props.values.items}
-                    setFieldValue={props.setFieldValue}
-                    related={props.values.related}
-                    addRelated={user => {
-                      user = user.trim().toUpperCase()
-                      const indexToInsert = props.values.related.filter(
-                        u => u < user
-                      ).length
-                      arrayHelpers.insert(indexToInsert, user)
-                    }}
+                name="payers"
+                render={payersArrayHelper => (
+                  <FieldArray
+                    name="related"
+                    render={relatedArrayHelper => (
+                      <TransactionItemsSection
+                        items={props.values.items}
+                        setFieldValue={props.setFieldValue}
+                        related={props.values.related}
+                        addRelated={user => {
+                          user = user.trim().toUpperCase()
+                          const indexToInsert = props.values.related.filter(
+                            u => u < user
+                          ).length
+                          relatedArrayHelper.insert(indexToInsert, user)
+                          payersArrayHelper.insert(indexToInsert, {
+                            userId: user,
+                            amount: 0
+                          })
+                        }}
+                      />
+                    )}
                   />
                 )}
+              />
+              <TransactionPayersSection
+                payers={props.values.payers}
+                setFieldValue={props.setFieldValue}
+                amountDiff={(function () {
+                  const itemsValues = props.values.items.reduce(
+                    (acc, cur) => acc + cur.quantity * cur.price,
+                    0
+                  )
+                  const totalPaid = props.values.payers.reduce(
+                    (acc, cur) => acc + cur.amount,
+                    0
+                  )
+                  return itemsValues - totalPaid
+                })()}
               />
               <Button
                 isLoading={props.isSubmitting}
