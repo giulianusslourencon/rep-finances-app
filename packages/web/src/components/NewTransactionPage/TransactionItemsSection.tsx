@@ -254,7 +254,6 @@ export const TransactionItemsSection: React.FC<TransactionItemsProps> = ({
                         ))}
                         <WrapItem>
                           <IdBox
-                            as="button"
                             onClick={relatedModalDisclosure.onOpen}
                             userId={'+'}
                           />

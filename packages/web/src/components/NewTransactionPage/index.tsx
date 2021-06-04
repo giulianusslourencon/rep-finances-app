@@ -1,8 +1,12 @@
 import { Button, StackDivider, VStack } from '@chakra-ui/react'
 import { Formik, FormikHelpers, Form, FieldArray } from 'formik'
+import Router from 'next/router'
 import React from 'react'
 
 import { Layout } from '@modules/page'
+
+import API from '@utils/api'
+import { Transaction } from '@utils/types'
 
 import {
   TransactionInfoProps,
@@ -26,6 +30,33 @@ type TransactionFormProps = {
 }
 
 export const NewTransactionPage: React.FC = () => {
+  const formatTransaction = (
+    transaction: TransactionFormProps
+  ): Transaction => {
+    const objItems = {} as Transaction['items']
+    transaction.items.map(
+      item =>
+        (objItems[item.itemName] = {
+          amount: (item.quantity * item.price) / 100,
+          related_users: item.related_users
+        })
+    )
+
+    const objPayers = {} as Transaction['payers']
+    transaction.payers.forEach(payer => {
+      if (payer.amount) objPayers[payer.userId] = payer.amount / 100
+    })
+
+    const { title, timestamp } = transaction.info
+
+    return {
+      title,
+      timestamp: timestamp,
+      items: objItems,
+      payers: objPayers
+    }
+  }
+
   return (
     <Layout buttons={[{ title: 'Voltar', href: '/' }]}>
       <Formik
@@ -38,14 +69,19 @@ export const NewTransactionPage: React.FC = () => {
           payers: [] as TransactionPayerForm[],
           related: [] as string[]
         }}
-        onSubmit={(
+        onSubmit={async (
           values: TransactionFormProps,
           { setSubmitting }: FormikHelpers<TransactionFormProps>
         ) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2))
-            setSubmitting(false)
-          }, 500)
+          try {
+            const response = await API.createTransaction(
+              formatTransaction(values)
+            )
+            Router.push(`/transactions/item/${response.data._id}`)
+          } catch (error) {
+            alert(error)
+          }
+          setSubmitting(false)
         }}
       >
         {props => (
