@@ -1,10 +1,10 @@
-import { GetServerSideProps } from 'next'
+import { GetStaticProps } from 'next'
 
 import { BalancePage, BalancePageProps } from '@components/BalancePage'
 
 import API from '@utils/api'
 
-export const getServerSideProps: GetServerSideProps<BalancePageProps> = async () => {
+export const getStaticProps: GetStaticProps<BalancePageProps> = async () => {
   const props: BalancePageProps = {
     balance: []
   }
@@ -23,7 +23,8 @@ export const getServerSideProps: GetServerSideProps<BalancePageProps> = async ()
   }
 
   return {
-    props
+    props,
+    revalidate: 15
   }
 }
 

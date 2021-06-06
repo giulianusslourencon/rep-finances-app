@@ -39,7 +39,8 @@ export type Balance = {
 }
 
 export type TransactionDetails = Balance & {
-  transaction: Transaction & TransactionListItem & { month: string }
+  transaction: Omit<Transaction, 'timestamp'> &
+    TransactionListItem & { month: string }
 }
 
 export type Count = {
