@@ -60,11 +60,11 @@ export const RelatedModal: React.FC<RelatedModalProps> = ({
         initialValues={{ user: '' }}
         onSubmit={(
           values: FormProps,
-          { setSubmitting }: FormikHelpers<FormProps>
+          { setSubmitting, resetForm }: FormikHelpers<FormProps>
         ) => {
           onAdd(values.user)
           setSubmitting(false)
-          disclosure.onClose()
+          resetForm()
         }}
       >
         {props => (
