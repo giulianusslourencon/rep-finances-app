@@ -56,6 +56,13 @@ export const TransactionItemsSection: React.FC<TransactionItemsProps> = ({
   const validateItemName = (itemName: string) => {
     if (!validateLabel(itemName))
       return 'Nome do item deve conter entre 2 e 255 caracteres'
+    if (
+      items.filter(
+        item =>
+          item.itemName.trim().toLowerCase() === itemName.trim().toLowerCase()
+      ).length > 1
+    )
+      return 'Nome duplicado'
     return undefined
   }
 
