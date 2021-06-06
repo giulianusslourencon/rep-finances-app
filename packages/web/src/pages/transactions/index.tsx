@@ -6,7 +6,7 @@ import {
 import API from '@utils/api'
 
 TransactionHistoryPage.getInitialProps = async ({ query }) => {
-  const page = parseInt(query.page?.toString() || '1')
+  const page = Math.max(parseInt(query.page?.toString() || '1'), 1)
 
   const itemsPerPage = 15
 
