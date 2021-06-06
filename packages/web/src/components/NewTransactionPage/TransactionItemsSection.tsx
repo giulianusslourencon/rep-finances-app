@@ -111,7 +111,6 @@ export const TransactionItemsSection: React.FC<TransactionItemsProps> = ({
                         placement="top"
                       >
                         <FormControl
-                          id={`itemName ${index}`}
                           isRequired={true}
                           isInvalid={
                             form.errors.items &&
@@ -166,7 +165,6 @@ export const TransactionItemsSection: React.FC<TransactionItemsProps> = ({
                       >
                         {({ field, form }: any) => (
                           <FormControl
-                            id={`itemQuantity ${index}`}
                             isRequired={true}
                             isInvalid={
                               form.errors.items &&
@@ -182,7 +180,7 @@ export const TransactionItemsSection: React.FC<TransactionItemsProps> = ({
                               }
                               min={1}
                               precision={0}
-                              fieldProps={{ width: 8, textAlign: 'center' }}
+                              fieldProps={{ width: 9, textAlign: 'center' }}
                             />
                             <FormErrorMessage color="red.500">
                               {form.errors.items
@@ -201,7 +199,6 @@ export const TransactionItemsSection: React.FC<TransactionItemsProps> = ({
                       >
                         {({ field, form }: any) => (
                           <FormControl
-                            id={`itemAmount ${index}`}
                             isRequired={true}
                             isInvalid={
                               form.errors.items &&

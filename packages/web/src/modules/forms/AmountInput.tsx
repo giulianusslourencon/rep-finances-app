@@ -25,7 +25,12 @@ export const AmountInput: React.FC<AmountInputProps> = ({
       min={0}
       {...props}
     >
-      <NumberInputField fontSize="1rem" width="7rem" {...fieldProps} />
+      <NumberInputField
+        fontSize="1rem"
+        width="7rem"
+        padding={0}
+        {...fieldProps}
+      />
     </NumberInput>
   )
 }

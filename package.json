@@ -9,7 +9,11 @@
     ]
   },
   "scripts": {
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "dev:server:dbs": "sh ./packages/server/setupTestDatabases.sh",
+    "dev:server": "yarn dev:server:dbs & yarn --cwd ./packages/server/ dev",
+    "dev:web": "yarn --cwd ./packages/web/ dev",
+    "dev": "yarn dev:server & yarn dev:web"
   },
   "repository": "https://github.com/giulianusslourencon/rep-finances-app.git",
   "license": "MIT",
