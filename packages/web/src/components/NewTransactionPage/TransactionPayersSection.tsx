@@ -39,7 +39,7 @@ export const TransactionPayersSection: React.FC<TransactionPayersProps> = ({
     <Box>
       <Text fontSize="lg">Pagamento:</Text>
       <FieldArray
-        name="payers"
+        name="related"
         render={() => (
           <FormControl isInvalid={isInvalid}>
             <VStack spacing={1} ml={4} align="flex-start">
@@ -49,7 +49,7 @@ export const TransactionPayersSection: React.FC<TransactionPayersProps> = ({
                   <AmountInput
                     value={formatAmount(user.amount)}
                     onChange={val =>
-                      setFieldValue(`payers.${index}.amount`, parseAmount(val))
+                      setFieldValue(`related.${index}.amount`, parseAmount(val))
                     }
                   />
                   <Button
@@ -57,7 +57,7 @@ export const TransactionPayersSection: React.FC<TransactionPayersProps> = ({
                     size="sm"
                     onClick={() =>
                       setFieldValue(
-                        `payers.${index}.amount`,
+                        `related.${index}.amount`,
                         user.amount + amountDiff
                       )
                     }

@@ -25,8 +25,7 @@ import {
 type TransactionFormProps = {
   info: TransactionInfoProps
   items: TransactionItemForm[]
-  payers: TransactionPayerForm[]
-  related: string[]
+  related: TransactionPayerForm[]
 }
 
 export const NewTransactionPage: React.FC = () => {
@@ -43,7 +42,7 @@ export const NewTransactionPage: React.FC = () => {
     )
 
     const objPayers = {} as Transaction['payers']
-    transaction.payers.forEach(payer => {
+    transaction.related.forEach(payer => {
       if (payer.amount) objPayers[payer.userId] = payer.amount / 100
     })
 
@@ -57,6 +56,8 @@ export const NewTransactionPage: React.FC = () => {
     }
   }
 
+  const initialUsers = ['D', 'F', 'G', 'M', 'P']
+
   return (
     <Layout buttons={[{ title: 'Voltar', href: '/' }]}>
       <Formik
@@ -66,8 +67,9 @@ export const NewTransactionPage: React.FC = () => {
             timestamp: Date.now()
           },
           items: [getBaseItem()],
-          payers: [] as TransactionPayerForm[],
-          related: [] as string[]
+          related: initialUsers
+            .sort()
+            .map(user => ({ userId: user, amount: 0 }))
         }}
         onSubmit={async (
           values: TransactionFormProps,
@@ -93,40 +95,34 @@ export const NewTransactionPage: React.FC = () => {
             >
               <TransactionInfoSection setFieldValue={props.setFieldValue} />
               <FieldArray
-                name="payers"
-                render={payersArrayHelper => (
-                  <FieldArray
-                    name="related"
-                    render={relatedArrayHelper => (
-                      <TransactionItemsSection
-                        items={props.values.items}
-                        setFieldValue={props.setFieldValue}
-                        related={props.values.related}
-                        addRelated={user => {
-                          user = user.trim().toUpperCase()
-                          const indexToInsert = props.values.related.filter(
-                            u => u < user
-                          ).length
-                          relatedArrayHelper.insert(indexToInsert, user)
-                          payersArrayHelper.insert(indexToInsert, {
-                            userId: user,
-                            amount: 0
-                          })
-                        }}
-                      />
-                    )}
+                name="related"
+                render={relatedArrayHelper => (
+                  <TransactionItemsSection
+                    items={props.values.items}
+                    setFieldValue={props.setFieldValue}
+                    related={props.values.related.map(user => user.userId)}
+                    addRelated={user => {
+                      user = user.trim().toUpperCase()
+                      const indexToInsert = props.values.related.filter(
+                        u => u.userId < user
+                      ).length
+                      relatedArrayHelper.insert(indexToInsert, {
+                        userId: user,
+                        amount: 0
+                      })
+                    }}
                   />
                 )}
               />
               <TransactionPayersSection
-                payers={props.values.payers}
+                payers={props.values.related}
                 setFieldValue={props.setFieldValue}
                 amountDiff={(function () {
                   const itemsValues = props.values.items.reduce(
                     (acc, cur) => acc + cur.quantity * cur.price,
                     0
                   )
-                  const totalPaid = props.values.payers.reduce(
+                  const totalPaid = props.values.related.reduce(
                     (acc, cur) => acc + cur.amount,
                     0
                   )
