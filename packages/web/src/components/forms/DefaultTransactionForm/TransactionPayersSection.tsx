@@ -11,13 +11,10 @@ import {
 import { FieldArray } from 'formik'
 import React from 'react'
 
+import { TransactionPayerForm } from '@components/forms'
+
 import { AmountInput } from '@modules/forms'
 import { IdBox } from '@modules/resource'
-
-export type TransactionPayerForm = {
-  userId: string
-  amount: number
-}
 
 type TransactionPayersProps = {
   payers: TransactionPayerForm[]

@@ -17,19 +17,14 @@ import {
 import { Field, FieldArray } from 'formik'
 import React from 'react'
 
+import { TransactionItemForm } from '@components/forms'
+
 import { AmountInput, LabelInput } from '@modules/forms'
 import { IdBox } from '@modules/resource'
 
 import { validateAmount, validateLabel } from '@utils/validateTransaction'
 
 import { RelatedModal } from './modals'
-
-export type TransactionItemForm = {
-  itemName: string
-  price: number
-  quantity: number
-  related_users: string[]
-}
 
 type TransactionItemsProps = {
   items: TransactionItemForm[]

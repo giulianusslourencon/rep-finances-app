@@ -16,11 +16,6 @@ import { validateLabel } from '@utils/validateTransaction'
 
 import { DateModal } from './modals'
 
-export type TransactionInfoProps = {
-  title: string
-  timestamp: number
-}
-
 export const TransactionInfoSection: React.FC<{
   setFieldValue: (field: string, value: any) => void
 }> = ({ setFieldValue }) => {

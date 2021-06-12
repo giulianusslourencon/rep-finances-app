@@ -1,7 +1,7 @@
 import {
   TransactionHistoryPage,
   TransactionHistoryPageProps
-} from '@components/TransactionHistoryPage'
+} from '@components/pages/TransactionHistoryPage'
 
 import API from '@utils/api'
 

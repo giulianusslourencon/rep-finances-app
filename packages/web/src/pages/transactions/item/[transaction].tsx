@@ -3,7 +3,7 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import {
   TransactionDetailsPageProps,
   TransactionDetailsPage
-} from '@components/TransactionDetailsPage'
+} from '@components/pages/TransactionDetailsPage'
 
 import API from '@utils/api'
 

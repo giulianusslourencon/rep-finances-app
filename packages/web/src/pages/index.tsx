@@ -1,6 +1,6 @@
 import { GetStaticProps } from 'next'
 
-import { BalancePage, BalancePageProps } from '@components/BalancePage'
+import { BalancePage, BalancePageProps } from '@components/pages/BalancePage'
 
 import API from '@utils/api'
 
