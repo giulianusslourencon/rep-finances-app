@@ -10,11 +10,11 @@ import {
 import { Field } from 'formik'
 import React from 'react'
 
+import { DateModal } from '@components/modals'
+
 import { LabelInput } from '@modules/forms'
 
 import { validateLabel } from '@utils/validateTransaction'
-
-import { DateModal } from './modals'
 
 export const TransactionInfoSection: React.FC<{
   setFieldValue: (field: string, value: any) => void
