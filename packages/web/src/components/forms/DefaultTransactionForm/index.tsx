@@ -2,9 +2,8 @@ import { VStack, StackDivider, Button } from '@chakra-ui/react'
 import { Form, FieldArray } from 'formik'
 import React from 'react'
 
-import { ITransactionForm } from '@components/forms'
+import { ITransactionForm, TransactionInfoSection } from '@components/forms'
 
-import { TransactionInfoSection } from './TransactionInfoSection'
 import { TransactionItemsSection } from './TransactionItemsSection'
 import { TransactionPayersSection } from './TransactionPayersSection'
 

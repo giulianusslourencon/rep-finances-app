@@ -50,7 +50,7 @@ export const TransactionInfoSection: React.FC<{
               placement="top"
             >
               <FormControl
-                id="transactionTitle"
+                id="info.title"
                 isRequired={true}
                 isInvalid={form.errors.info?.title && form.touched.info?.title}
                 mb={4}
@@ -58,7 +58,7 @@ export const TransactionInfoSection: React.FC<{
                 <FormLabel width="7.5rem" fontSize="lg">
                   Título:
                 </FormLabel>
-                <LabelInput {...field} placeholder="Título" id="info.title" />
+                <LabelInput {...field} placeholder="Título" />
                 <FormErrorMessage color="red.500">
                   {form.errors.info?.title}
                 </FormErrorMessage>
@@ -84,7 +84,7 @@ export const TransactionInfoSection: React.FC<{
                 placement="top"
               >
                 <FormControl
-                  id="transactionDate"
+                  id="info.timestamp"
                   isRequired={true}
                   justifyContent="stretch"
                 >
@@ -97,7 +97,6 @@ export const TransactionInfoSection: React.FC<{
                     value={formatDate(field.value)}
                     onClick={dateModalDisclosure.onOpen}
                     cursor="pointer"
-                    id="info.timestamp"
                   />
                 </FormControl>
               </Tooltip>
