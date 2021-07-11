@@ -10,7 +10,7 @@ import {
 import { Field } from 'formik'
 import React from 'react'
 
-import { DateModal } from '@components/modals'
+import { DateModal } from '@components/overlay'
 
 import { LabelInput } from '@modules/forms'
 

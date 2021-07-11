@@ -23,8 +23,8 @@ export type TransactionFormProps = {
   related: TransactionPayerForm[]
 }
 
-export type ITransactionForm = (
-  props: FormikProps<TransactionFormProps>
+export type ITransactionForm<Props = TransactionFormProps> = (
+  props: FormikProps<Props>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
 ) => Form

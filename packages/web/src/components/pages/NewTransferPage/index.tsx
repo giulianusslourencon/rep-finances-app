@@ -2,8 +2,7 @@ import { Formik, FormikHelpers } from 'formik'
 import Router from 'next/router'
 import React from 'react'
 
-import { TransactionFormProps } from '@components/forms'
-import { getBaseItem } from '@components/forms/DefaultTransactionForm/TransactionItemsSection'
+import { TransactionInfoProps } from '@components/forms'
 import { TransferTransactionForm } from '@components/forms/TransferTransactionForm'
 
 import { Layout } from '@modules/page'
@@ -11,31 +10,32 @@ import { Layout } from '@modules/page'
 import API from '@utils/api'
 import { Transaction } from '@utils/types'
 
+export type TransferFormProps = {
+  info: TransactionInfoProps
+  transfer: {
+    payer: string
+    amount: number
+    receiver: string
+  }
+  related: string[]
+}
+
 export const NewTransferPage: React.FC = () => {
-  const formatTransaction = (
-    transaction: TransactionFormProps
-  ): Transaction => {
-    const objItems = {} as Transaction['items']
-    transaction.items.map(
-      item =>
-        (objItems[item.itemName] = {
-          amount: (item.quantity * item.price) / 100,
-          related_users: item.related_users
-        })
-    )
-
-    const objPayers = {} as Transaction['payers']
-    transaction.related.forEach(payer => {
-      if (payer.amount) objPayers[payer.userId] = payer.amount / 100
-    })
-
+  const formatTransaction = (transaction: TransferFormProps): Transaction => {
     const { title, timestamp } = transaction.info
 
     return {
       title,
       timestamp: timestamp,
-      items: objItems,
-      payers: objPayers
+      items: {
+        Valor: {
+          amount: transaction.transfer.amount / 100,
+          related_users: [transaction.transfer.receiver]
+        }
+      },
+      payers: {
+        [`${transaction.transfer.payer}`]: transaction.transfer.amount / 100
+      }
     }
   }
 
@@ -46,23 +46,26 @@ export const NewTransferPage: React.FC = () => {
       <Formik
         initialValues={{
           info: {
-            title: '',
+            title: 'Transferencia X-Y',
             timestamp: Date.now()
           },
-          items: [getBaseItem()],
+          transfer: {
+            payer: '?',
+            amount: 0,
+            receiver: '?'
+          },
           related: initialUsers
-            .sort()
-            .map(user => ({ userId: user, amount: 0 }))
         }}
         onSubmit={async (
-          values: TransactionFormProps,
-          { setSubmitting }: FormikHelpers<TransactionFormProps>
+          values: TransferFormProps,
+          { setSubmitting }: FormikHelpers<TransferFormProps>
         ) => {
           try {
             const response = await API.createTransaction(
               formatTransaction(values)
             )
             Router.push(`/transactions/item/${response.data._id}`)
+            // console.log(formatTransaction(values))
           } catch (error) {
             alert(error)
           }

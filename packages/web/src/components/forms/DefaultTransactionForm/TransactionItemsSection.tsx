@@ -18,7 +18,7 @@ import { Field, FieldArray } from 'formik'
 import React from 'react'
 
 import { TransactionItemForm } from '@components/forms'
-import { RelatedModal } from '@components/modals'
+import { RelatedModal } from '@components/overlay'
 
 import { AmountInput, LabelInput } from '@modules/forms'
 import { IdBox } from '@modules/resource'
