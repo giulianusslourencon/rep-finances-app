@@ -26,7 +26,7 @@ export const NewTransferPage: React.FC = () => {
 
     return {
       title,
-      timestamp: timestamp,
+      timestamp,
       items: {
         Valor: {
           amount: transaction.transfer.amount / 100,
@@ -46,7 +46,7 @@ export const NewTransferPage: React.FC = () => {
       <Formik
         initialValues={{
           info: {
-            title: 'Transferencia X-Y',
+            title: 'Transferencia ?-?',
             timestamp: Date.now()
           },
           transfer: {

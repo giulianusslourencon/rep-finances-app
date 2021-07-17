@@ -62,7 +62,7 @@ export const RelatedModal: React.FC<RelatedModalProps> = ({
           values: FormProps,
           { setSubmitting, resetForm }: FormikHelpers<FormProps>
         ) => {
-          onAdd(values.user)
+          onAdd(values.user.toUpperCase())
           setSubmitting(false)
           resetForm()
         }}

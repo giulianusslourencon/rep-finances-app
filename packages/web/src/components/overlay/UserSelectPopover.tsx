@@ -14,6 +14,8 @@ import React from 'react'
 
 import { IdBox } from '@modules/resource'
 
+import { validateUserId } from '@utils/validateTransaction'
+
 type UserSelectPopoverProps = {
   selectedId: string
   selectionList: string[]
@@ -27,13 +29,22 @@ export const UserSelectPopover: React.FC<UserSelectPopoverProps> = ({
   onSelectId,
   relatedModalDisclosure
 }) => {
+  const validId = validateUserId
+
   return (
     <Popover>
       {({ onClose }) => (
         <>
           <PopoverTrigger>
             {/* <IdBox userId={selectedId} /> */}
-            <Button>{selectedId}</Button>
+            <Button
+              variant={validId(selectedId) ? 'solid' : 'ghost'}
+              borderRadius="0.125rem"
+              width="1.5rem"
+              height="1.5rem"
+            >
+              {selectedId}
+            </Button>
           </PopoverTrigger>
           <Portal>
             <PopoverContent>

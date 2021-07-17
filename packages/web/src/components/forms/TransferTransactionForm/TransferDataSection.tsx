@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ArrowForwardIcon } from '@chakra-ui/icons'
 import {
   Box,
   Flex,
   FormControl,
   FormErrorMessage,
   Text,
-  useDisclosure
+  Tooltip,
+  useDisclosure,
+  VStack
 } from '@chakra-ui/react'
 import { Field, FieldArray } from 'formik'
 import React from 'react'
@@ -38,6 +41,14 @@ export const TransferDataSection: React.FC<TransferDataProps> = ({
     return undefined
   }
 
+  const validateId = (value: string, field: 'payer' | 'receiver') => {
+    if (value === '?')
+      return `Selecione um usuário válido para o ${
+        field === 'payer' ? 'pagador' : 'recebedor'
+      }`
+    return undefined
+  }
+
   const isInvalid = payer === receiver
 
   const relatedModalDisclosure = useDisclosure()
@@ -64,12 +75,24 @@ export const TransferDataSection: React.FC<TransferDataProps> = ({
             >
               <FormControl isInvalid={isInvalid}>
                 <Flex justify="space-around">
-                  <UserSelectPopover
-                    selectedId={payer}
-                    selectionList={related}
-                    onSelectId={value => setFieldValue('transfer.payer', value)}
-                    relatedModalDisclosure={relatedModalDisclosure}
-                  />
+                  <Field name="transfer.payer" validate={validateId}>
+                    {({ form }: any) => (
+                      <UserSelectPopover
+                        selectedId={payer}
+                        selectionList={related}
+                        onSelectId={value => {
+                          setFieldValue('transfer.payer', value)
+                          if (!form.touched.info?.title) {
+                            setFieldValue(
+                              'info.title',
+                              `Transferencia ${value}-${receiver}`
+                            )
+                          }
+                        }}
+                        relatedModalDisclosure={relatedModalDisclosure}
+                      />
+                    )}
+                  </Field>
                   <Field
                     name="transfer.amount"
                     validate={validateTransferAmount}
@@ -82,28 +105,49 @@ export const TransferDataSection: React.FC<TransferDataProps> = ({
                           form.touched.transfer?.amount
                         }
                       >
-                        <AmountInput
-                          value={formatAmount(field.value)}
-                          onChange={val =>
-                            setFieldValue('transfer.amount', parseAmount(val))
-                          }
-                          display="flex"
-                          justifyContent="center"
-                        />
+                        <VStack>
+                          <AmountInput
+                            value={formatAmount(field.value)}
+                            onChange={val =>
+                              setFieldValue('transfer.amount', parseAmount(val))
+                            }
+                            display="flex"
+                            justifyContent="center"
+                          />
+                          <Tooltip
+                            shouldWrapChildren
+                            label="O da esquerda pagou para o da direita"
+                            openDelay={500}
+                            hasArrow
+                            placement="bottom"
+                          >
+                            <ArrowForwardIcon color="purple.800" />
+                          </Tooltip>
+                        </VStack>
                         <FormErrorMessage color="red.500">
                           {form.errors.transfer?.amount}
                         </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
-                  <UserSelectPopover
-                    selectedId={receiver}
-                    selectionList={related}
-                    onSelectId={value =>
-                      setFieldValue('transfer.receiver', value)
-                    }
-                    relatedModalDisclosure={relatedModalDisclosure}
-                  />
+                  <Field name="transfer.receiver" validate={validateId}>
+                    {({ form }: any) => (
+                      <UserSelectPopover
+                        selectedId={receiver}
+                        selectionList={related}
+                        onSelectId={value => {
+                          setFieldValue('transfer.receiver', value)
+                          if (!form.touched.info?.title) {
+                            setFieldValue(
+                              'info.title',
+                              `Transferencia ${payer}-${value}`
+                            )
+                          }
+                        }}
+                        relatedModalDisclosure={relatedModalDisclosure}
+                      />
+                    )}
+                  </Field>
                 </Flex>
                 <FormErrorMessage>
                   Os ids de pagador e recebedor não podem ser os mesmos
