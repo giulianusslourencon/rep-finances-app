@@ -1,4 +1,3 @@
-export * from './EntityErrorHandler'
 export * from './IErrorHandler'
 export * from './IErrorReason'
 export * from './InvalidError'

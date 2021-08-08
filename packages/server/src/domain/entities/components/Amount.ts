@@ -1,7 +1,8 @@
 import { Path } from '@shared/utils'
 
 import { IErrorHandler, InvalidError } from '@errors/contracts'
-import { PositiveNumberReason } from '@errors/reasons'
+
+import { PositiveNumberReason } from '@entities/errors/reasons'
 
 export class Amount {
   constructor(private readonly amount: number) {}

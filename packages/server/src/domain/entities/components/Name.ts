@@ -1,7 +1,8 @@
 import { Path } from '@shared/utils'
 
 import { IErrorHandler, InvalidError } from '@errors/contracts'
-import { SizeReason } from '@errors/reasons'
+
+import { SizeReason } from '@entities/errors/reasons'
 
 export class Name {
   constructor(private readonly name: string) {}

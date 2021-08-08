@@ -1,9 +1,9 @@
 import { Path } from '@shared/utils'
 
 import { IErrorHandler, InvalidError } from '@errors/contracts'
-import { DuplicateReason, EmptyReason } from '@errors/reasons'
 
 import { Amount, Name } from '@entities/components'
+import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
 import { RelatedList } from '@entities/Finances'
 
 type ValidatedItems = [Name, { amount: Amount; related_users: RelatedList }][]

@@ -1,9 +1,9 @@
 import { Path } from '@shared/utils'
 
 import { IErrorHandler, InvalidError } from '@errors/contracts'
-import { DuplicateReason, EmptyReason } from '@errors/reasons'
 
 import { Amount, UserId } from '@entities/components'
+import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
 
 type ValidatedPayers = [UserId, Amount][]
 

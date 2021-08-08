@@ -1,7 +1,8 @@
 import { Path } from '@shared/utils'
 
 import { IErrorHandler, InvalidError } from '@errors/contracts'
-import { CustomReason, SizeReason } from '@errors/reasons'
+
+import { CustomReason, SizeReason } from '@entities/errors/reasons'
 
 export class UserId {
   private constructor(private readonly userId: string) {}

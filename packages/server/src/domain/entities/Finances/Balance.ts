@@ -1,6 +1,6 @@
 import { Path } from '@shared/utils'
 
-import { EntityErrorHandler } from '@errors/contracts'
+import { IErrorHandler } from '@errors/contracts'
 
 import { UserId } from '@entities/components'
 import { IBalanceable } from '@entities/Finances'
@@ -14,7 +14,7 @@ export class Balance implements IBalanceable {
 
   static create(
     balance: IndividualBalanceProps,
-    errorHandler: EntityErrorHandler,
+    errorHandler: IErrorHandler,
     path = new Path()
   ): Balance {
     Object.keys(balance).forEach(userId => {

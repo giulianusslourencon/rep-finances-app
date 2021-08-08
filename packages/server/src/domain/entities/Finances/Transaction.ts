@@ -1,9 +1,9 @@
 import { DateParser, Path } from '@shared/utils'
 
 import { IErrorHandler, InvalidError } from '@errors/contracts'
-import { CustomReason, FormattingReason } from '@errors/reasons'
 
 import { Name } from '@entities/components'
+import { CustomReason, FormattingReason } from '@entities/errors/reasons'
 import {
   IBalanceable,
   IndividualBalanceProps,
