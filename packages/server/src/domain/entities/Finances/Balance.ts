@@ -1,6 +1,7 @@
+import { EntityErrorHandler } from '@errors/contracts'
+
 import { Path } from '@shared/utils'
 
-import { EntityErrorHandler } from '@entities/errors'
 import { IndividualBalance, IndividualBalanceProps } from '@entities/Finances'
 
 export type BalanceProps = {

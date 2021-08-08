@@ -9,8 +9,11 @@
       "@shared/*": [
         "src/shared/*"
       ],
+      "@errors/*": [
+        "src/domain/errors/*"
+      ],
       "@entities/*": [
-        "src/entities/*"
+        "src/domain/entities/*"
       ],
       "@useCases/*": [
         "src/useCases/*"

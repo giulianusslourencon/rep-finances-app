@@ -1,4 +1,4 @@
-import { IErrorReason } from '@entities/errors'
+import { IErrorReason } from '@errors/contracts'
 
 export class CustomReason implements IErrorReason {
   constructor(private reason: string) {}

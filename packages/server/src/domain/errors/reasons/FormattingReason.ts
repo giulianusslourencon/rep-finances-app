@@ -1,4 +1,4 @@
-import { IErrorReason } from '@entities/errors'
+import { IErrorReason } from '@errors/contracts'
 
 export class FormattingReason implements IErrorReason {
   describe(entity: string): string {

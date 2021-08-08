@@ -1,15 +1,10 @@
+import { EntityErrorHandler, InvalidError } from '@errors/contracts'
+import { PositiveNumberReason } from '@errors/reasons'
+
 import { Path } from '@shared/utils'
 
-import { EntityErrorHandler, InvalidError } from '@entities/errors'
-import { PositiveNumberReason } from '@entities/errors/reasons'
-
 export class Amount {
-  private readonly amount: number
-
-  private constructor(amount: number) {
-    this.amount = amount
-    Object.freeze(this)
-  }
+  constructor(private readonly amount: number) {}
 
   static create(
     amount: number,
@@ -33,10 +28,7 @@ export class Amount {
     return this.amount
   }
 
-  static validate(amount: number): boolean {
-    if (!amount || amount <= 0) {
-      return false
-    }
-    return true
+  private static validate(amount: number): boolean {
+    return !(!amount || amount <= 0)
   }
 }

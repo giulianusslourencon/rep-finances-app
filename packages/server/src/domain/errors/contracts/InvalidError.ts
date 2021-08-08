@@ -1,4 +1,4 @@
-import { IErrorReason } from '@entities/errors'
+import { IErrorReason } from '@errors/contracts'
 
 import { StringCapitalizer } from '@shared/utils'
 

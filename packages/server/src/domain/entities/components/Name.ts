@@ -4,12 +4,7 @@ import { EntityErrorHandler, InvalidError } from '@entities/errors'
 import { SizeReason } from '@entities/errors/reasons'
 
 export class Name {
-  private readonly name: string
-
-  private constructor(name: string) {
-    this.name = name
-    Object.freeze(this)
-  }
+  constructor(private readonly name: string) {}
 
   static create(
     name: string,
@@ -29,10 +24,7 @@ export class Name {
     return this.name
   }
 
-  static validate(name: string): boolean {
-    if (!name || name.trim().length < 2 || name.trim().length > 64) {
-      return false
-    }
-    return true
+  private static validate(name: string): boolean {
+    return !(!name || name.trim().length < 2 || name.trim().length > 64)
   }
 }

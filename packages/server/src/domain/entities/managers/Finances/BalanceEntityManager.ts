@@ -1,6 +1,7 @@
+import { EntityErrorHandler, InvalidFields } from '@errors/contracts'
+
 import { Either, left, right } from '@shared/types'
 
-import { EntityErrorHandler, InvalidFields } from '@entities/errors'
 import {
   Balance,
   BalanceFromArray,

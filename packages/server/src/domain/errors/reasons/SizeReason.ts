@@ -1,4 +1,4 @@
-import { IErrorReason } from '@entities/errors'
+import { IErrorReason } from '@errors/contracts'
 
 export class SizeReason implements IErrorReason {
   constructor(private min: number, private max: number) {}

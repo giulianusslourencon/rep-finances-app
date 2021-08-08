@@ -1,5 +1,4 @@
-import { InvalidError } from './InvalidError'
-import { InvalidFields } from './InvalidFields'
+import { InvalidError, InvalidFields } from '@errors/contracts'
 
 export class EntityErrorHandler {
   private errorList: InvalidFields

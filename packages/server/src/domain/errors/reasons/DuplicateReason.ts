@@ -1,4 +1,4 @@
-import { IErrorReason } from '@entities/errors'
+import { IErrorReason } from '@errors/contracts'
 
 export class DuplicateReason implements IErrorReason {
   constructor(private field: string) {}
