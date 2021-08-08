@@ -1,14 +1,14 @@
 import { Path } from '@shared/utils'
 
-import { EntityErrorHandler, InvalidError } from '@entities/errors'
-import { SizeReason } from '@entities/errors/reasons'
+import { IErrorHandler, InvalidError } from '@errors/contracts'
+import { SizeReason } from '@errors/reasons'
 
 export class Name {
   constructor(private readonly name: string) {}
 
   static create(
     name: string,
-    errorHandler: EntityErrorHandler,
+    errorHandler: IErrorHandler,
     path = new Path()
   ): Name {
     if (!Name.validate(name)) {

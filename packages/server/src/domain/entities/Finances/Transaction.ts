@@ -1,17 +1,19 @@
 import { DateParser, Path } from '@shared/utils'
 
-import { Amount, Name } from '@entities/components'
-import { EntityErrorHandler, InvalidError } from '@entities/errors'
-import { CustomReason, FormattingReason } from '@entities/errors/reasons'
+import { IErrorHandler, InvalidError } from '@errors/contracts'
+import { CustomReason, FormattingReason } from '@errors/reasons'
+
+import { Name } from '@entities/components'
 import {
-  RelatedList,
+  IBalanceable,
+  IndividualBalanceProps,
   TransactionItems,
   TransactionItemsProps,
   TransactionPayers,
   TransactionPayersProps
 } from '@entities/Finances'
 
-export type TransactionInitProps = {
+export type TransactionProps = {
   id: string
   title: string
   timestamp: number
@@ -19,54 +21,18 @@ export type TransactionInitProps = {
   payers: TransactionPayersProps
 }
 
-export type TransactionProps = {
-  _id: string
-  title: string
-  date: Date
-  month: string
-  items: TransactionItemsProps
-  payers: TransactionPayersProps
-  amount: number
-  related: string[]
-}
-
-export class Transaction {
-  public readonly _id!: string
-
-  public title!: Name
-  public date!: Date
-  public items!: TransactionItems
-  public payers!: TransactionPayers
-
-  public readonly month!: string
-  public readonly amount!: Amount
-  public readonly related!: RelatedList
-
-  private constructor(
-    id: string,
-    title: Name,
-    date: Date,
-    items: TransactionItems,
-    payers: TransactionPayers,
-    month: string,
-    amount: Amount,
-    related: RelatedList
-  ) {
-    this._id = id
-    this.title = title
-    this.date = date
-    this.items = items
-    this.payers = payers
-    this.month = month
-    this.amount = amount
-    this.related = related
-
-    Object.freeze(this)
-  }
+export class Transaction implements IBalanceable {
+  constructor(
+    private readonly id: string,
+    private readonly title: Name,
+    private readonly timestamp: number,
+    private readonly items: TransactionItems,
+    private readonly payers: TransactionPayers
+  ) {}
 
   static create(
-    props: TransactionInitProps,
-    errorHandler: EntityErrorHandler,
+    props: TransactionProps,
+    errorHandler: IErrorHandler,
     path = new Path()
   ): Transaction {
     const transactionTitle = Name.create(
@@ -85,8 +51,7 @@ export class Transaction {
       path.add('payers')
     )
 
-    const date = new Date(props.timestamp)
-    if (isNaN(date.getTime()))
+    if (isNaN(new Date(props.timestamp).getTime()))
       errorHandler.addError(
         new InvalidError(
           'Date',
@@ -96,17 +61,11 @@ export class Transaction {
         path.add('timestamp').resolve()
       )
 
-    const month = DateParser.parseDate(props.timestamp)
+    const totalPrice = transactionItems.totalPrice
 
-    const itemsAmount = Object.entries(props.items).reduce((acc, cur) => {
-      return acc + cur[1].amount
-    }, 0)
+    const totalPaid = transactionPayers.totalPaid
 
-    const totalPaid = Object.entries(props.payers).reduce((acc, cur) => {
-      return acc + cur[1]
-    }, 0)
-
-    if (itemsAmount.toFixed(2) !== totalPaid.toFixed(2))
+    if (totalPrice.toFixed(2) !== totalPaid.toFixed(2)) {
       errorHandler.addError(
         new InvalidError(
           'Payment',
@@ -115,49 +74,61 @@ export class Transaction {
         ),
         path.resolve()
       )
-
-    const transactionAmount = Amount.create(
-      itemsAmount,
-      new EntityErrorHandler(),
-      path
-    )
-
-    let related = Object.keys(props.payers).map(id => id.trim().toUpperCase())
-    for (const item of Object.values(props.items)) {
-      related = related.concat(
-        item.related_users.map(id => id.trim().toUpperCase())
-      )
     }
-    related = [...new Set(related)]
-
-    const relatedUsers = RelatedList.create(
-      related,
-      new EntityErrorHandler(), // Ingoring duplicate errors
-      path
-    )
 
     return new Transaction(
       props.id,
       transactionTitle,
-      date,
+      props.timestamp,
       transactionItems,
-      transactionPayers,
-      month,
-      transactionAmount,
-      relatedUsers
+      transactionPayers
     )
+  }
+
+  extractBalance(): IndividualBalanceProps {
+    const usersBalance: IndividualBalanceProps = { ...this.payers.value }
+
+    Object.values(this.items.value).forEach(item => {
+      const nUsers = item.related_users.length
+
+      item.related_users.forEach(user => {
+        usersBalance[user] = (usersBalance[user] || 0) - item.amount / nUsers
+      })
+    })
+    return usersBalance
   }
 
   get value(): TransactionProps {
     return {
-      _id: this._id,
+      id: this.id,
       title: this.title.value,
-      date: this.date,
+      timestamp: this.timestamp,
       items: this.items.value,
-      payers: this.payers.value,
-      month: this.month,
-      amount: this.amount.value,
-      related: this.related.value
+      payers: this.payers.value
     }
+  }
+
+  get date(): Date {
+    return new Date(this.timestamp)
+  }
+
+  get amount(): number {
+    return this.items.totalPrice
+  }
+
+  get month(): string {
+    return DateParser.parseDate(this.timestamp)
+  }
+
+  get related(): string[] {
+    let related = Object.keys(this.payers.value).map(id =>
+      id.trim().toUpperCase()
+    )
+    for (const item of Object.values(this.items.value)) {
+      related = related.concat(
+        item.related_users.map(id => id.trim().toUpperCase())
+      )
+    }
+    return [...new Set(related)]
   }
 }

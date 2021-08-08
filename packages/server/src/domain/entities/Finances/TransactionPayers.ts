@@ -1,8 +1,9 @@
 import { Path } from '@shared/utils'
 
+import { IErrorHandler, InvalidError } from '@errors/contracts'
+import { DuplicateReason, EmptyReason } from '@errors/reasons'
+
 import { Amount, UserId } from '@entities/components'
-import { EntityErrorHandler, InvalidError } from '@entities/errors'
-import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
 
 type ValidatedPayers = [UserId, Amount][]
 
@@ -11,16 +12,11 @@ export type TransactionPayersProps = {
 }
 
 export class TransactionPayers {
-  private readonly payers: ValidatedPayers
-
-  private constructor(payers: ValidatedPayers) {
-    this.payers = [...payers]
-    Object.freeze(this)
-  }
+  constructor(private readonly payers: ValidatedPayers) {}
 
   static create(
     payers: TransactionPayersProps,
-    errorHandler: EntityErrorHandler,
+    errorHandler: IErrorHandler,
     path = new Path()
   ): TransactionPayers {
     const finalList: ValidatedPayers = []
@@ -69,8 +65,13 @@ export class TransactionPayers {
     return payers
   }
 
-  static validate(payers: ValidatedPayers): boolean {
-    if (payers.length === 0) return false
-    return true
+  get totalPaid(): number {
+    return this.payers.reduce((acc, cur) => {
+      return acc + cur[1].value
+    }, 0)
+  }
+
+  private static validate(payers: ValidatedPayers): boolean {
+    return payers.length > 0
   }
 }

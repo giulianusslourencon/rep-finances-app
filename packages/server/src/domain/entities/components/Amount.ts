@@ -1,14 +1,14 @@
-import { EntityErrorHandler, InvalidError } from '@errors/contracts'
-import { PositiveNumberReason } from '@errors/reasons'
-
 import { Path } from '@shared/utils'
+
+import { IErrorHandler, InvalidError } from '@errors/contracts'
+import { PositiveNumberReason } from '@errors/reasons'
 
 export class Amount {
   constructor(private readonly amount: number) {}
 
   static create(
     amount: number,
-    errorHandler: EntityErrorHandler,
+    errorHandler: IErrorHandler,
     path = new Path()
   ): Amount {
     if (!Amount.validate(amount)) {

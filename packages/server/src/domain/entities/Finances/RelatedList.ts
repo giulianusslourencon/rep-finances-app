@@ -1,20 +1,16 @@
 import { Path } from '@shared/utils'
 
+import { IErrorHandler, InvalidError } from '@errors/contracts'
+import { DuplicateReason, EmptyReason } from '@errors/reasons'
+
 import { UserId } from '@entities/components'
-import { EntityErrorHandler, InvalidError } from '@entities/errors'
-import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
 
 export class RelatedList {
-  private readonly relatedList: UserId[]
-
-  private constructor(relatedList: UserId[]) {
-    this.relatedList = [...relatedList]
-    Object.freeze(this)
-  }
+  constructor(private readonly relatedList: string[]) {}
 
   static create(
     relatedList: string[],
-    errorHandler: EntityErrorHandler,
+    errorHandler: IErrorHandler,
     path = new Path()
   ): RelatedList {
     const finalList: UserId[] = []
@@ -47,15 +43,14 @@ export class RelatedList {
         path.resolve()
       )
 
-    return new RelatedList(finalList)
+    return new RelatedList(finalList.map(related => related.value))
   }
 
   get value(): string[] {
-    return this.relatedList.map(related => related.value)
+    return this.relatedList
   }
 
-  static validate(relatedList: UserId[]): boolean {
-    if (relatedList.length === 0) return false
-    return true
+  private static validate(relatedList: UserId[]): boolean {
+    return relatedList.length > 0
   }
 }

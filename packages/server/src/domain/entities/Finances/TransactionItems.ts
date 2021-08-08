@@ -1,8 +1,9 @@
 import { Path } from '@shared/utils'
 
+import { IErrorHandler, InvalidError } from '@errors/contracts'
+import { DuplicateReason, EmptyReason } from '@errors/reasons'
+
 import { Amount, Name } from '@entities/components'
-import { EntityErrorHandler, InvalidError } from '@entities/errors'
-import { DuplicateReason, EmptyReason } from '@entities/errors/reasons'
 import { RelatedList } from '@entities/Finances'
 
 type ValidatedItems = [Name, { amount: Amount; related_users: RelatedList }][]
@@ -15,16 +16,11 @@ export type TransactionItemsProps = {
 }
 
 export class TransactionItems {
-  private readonly items: ValidatedItems
-
-  private constructor(items: ValidatedItems) {
-    this.items = [...items]
-    Object.freeze(this)
-  }
+  constructor(private readonly items: ValidatedItems) {}
 
   static create(
     items: TransactionItemsProps,
-    errorHandler: EntityErrorHandler,
+    errorHandler: IErrorHandler,
     path = new Path()
   ): TransactionItems {
     const finalList: ValidatedItems = []
@@ -83,8 +79,13 @@ export class TransactionItems {
     return items
   }
 
-  static validate(items: ValidatedItems): boolean {
-    if (items.length === 0) return false
-    return true
+  get totalPrice(): number {
+    return this.items.reduce((acc, cur) => {
+      return acc + cur[1].amount.value
+    }, 0)
+  }
+
+  private static validate(items: ValidatedItems): boolean {
+    return items.length > 0
   }
 }

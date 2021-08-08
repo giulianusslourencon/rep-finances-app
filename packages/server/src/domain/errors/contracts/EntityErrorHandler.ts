@@ -1,6 +1,6 @@
-import { InvalidError, InvalidFields } from '@errors/contracts'
+import { InvalidError, InvalidFields, IErrorHandler } from '@errors/contracts'
 
-export class EntityErrorHandler {
+export class EntityErrorHandler implements IErrorHandler {
   private errorList: InvalidFields
 
   constructor() {

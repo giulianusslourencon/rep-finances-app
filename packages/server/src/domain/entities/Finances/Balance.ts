@@ -1,41 +1,45 @@
-import { EntityErrorHandler } from '@errors/contracts'
-
 import { Path } from '@shared/utils'
 
-import { IndividualBalance, IndividualBalanceProps } from '@entities/Finances'
+import { EntityErrorHandler } from '@errors/contracts'
 
-export type BalanceProps = {
-  individual_balance: IndividualBalanceProps
+import { UserId } from '@entities/components'
+import { IBalanceable } from '@entities/Finances'
+
+export type IndividualBalanceProps = {
+  [userId: string]: number
 }
 
-export class Balance {
-  public individual_balance!: IndividualBalance
-
-  protected constructor(individual_balance: IndividualBalance) {
-    this.individual_balance = individual_balance
-    Object.freeze(this)
-  }
+export class Balance implements IBalanceable {
+  constructor(private readonly balance: IndividualBalanceProps) {}
 
   static create(
-    balance: BalanceProps,
+    balance: IndividualBalanceProps,
     errorHandler: EntityErrorHandler,
     path = new Path()
   ): Balance {
-    Object.keys(balance.individual_balance).forEach(userId => {
-      if (!balance.individual_balance[userId])
-        delete balance.individual_balance[userId]
+    Object.keys(balance).forEach(userId => {
+      if (!balance[userId]) delete balance[userId]
     })
 
-    const individualBalance = IndividualBalance.create(
-      balance.individual_balance,
-      errorHandler,
-      path.add('individual_balance')
-    )
+    const finalList: [UserId, number][] = []
+    for (const [userId, amount] of Object.entries(balance)) {
+      const id = UserId.create(userId, errorHandler, path.add(userId))
+      finalList.push([id, amount])
+    }
 
-    return new Balance(individualBalance)
+    const formattedBalance: IndividualBalanceProps = {}
+    for (const [userId, amount] of finalList) {
+      balance[userId.value] = amount
+    }
+
+    return new Balance(formattedBalance)
   }
 
-  get value(): BalanceProps {
-    return { individual_balance: this.individual_balance.value }
+  extractBalance(): IndividualBalanceProps {
+    return this.balance
+  }
+
+  get value(): IndividualBalanceProps {
+    return this.balance
   }
 }
