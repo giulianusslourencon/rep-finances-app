@@ -16,7 +16,7 @@ export type TransactionItemsProps = {
 }
 
 export class TransactionItems {
-  constructor(private readonly items: ValidatedItems) {}
+  constructor(private readonly items: TransactionItemsProps) {}
 
   static create(
     items: TransactionItemsProps,
@@ -59,29 +59,31 @@ export class TransactionItems {
       ])
     }
 
-    if (!TransactionItems.validate(finalList))
+    if (!TransactionItems.validate(finalList)) {
       errorHandler.addError(
         new InvalidError('Transaction Items', '', new EmptyReason()),
         path.resolve()
       )
+    }
 
-    return new TransactionItems(finalList)
-  }
-
-  get value(): TransactionItemsProps {
-    const items: TransactionItemsProps = {}
-    for (const [name, { amount, related_users }] of this.items) {
-      items[name.value] = {
+    const validatedItems: TransactionItemsProps = {}
+    for (const [name, { amount, related_users }] of finalList) {
+      validatedItems[name.value] = {
         amount: amount.value,
         related_users: related_users.value
       }
     }
-    return items
+
+    return new TransactionItems(validatedItems)
+  }
+
+  get value(): TransactionItemsProps {
+    return this.items
   }
 
   get totalPrice(): number {
-    return this.items.reduce((acc, cur) => {
-      return acc + cur[1].amount.value
+    return Object.entries(this.items).reduce((acc, cur) => {
+      return acc + cur[1].amount
     }, 0)
   }
 

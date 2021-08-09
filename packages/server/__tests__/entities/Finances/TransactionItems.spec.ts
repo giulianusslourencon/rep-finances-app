@@ -21,6 +21,23 @@ describe('Transaction Items Entity', () => {
       expect(errorHandler.hasErrors).toBeFalsy()
       expect(transactionItems.value).toStrictEqual(items)
     })
+
+    it('Should calculate the total price of all items', () => {
+      const items: TransactionItemsProps = {
+        item1: {
+          amount: 10,
+          related_users: ['P', 'G']
+        },
+        item2: {
+          amount: 20,
+          related_users: ['P']
+        }
+      }
+
+      const transactionItems = new TransactionItems(items)
+
+      expect(transactionItems.totalPrice).toBe(30)
+    })
   })
 
   describe('Error Cases', () => {

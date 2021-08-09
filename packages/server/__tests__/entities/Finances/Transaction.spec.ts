@@ -1,31 +1,42 @@
-import { TransactionInitialPropsBuilder } from '@tests/builders/Finances'
+import { TransactionBuilder } from '@tests/builders/Finances'
 
 import { EntityErrorHandler } from '@entities/errors'
 import { Transaction } from '@entities/Finances'
 
 describe('Transaction Entity', () => {
   describe('Success Cases', () => {
-    it('Should allow a valid transaction and fill readonly fields', () => {
+    it('Should allow a valid transaction and calculate info properties', () => {
       const errorHandler = new EntityErrorHandler()
-      const transactionInit = TransactionInitialPropsBuilder.aTransaction().buildWithId()
+      const transactionInit =
+        TransactionBuilder.aTransaction().buildInitialProps()
 
       const transaction = Transaction.create(transactionInit, errorHandler)
 
       expect(errorHandler.hasErrors).toBeFalsy()
 
-      expect(transaction.value).toHaveProperty('_id')
-      expect(transaction.value.amount).toBe(10)
-      expect(transaction.value.month).toBe('202012')
-      expect(transaction.value.related).toStrictEqual(['P', 'D'])
+      const createdTransaction = transaction.value
+
+      expect(createdTransaction.amount).toBe(10)
+      expect(createdTransaction.month).toBe('202012')
+      expect(createdTransaction.related).toStrictEqual(['P', 'D'])
+    })
+
+    it('Should extract the transaction final balance', () => {
+      const transaction = TransactionBuilder.aTransaction().build()
+
+      expect(transaction.extractBalance()).toStrictEqual({
+        P: 5,
+        D: -5
+      })
     })
   })
 
   describe('Error Cases', () => {
     it('Should not allow a transaction with invalid title', () => {
       const errorHandler = new EntityErrorHandler()
-      const transactionInit = TransactionInitialPropsBuilder.aTransaction()
+      const transactionInit = TransactionBuilder.aTransaction()
         .withInvalidTitle()
-        .buildWithId()
+        .buildInitialProps()
 
       Transaction.create(transactionInit, errorHandler)
 
@@ -34,24 +45,24 @@ describe('Transaction Entity', () => {
       expect(errorHandler.errors[0].error.name).toBe('InvalidNameError')
     })
 
-    it('Should not allow a transaction with invalid timestamp', () => {
+    it('Should not allow a transaction with invalid date', () => {
       const errorHandler = new EntityErrorHandler()
-      const transactionInit = TransactionInitialPropsBuilder.aTransaction()
-        .withInvalidTimestamp()
-        .buildWithId()
+      const transactionInit = TransactionBuilder.aTransaction()
+        .withInvalidDate()
+        .buildInitialProps()
 
       Transaction.create(transactionInit, errorHandler)
 
       expect(errorHandler.hasErrors).toBeTruthy()
-      expect(errorHandler.errors[0].field).toBe('timestamp')
+      expect(errorHandler.errors[0].field).toBe('date')
       expect(errorHandler.errors[0].error.name).toBe('InvalidDateError')
     })
 
     it('Should not allow a transaction with invalid items', () => {
       const errorHandler = new EntityErrorHandler()
-      const transactionInit = TransactionInitialPropsBuilder.aTransaction()
+      const transactionInit = TransactionBuilder.aTransaction()
         .withInvalidItems()
-        .buildWithId()
+        .buildInitialProps()
 
       Transaction.create(transactionInit, errorHandler)
 
@@ -62,9 +73,9 @@ describe('Transaction Entity', () => {
 
     it('Should not allow a transaction with invalid payers', () => {
       const errorHandler = new EntityErrorHandler()
-      const transactionInit = TransactionInitialPropsBuilder.aTransaction()
+      const transactionInit = TransactionBuilder.aTransaction()
         .withInvalidPayers()
-        .buildWithId()
+        .buildInitialProps()
 
       Transaction.create(transactionInit, errorHandler)
 
@@ -75,9 +86,9 @@ describe('Transaction Entity', () => {
 
     it('Should not allow a transaction with items value distinct from total paid', () => {
       const errorHandler = new EntityErrorHandler()
-      const transactionInit = TransactionInitialPropsBuilder.aTransaction()
+      const transactionInit = TransactionBuilder.aTransaction()
         .withInvalidPayment()
-        .buildWithId()
+        .buildInitialProps()
 
       Transaction.create(transactionInit, errorHandler)
 

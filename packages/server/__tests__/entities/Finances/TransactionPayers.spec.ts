@@ -15,6 +15,17 @@ describe('Transaction Payers Entity', () => {
       expect(errorHandler.hasErrors).toBeFalsy()
       expect(transactionPayers.value).toStrictEqual(payers)
     })
+
+    it('Should calculate the total paid by all users', () => {
+      const payers: TransactionPayersProps = {
+        P: 10,
+        G: 50
+      }
+
+      const transactionPayers = new TransactionPayers(payers)
+
+      expect(transactionPayers.totalPaid).toBe(60)
+    })
   })
 
   describe('Error Cases', () => {

@@ -29,7 +29,7 @@ export class Balance implements IBalanceable {
 
     const formattedBalance: IndividualBalanceProps = {}
     for (const [userId, amount] of finalList) {
-      balance[userId.value] = amount
+      formattedBalance[userId.value] = amount
     }
 
     return new Balance(formattedBalance)

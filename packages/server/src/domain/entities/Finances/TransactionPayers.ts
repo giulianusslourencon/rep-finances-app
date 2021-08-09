@@ -12,7 +12,7 @@ export type TransactionPayersProps = {
 }
 
 export class TransactionPayers {
-  constructor(private readonly payers: ValidatedPayers) {}
+  constructor(private readonly payers: TransactionPayersProps) {}
 
   static create(
     payers: TransactionPayersProps,
@@ -48,26 +48,28 @@ export class TransactionPayers {
       finalList.push([userId, userAmount])
     }
 
-    if (!TransactionPayers.validate(finalList))
+    if (!TransactionPayers.validate(finalList)) {
       errorHandler.addError(
         new InvalidError('Transaction Payers', '', new EmptyReason()),
         path.resolve()
       )
+    }
 
-    return new TransactionPayers(finalList)
+    const validatedPayers: TransactionPayersProps = {}
+    for (const [userId, amount] of finalList) {
+      validatedPayers[userId.value] = amount.value
+    }
+
+    return new TransactionPayers(validatedPayers)
   }
 
   get value(): TransactionPayersProps {
-    const payers: TransactionPayersProps = {}
-    for (const [userId, amount] of this.payers) {
-      payers[userId.value] = amount.value
-    }
-    return payers
+    return this.payers
   }
 
   get totalPaid(): number {
-    return this.payers.reduce((acc, cur) => {
-      return acc + cur[1].value
+    return Object.entries(this.payers).reduce((acc, cur) => {
+      return acc + cur[1]
     }, 0)
   }
 

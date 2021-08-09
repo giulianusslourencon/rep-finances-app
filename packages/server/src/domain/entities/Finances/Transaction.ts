@@ -16,16 +16,27 @@ import {
 export type TransactionProps = {
   id: string
   title: string
-  timestamp: number
+  date: number | string | Date
   items: TransactionItemsProps
   payers: TransactionPayersProps
+}
+
+export type TransactionFullInfo = {
+  id: string
+  title: string
+  date: Date
+  items: TransactionItemsProps
+  payers: TransactionPayersProps
+  month: string
+  related: string[]
+  amount: number
 }
 
 export class Transaction implements IBalanceable {
   constructor(
     private readonly id: string,
-    private readonly title: Name,
-    private readonly timestamp: number,
+    private readonly title: string,
+    private readonly date: number | string | Date,
     private readonly items: TransactionItems,
     private readonly payers: TransactionPayers
   ) {}
@@ -51,14 +62,10 @@ export class Transaction implements IBalanceable {
       path.add('payers')
     )
 
-    if (isNaN(new Date(props.timestamp).getTime()))
+    if (isNaN(new Date(props.date).getTime()))
       errorHandler.addError(
-        new InvalidError(
-          'Date',
-          props.timestamp.toString(),
-          new FormattingReason()
-        ),
-        path.add('timestamp').resolve()
+        new InvalidError('Date', props.date.toString(), new FormattingReason()),
+        path.add('date').resolve()
       )
 
     const totalPrice = transactionItems.totalPrice
@@ -78,8 +85,8 @@ export class Transaction implements IBalanceable {
 
     return new Transaction(
       props.id,
-      transactionTitle,
-      props.timestamp,
+      transactionTitle.value,
+      props.date,
       transactionItems,
       transactionPayers
     )
@@ -98,29 +105,28 @@ export class Transaction implements IBalanceable {
     return usersBalance
   }
 
-  get value(): TransactionProps {
+  get value(): TransactionFullInfo {
     return {
       id: this.id,
-      title: this.title.value,
-      timestamp: this.timestamp,
+      title: this.title,
+      date: new Date(this.date),
       items: this.items.value,
-      payers: this.payers.value
+      payers: this.payers.value,
+      amount: this.amount,
+      month: this.month,
+      related: this.related
     }
   }
 
-  get date(): Date {
-    return new Date(this.timestamp)
-  }
-
-  get amount(): number {
+  private get amount(): number {
     return this.items.totalPrice
   }
 
-  get month(): string {
-    return DateParser.parseDate(this.timestamp)
+  private get month(): string {
+    return DateParser.parseDate(new Date(this.date))
   }
 
-  get related(): string[] {
+  private get related(): string[] {
     let related = Object.keys(this.payers.value).map(id =>
       id.trim().toUpperCase()
     )

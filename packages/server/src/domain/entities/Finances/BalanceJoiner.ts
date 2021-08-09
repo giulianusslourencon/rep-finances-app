@@ -1,8 +1,9 @@
-import { IBalanceable, IndividualBalanceProps } from '@entities/Finances'
+import { EntityErrorHandler } from '@entities/errors'
+import { Balance, IBalanceable } from '@entities/Finances'
 
 export class BalanceJoiner {
-  static joinBalances(entities: IBalanceable[]): IndividualBalanceProps {
-    return entities
+  static joinBalances(entities: IBalanceable[]): Balance {
+    const finalBalance = entities
       .map(entity => entity.extractBalance())
       .reduce((acc, cur) => {
         for (const [userId, user_balance] of Object.entries(cur)) {
@@ -10,5 +11,7 @@ export class BalanceJoiner {
         }
         return acc
       }, {})
+
+    return Balance.create(finalBalance, new EntityErrorHandler())
   }
 }

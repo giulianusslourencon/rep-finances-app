@@ -1,6 +1,6 @@
 export class DateParser {
   public static parseDate = (
-    timestamp: number | string,
+    timestamp: number | string | Date,
     timeZone = 'America/Sao_Paulo'
   ): string => {
     const date = new Date(timestamp)
